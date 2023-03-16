@@ -1,175 +1,103 @@
 <template>
-    <div class="prompt-container">
-        <div class="loading-spinner" v-show="loading"></div>
-        <div class="token-counter">Estimated PROMPT token usage: {{ tokenCount }}</div>
-        <div class="token-counter">Real PROMPT token usage: {{ actualTokens }}</div>
-        <textarea v-model="prompt" placeholder="Enter your prompt" rows="5" class="prompt-textarea"></textarea>
-        <button class="submit-button" @click="submitPrompt">Submit</button>
-        <div class="response-area">
-            <div class="token-counter">Real RESPONSE token usage: {{ responseTokens }}</div>
-            <div class="response-title">Response:</div>
-            <div class="response">{{ response }}</div>
-        </div>
+  <div class="flex flex-col items-center justify-center w-full relative text-gray-100">
+    <div
+      class="animate-spin absolute top-1/2 left-1/2 transform-gpu -translate-x-1/2 -translate-y-1/2 border-t-4 border-white border-opacity-50 w-14 h-14 rounded-full"
+      v-show="loading"></div>
+    {{ loading }}
+    <div class="text-sm font-bold mb-1">
+      Estimated PROMPT token usage: {{ tokenCount }}
     </div>
-</template>
+    <div class="text-sm font-bold mb-1">
+      Real PROMPT token usage: {{ actualTokens }}
+    </div>
+    <div class="flex items-center mb-5">
+      <label for="api-key-input" class="font-bold mr-2">OpenAI API Key:</label>
+      <input id="api-key-input" v-model="apiKey" type="text"
+        class="w-full max-w-md p-1 text-sm border border-green-500 rounded mr-2 bg-gray-800" />
+      <button class="text-sm px-2 py-1 bg-green-500 text-white rounded cursor-pointer hover:bg-green-600"
+        @click="saveApiKey">
+        Save API Key
+      </button>
+    </div>
 
-<script>
-// Import Axios
+    <textarea v-model="prompt" placeholder="Enter your prompt" rows="5"
+      class="w-full max-w-xl min-h-24 p-2 text-lg border border-green-500 rounded resize-y mb-2 mx-auto bg-gray-800"></textarea>
+    <button class="text-lg px-6 py-2 bg-green-500 text-white rounded cursor-pointer hover:bg-green-600 mt-2"
+      @click="submitPrompt">Submit</button>
+    <div class="rounded p-5 mt-5 w-full max-w-xl bg-gray-900">
+      <div class="text-sm font-bold mb-1">
+        Real RESPONSE token usage: {{ responseTokens }}
+      </div>
+      <div class="font-bold text-xl mb-2">Response:</div>
+      <div class="whitespace-pre-wrap text-lg">{{ response }}</div>
+    </div>
+  </div>
+</template>
+<script setup>
+import { ref, watch } from "vue";
 import axios from "axios";
 
-export default {
-    data() {
-        return {
-            prompt: "",
-            response: "",
-            tokenCount: 0,
-            actualTokens: 0,
-            responseTokens: 0,
-            loading: false
-        };
-    },
-    methods: {
-        async submitPrompt() {
-            if (!this.prompt) return;
-            this.loading = true;
+const prompt = ref("");
+const response = ref("");
+const tokenCount = ref(0);
+const actualTokens = ref(0);
+const responseTokens = ref(0);
+const loading = ref(false);
+const apiKey = ref(localStorage.getItem("openai_api_key") || "");
 
+const saveApiKey = () => {
+  localStorage.setItem("openai_api_key", apiKey.value);
+};
 
-            const apiKey = process.env.OPENAI_API_KEY;
-            const url = "https://api.openai.com/v1/chat/completions";
+async function submitPrompt() {
+  if (!prompt.value) return;
+  loading.value = true;
 
-            try {
-                const result = await axios.post(
-                    url,
-                    {
-                        model: "gpt-4",
-                        messages: [
-                            {
-                                role: "user",
-                                content: this.prompt
-                            }
-                        ],
-                        temperature: 0.7
-                    },
-                    {
-                        headers: {
-                            "Content-Type": "application/json",
-                            "Authorization": `Bearer ${apiKey}`
-                        }
-                    }
-                );
-                this.loading = false;
-                this.response = result.data.choices[0].message.content.trim();
-                this.actualTokens = result.data.usage.prompt_tokens;
-                this.responseTokens = result.data.usage.completion_tokens;
-            } catch (error) {
-                console.error("Error:", error);
-                this.response = "An error occurred while fetching the response.";
-            }
+  const url = "https://api.openai.com/v1/chat/completions";
+
+  try {
+    const result = await axios.post(
+      url,
+      {
+        model: "gpt-4",
+        messages: [
+          {
+            role: "user",
+            content: prompt.value,
+          },
+        ],
+        temperature: 0.7,
+      },
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${apiKey.value}`,
         },
-        async fetchTokenCount() {
-            try {
-                const response = await axios.post("http://localhost:5000/count_tokens", {
-                    text: this.prompt
-                });
-                return response.data.token_count;
-            } catch (error) {
-                console.error("Error fetching token count:", error);
-                return 0;
-            }
-        },
-    },
-    watch: {
-        async prompt() {
-            this.tokenCount = await this.fetchTokenCount();
-        }
-    },
+      }
+    );
+    loading.value = false;
+    response.value = result.data.choices[0].message.content.trim();
+    actualTokens.value = result.data.usage.prompt_tokens;
+    responseTokens.value = result.data.usage.completion_tokens;
+  } catch (error) {
+    console.error("Error:", error);
+    response.value = "An error occurred while fetching the response.";
+  }
 }
+
+async function fetchTokenCount() {
+  try {
+    const response = await axios.post("http://localhost:5000/count_tokens", {
+      text: prompt.value
+    });
+    return response.data.token_count;
+  } catch (error) {
+    console.error("Error fetching token count:", error);
+    return 0;
+  }
+}
+
+watch(prompt, async () => {
+  tokenCount.value = await fetchTokenCount();
+});
 </script>
-<style scoped>
-.prompt-textarea {
-    width: 90%;
-    max-width: 800px;
-    min-height: 100px;
-    padding: 10px;
-    font-size: 16px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    resize: vertical;
-    box-sizing: border-box;
-    margin-bottom: 10px;
-    margin-left: auto;
-    margin-right: auto;
-}
-
-.prompt-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 100%;
-}
-
-.token-counter {
-    font-size: 14px;
-    font-weight: bold;
-    margin-bottom: 5px;
-}
-
-.submit-button {
-    background-color: #008cba;
-    border: none;
-    color: white;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 16px;
-    padding: 10px 24px;
-    margin-top: 10px;
-    cursor: pointer;
-    border-radius: 4px;
-}
-
-.submit-button:hover {
-    background-color: #0073a8;
-}
-
-.response-area {
-    background-color: #f0f0f0;
-    border-radius: 4px;
-    padding: 20px;
-    margin-top: 20px;
-    width: 90%;
-    max-width: 800px;
-    box-sizing: border-box;
-}
-
-.response-title {
-    font-weight: bold;
-    font-size: 18px;
-    margin-bottom: 10px;
-}
-
-.response {
-    white-space: pre-wrap;
-    font-size: 16px;
-}
-
-.loading-spinner {
-    border: 4px solid rgba(0, 0, 0, 0.1);
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    border-top-color: #008cba;
-    animation: spin 1s linear infinite;
-    margin-top: 10px;
-}
-
-@keyframes spin {
-    0% {
-        transform: rotate(0deg);
-    }
-
-    100% {
-        transform: rotate(360deg);
-    }
-}
-</style>
