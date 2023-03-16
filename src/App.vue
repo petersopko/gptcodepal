@@ -1,15 +1,17 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div id="app">
+    <Gpt4Prompt />
+  </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import Gpt4Prompt from "./components/Gpt4Prompt.vue";
 
 export default {
   name: 'App',
   components: {
-    HelloWorld
+    Gpt4Prompt
+
   }
 }
 </script>
