@@ -1,32 +1,13 @@
 
 <template>
-  <div class="flex flex-col items-center justify-center relative text-gray-100 w-full max-w-3xl">
+  <div class="container">
     <Loader :loading="loading" />
-    <TextInput v-model="description" placeholder="Enter your description" class="w-full max-w-3xl" :rows="5" />
-    <div v-for="(codeChunk, index) in codeChunks" class="w-full max-w-3xl" :key="index">
-      <CodeInput v-model="codeChunks[index]" name-placeholder="Name your code chunk" code-placeholder="Enter your code"
-        :rows="20" :index="index" @remove="removeCodeChunk(index)" />
-    </div>
-    <button class="text-sm px-6 py-2 bg-green-500 text-white rounded cursor-pointer hover:bg-green-600 mt-2 mb-4 mx-4"
-      @click="addCodeChunk">
-      Add Code Section
-    </button>
-    <div class="flex items-center mt-2 mb-4">
-      <div class="text-sm font-bold mr-4">
-        Estimated Prompt Tokens: {{ tokenCount }} (${{ (tokenCount * 0.001 * 0.03).toFixed(3) }})
-      </div>
-      <button class="text-lg px-6 py-2 bg-green-500 text-white rounded cursor-pointer hover:bg-green-600"
-        @click="submitPrompt">
-        Submit
-      </button>
-    </div>
-    <div class="rounded p-5 mt-5 w-full max-w-3xl bg-gray-900">
-      <ResponseTokensInfo :responseTokens="responseTokens" :actualTokens="actualTokens" />
-      <HighlightedCode :response="response" />
-      <!-- {{ response }} -->
-    </div>
-    <Settings @save-api-key="saveApiKey" class="w-full max-w-3xl mt-4" />
-
+    <TextInput v-model="description" placeholder="Enter your description" class="input" :rows="5" />
+    <CodeChunkList :codeChunks="codeChunks" @remove="removeCodeChunk" />
+    <AddCodeChunkButton @add="addCodeChunk" />
+    <TokenInfo :tokenCount="tokenCount" @submit="submitPrompt" />
+    <ResponseSection :response="response" :responseTokens="responseTokens" :actualTokens="actualTokens" />
+    <Settings @save-api-key="saveApiKey" class="settings" />
   </div>
 </template>
 
@@ -36,9 +17,10 @@ import axios from "axios";
 import Loader from "../components/Loader.vue";
 import Settings from "../components/Settings.vue";
 import TextInput from "../components/TextInput.vue";
-import CodeInput from "../components/CodeInput.vue";
-import ResponseTokensInfo from "../components/ResponseTokensInfo.vue";
-import HighlightedCode from "../components/HighlightedCode.vue";
+import CodeChunkList from "../components/CodeChunkList.vue";
+import AddCodeChunkButton from "../components/AddCodeChunkButton.vue";
+import TokenInfo from "../components/TokenInfo.vue";
+import ResponseSection from "../components/ResponseSection.vue";
 
 const description = ref("");
 const response = ref("");
@@ -94,15 +76,22 @@ async function submitPrompt() {
         },
       }
     );
-    loading.value = false;
-    response.value = result.data.choices[0].message.content.trim();
-    actualTokens.value = result.data.usage.prompt_tokens;
-    responseTokens.value = result.data.usage.completion_tokens;
+    handleResponse(result);
   } catch (error) {
-    console.error("Error:", error);
-    response.value = "An error occurred while fetching the response.";
+    handleError(error);
   }
-  console.log("Response:", response.value)
+}
+
+function handleResponse(result) {
+  loading.value = false;
+  response.value = result.data.choices[0].message.content.trim();
+  actualTokens.value = result.data.usage.prompt_tokens;
+  responseTokens.value = result.data.usage.completion_tokens;
+}
+
+function handleError(error) {
+  console.error("Error:", error);
+  response.value = "An error occurred while fetching the response.";
 }
 
 async function fetchTokenCount() {
@@ -124,3 +113,27 @@ watch([description, codeChunks], async () => {
   tokenCount.value = await fetchTokenCount();
 }, { deep: true });
 </script>
+
+<style scoped>
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  color: #fff;
+  width: 100%;
+  max-width: 3xl;
+}
+
+.input {
+  width: 100%;
+  max-width: 3xl;
+}
+
+.settings {
+  width: 100%;
+  max-width: 3xl;
+  margin-top: 1rem;
+}
+</style>
