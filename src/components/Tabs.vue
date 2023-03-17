@@ -45,7 +45,7 @@ export default {
     align-items: center;
     padding: 10px 15px;
     border: 1px solid #ccc;
-    border-radius: 4px;
+    border-radius: 0;
     cursor: pointer;
     min-width: 80px;
 }
@@ -65,7 +65,7 @@ export default {
     font-weight: bold;
     cursor: pointer;
     border: 1px solid #ccc;
-    border-radius: 50%;
+    border-radius: 0;
     padding: 2px 5px;
 }
 

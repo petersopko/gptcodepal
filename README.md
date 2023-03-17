@@ -15,7 +15,7 @@ gpt-4-prompt-interface
 ├─ package.json
 ├─ postcss.config.cjs
 ├─ public
-│  └─ vite.svg
+│  └─ gear.svg
 ├─ README.md
 ├─ src
 │  ├─ App.vue
@@ -23,11 +23,25 @@ gpt-4-prompt-interface
 │  │  └─ vue.svg
 │  ├─ components
 │  │  ├─ CodeInput.vue
-│  │  ├─ ResponseContent.vue
+│  │  ├─ CodeInputAddButton.vue
+│  │  ├─ CodeInputList.vue
 │  │  ├─ Loader.vue
+│  │  ├─ ResponseContent.vue
+│  │  ├─ ResponseSection.vue
+│  │  ├─ ResponseSectionHeadline.vue
 │  │  ├─ ResponseTokensInfo.vue
 │  │  ├─ Settings.vue
-│  │  └─ TextInput.vue
+│  │  ├─ SubmitButton.vue
+│  │  ├─ Tabs.vue
+│  │  ├─ TextInput.vue
+│  │  ├─ TokenEstimations.vue
+│  │  └─ TokenInfo.vue
+│  ├─ composables
+│  │  ├─ useCodeInputs.js
+│  │  ├─ useDescription.js
+│  │  ├─ useSubmitPrompt.js
+│  │  ├─ useTabs.js
+│  │  └─ useTokenCount.js
 │  ├─ main.js
 │  └─ views
 │     └─ Interface.vue

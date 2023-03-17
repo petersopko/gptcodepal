@@ -1,5 +1,5 @@
 <template>
-    <div class="border border-gray-300 p-4 rounded mb-4 input">
+    <div class="bg-gray-900 border border-gray-300 p-4 rounded-none mb-4 input">
         <div v-for="(codeInput, index) in codeInputs" :key="index">
             <CodeInput v-model="codeInputs[index]" name-placeholder="Name your code input"
                 code-placeholder="Enter your code" :rows="20" :index="index" @remove="removeCodeInput(index)"
@@ -8,6 +8,7 @@
         <CodeInputAddButton @add="addCodeInput" />
     </div>
 </template>
+
 
 <script setup>
 import CodeInput from './CodeInput.vue';

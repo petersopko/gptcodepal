@@ -1,8 +1,8 @@
 <template>
-    <div class="border border-gray-300 py-2 px-4 rounded mb-5">
+    <div class="bg-gray-800 border border-gray-300 py-2 px-4 rounded-none mb-5">
         <div class="flex items-center justify-between text-xl font-bold">
             <div>Settings</div>
-            <button @click="toggleFold" class="text-lg text-white p-2 rounded mx-4">
+            <button @click="toggleFold" class="text-lg text-white p-2 rounded-none mx-4">
                 <font-awesome-icon :icon="['fas', `chevron-${isFolded ? 'down' : 'up'}`]" />
             </button>
         </div>
@@ -12,12 +12,13 @@
                 <div class="relative w-full max-w-md">
                     <input id="api-key-input" v-model="apiKey" :class="{ 'opacity-0': !inputFocused }"
                         @focus="inputFocused = true" @blur="onBlur" type="text"
-                        class="w-full p-1 text-sm border border-green-500 rounded bg-gray-800 absolute" />
+                        class="w-full p-1 text-sm border-b border-green-500 rounded-none bg-gray-800 absolute" />
                     <input id="api-key-hidden" :class="{ 'opacity-0': inputFocused }" @focus="inputFocused = true"
                         :value="apiKeyHidden" type="text" readonly
-                        class="w-full p-1 text-sm border border-green-500 rounded bg-gray-800" />
+                        class="w-full p-1 text-sm border-b border-green-500 rounded-none bg-gray-800" />
                 </div>
-                <button class="ml-2 text-sm px-2 py-1 bg-green-500 text-white rounded cursor-pointer hover:bg-green-600"
+                <button
+                    class="ml-2 text-sm px-2 py-1 bg-green-500 text-white rounded-none cursor-pointer hover:bg-green-600"
                     @click="saveApiKey">
                     Save API Key
                 </button>
@@ -25,6 +26,7 @@
         </div>
     </div>
 </template>
+
 
 <script setup>
 import { ref, computed, onMounted } from "vue";

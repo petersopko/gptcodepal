@@ -1,10 +1,10 @@
 <template>
     <div class="min-w-full whitespace-pre-wrap text-lg text-left">
         <span v-for="(part, index) in parts" :key="index">
-            <span v-if="part.isCode" class="bg-gray-800 p-1 rounded inline-block relative w-full">
+            <span v-if="part.isCode" class="bg-gray-800 p-1 rounded-none inline-block relative w-full">
                 <highlightjs :code="part.text" />
                 <button
-                    class="absolute top-0 right-0 mt-1 mr-1 text-xs text-white bg-gray-700 rounded p-2 cursor-pointer hover:bg-gray-600"
+                    class="absolute top-0 right-0 mt-1 mr-1 text-xs text-white bg-gray-700 rounded-none p-2 cursor-pointer hover:bg-gray-600"
                     @click="copyToClipboard(part.text)">
                     <font-awesome-icon icon="clipboard" size="2x" />
                 </button>
@@ -13,6 +13,7 @@
         </span>
     </div>
 </template>
+
 
 
 <script setup>
