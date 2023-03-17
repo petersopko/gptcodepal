@@ -1,6 +1,6 @@
-# CodePal-GPT4: Interface with Vue 3 and Vite
+# GptCodePal: Interface with Vue 3 and Vite
 
-CodePal-GPT4 is a friendly and powerful tool for developers, tinkerers, and programmers. It provides an interactive interface for working with the GPT-4 AI model, helping you generate code and content with ease. Built with Vue 3 and Vite, the interface is clean, efficient, and easy to use.
+GptCodePal is a friendly tool for developers and tinkerers. It provides an interactive interface for working with the GPT-4 API, helping you generate code and content with ease. Built with Vue 3 and Vite, the interface is clean, efficient, and easy to use and adjust.
 
 ## Features
 
@@ -8,85 +8,83 @@ CodePal-GPT4 is a friendly and powerful tool for developers, tinkerers, and prog
 - Receive generated content based on your input
 - Support for multiple tabs
 - Real-time token counter
+- Code highlighted responses powered by highlight.js
+- Easy to copy code chunks
 
 ## Project Structure
 
 The project is organized as follows:
 
-```
-
-codepal-gpt4
+gptcodepal
 ├─ backend
-│  └─ app.py
+│ └─ app.py
 ├─ index.html
 ├─ package-lock.json
 ├─ package.json
 ├─ postcss.config.cjs
 ├─ public
-│  └─ gear.svg
+│ └─ gear.svg
 ├─ README.md
 ├─ src
-│  ├─ App.vue
-│  ├─ assets
-│  │  └─ vue.svg
-│  ├─ components
-│  │  ├─ CodeInput.vue
-│  │  ├─ CodeInputAddButton.vue
-│  │  ├─ CodeInputList.vue
-│  │  ├─ Loader.vue
-│  │  ├─ ResponseContent.vue
-│  │  ├─ ResponseSection.vue
-│  │  ├─ ResponseSectionHeadline.vue
-│  │  ├─ ResponseTokensInfo.vue
-│  │  ├─ Settings.vue
-│  │  ├─ SubmitButton.vue
-│  │  ├─ Tabs.vue
-│  │  ├─ TextInput.vue
-│  │  ├─ TokenEstimations.vue
-│  │  └─ TokenInfo.vue
-│  ├─ composables
-│  │  ├─ useCodeInputs.js
-│  │  ├─ useDescription.js
-│  │  ├─ useSubmitPrompt.js
-│  │  ├─ useTabs.js
-│  │  └─ useTokenCount.js
-│  ├─ main.js
-│  └─ views
-│     └─ Interface.vue
+│ ├─ App.vue
+│ ├─ assets
+│ │ └─ vue.svg
+│ ├─ components
+│ │ ├─ CodeInput.vue
+│ │ ├─ CodeInputAddButton.vue
+│ │ ├─ CodeInputList.vue
+│ │ ├─ Loader.vue
+│ │ ├─ ResponseContent.vue
+│ │ ├─ ResponseSection.vue
+│ │ ├─ ResponseSectionHeadline.vue
+│ │ ├─ ResponseTokensInfo.vue
+│ │ ├─ Settings.vue
+│ │ ├─ SubmitButton.vue
+│ │ ├─ Tabs.vue
+│ │ ├─ TextInput.vue
+│ │ ├─ TokenEstimations.vue
+│ │ └─ TokenInfo.vue
+│ ├─ composables
+│ │ ├─ useCodeInputs.js
+│ │ ├─ useDescription.js
+│ │ ├─ useSubmitPrompt.js
+│ │ ├─ useTabs.js
+│ │ └─ useTokenCount.js
+│ ├─ main.js
+│ └─ views
+│ └─ Interface.vue
 ├─ styles
-│  └─ style.css
+│ └─ style.css
 ├─ tailwind.config.cjs
 └─ vite.config.js
-
-```
 
 ## Installation
 
 1. Clone the repository.
 
-git clone https://github.com/your-username/codepal-gpt4.git
+`git clone https://github.com/petersopko/gptcodepal.git`
 
 2. Change into the project directory.
 
-cd codepal-gpt4
+`cd gptcodepal`
 
 3. Install the required dependencies.
 
-npm install
+`npm install`
 
 ## Running the App
 
 1. Start the development server.
 
-npm run dev
+`npm run dev`
 
-2. Open the app in the browser at `http://localhost:3000/`.
+2. Open the app in the browser at `http://127.0.0.1:5173/`.
 
 ## Building for Production
 
 To build the app for production, run:
 
-npm run build
+`npm run build`
 
 Then, serve the generated `dist` folder with any static file server.
 
