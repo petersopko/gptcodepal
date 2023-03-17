@@ -17,7 +17,10 @@ export default function useSubmitPrompt(apiKey, description, codeChunks) {
       .map((chunk) => `\n${chunk.name}\n\`\`\`${chunk.code}\`\`\``)
       .join("");
 
-    const formattedPrompt = `${description.value}${formattedCodeChunks}`;
+    const specialText =
+      "Please note: If you are replying with code make sure to wrap the code with ``` . Make sure that the code contents is ready to be pasted as is.";
+
+    const formattedPrompt = `${description.value}${formattedCodeChunks}\n${specialText}`;
     const url = "https://api.openai.com/v1/chat/completions";
     console.log("Prompt:", formattedPrompt);
     try {
