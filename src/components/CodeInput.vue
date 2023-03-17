@@ -15,7 +15,7 @@
         </div>
         <div v-show="!isFolded">
             <input v-model="name" type="text"
-                class="w-full max-w-3xl p-2 text-lg border border-green-500 rounded mb-2 mx-auto bg-gray-800"
+                class="min-w-full max-w-3xl p-2 text-lg border border-green-500 rounded mb-2 mx-auto bg-gray-800"
                 :placeholder="namePlaceholder" />
             <textarea v-model="value" :placeholder="codePlaceholder" :rows="rows"
                 class="min-w-full max-w-3xl p-2 text-lg border border-green-500 rounded resize-y mb-2 mx-auto bg-gray-800"></textarea>
