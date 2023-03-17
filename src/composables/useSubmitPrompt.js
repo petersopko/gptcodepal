@@ -1,7 +1,7 @@
 import { ref } from "vue";
 import axios from "axios";
 
-export default function useSubmitPrompt(apiKey, description, codeChunks) {
+export default function useSubmitPrompt(apiKey, description, codeInputs) {
   const response = ref("");
   const loading = ref(false);
   const actualTokens = ref(0);
@@ -13,14 +13,14 @@ export default function useSubmitPrompt(apiKey, description, codeChunks) {
     if (!description.value) return;
     loading.value = true;
 
-    const formattedCodeChunks = codeChunks.value
+    const formattedCodeInputs = codeInputs.value
       .map((chunk) => `\n${chunk.name}\n\`\`\`${chunk.code}\`\`\``)
       .join("");
 
     const specialText =
       "Please note: If you are replying with code make sure to wrap the code with ``` . Make sure that the code contents is ready to be pasted as is. Don't mark the code with the language name. The application will automatically detect the language.";
 
-    const formattedPrompt = `${description.value}${formattedCodeChunks}\n${specialText}`;
+    const formattedPrompt = `${description.value}${formattedCodeInputs}\n${specialText}`;
     const url = "https://api.openai.com/v1/chat/completions";
     console.log("Prompt:", formattedPrompt);
     try {

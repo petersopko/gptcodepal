@@ -2,7 +2,7 @@
     <div class="border border-gray-300 p-4 rounded mb-4">
         <div class="flex items-center justify-between text-xl font-bold mb-">
             <div>
-                Code Chunk {{ index + 1 }} <span v-if="modelValue.name">- {{ modelValue.name }}</span>
+                <span>{{ !modelValue.name ? 'Code Input ' + (index + 1) : modelValue.name }}</span>
             </div>
             <div>
                 <button @click="toggleFold" class="text-lg text-white p-2 rounded mx-4">
@@ -18,7 +18,8 @@
                 class="min-w-full max-w-3xl p-2 text-lg border border-green-500 rounded mb-2 mx-auto bg-gray-800"
                 :placeholder="namePlaceholder" />
             <textarea v-model="value" :placeholder="codePlaceholder" :rows="rows"
-                class="min-w-full max-w-3xl p-2 text-lg border border-green-500 rounded resize-y mb-2 mx-auto bg-gray-800"></textarea>
+                class="min-w-full max-w-3xl p-2 text-lg border border-green-500 rounded resize-y mb-2 mx-auto bg-gray-800"
+                :style="{ 'min-height': minHeight + 'px' }"></textarea>
         </div>
     </div>
 </template>
@@ -32,6 +33,10 @@ const props = defineProps({
     codePlaceholder: String,
     rows: Number,
     index: Number,
+    minHeight: {
+        type: Number,
+        default: 100,
+    },
 });
 
 const emit = defineEmits(["update:modelValue", "remove"]);
