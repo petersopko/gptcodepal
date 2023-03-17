@@ -1,13 +1,21 @@
-# GPT-4 Prompt Interface with Vue 3 and Vite
+# CodePal-GPT4: Interface with Vue 3 and Vite
 
-This project provides an interface for interacting with the GPT-4 AI model using Vue 3 and Vite. The interface allows users to write code, submit it to GPT-4, and receive generated content based on their input. It features a clean and easy-to-use design with support for multiple tabs and a real-time token counter.
+CodePal-GPT4 is a friendly and powerful tool for developers, tinkerers, and programmers. It provides an interactive interface for working with the GPT-4 AI model, helping you generate code and content with ease. Built with Vue 3 and Vite, the interface is clean, efficient, and easy to use.
+
+## Features
+
+- Write and submit code to GPT-4
+- Receive generated content based on your input
+- Support for multiple tabs
+- Real-time token counter
 
 ## Project Structure
 
 The project is organized as follows:
 
 ```
-gpt-4-prompt-interface
+
+codepal-gpt4
 ├─ backend
 │  └─ app.py
 ├─ index.html
@@ -49,17 +57,18 @@ gpt-4-prompt-interface
 │  └─ style.css
 ├─ tailwind.config.cjs
 └─ vite.config.js
+
 ```
 
 ## Installation
 
 1. Clone the repository.
 
-git clone https://github.com/your-username/gpt-4-prompt-interface.git
+git clone https://github.com/your-username/codepal-gpt4.git
 
 2. Change into the project directory.
 
-cd gpt-4-prompt-interface
+cd codepal-gpt4
 
 3. Install the required dependencies.
 
