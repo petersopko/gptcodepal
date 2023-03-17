@@ -1,11 +1,10 @@
 <template>
   <div class="flex flex-col items-center justify-center relative text-gray-100 w-full max-w-3xl">
     <Loader :loading="loading" />
-    <ApiKeyInput @save-api-key="saveApiKey" />
     <TextInput v-model="description" placeholder="Enter your description" class="w-full max-w-3xl" :rows="5" />
     <div v-for="(codeChunk, index) in codeChunks" class="w-full max-w-3xl" :key="index">
       <CodeInput v-model="codeChunks[index]" name-placeholder="Name your code chunk" code-placeholder="Enter your code"
-        :rows="20" :index="index" @remove="removeCodeChunk(index)" />
+        :rows="20" :index="index" @remove="removeCodeChunk(index)" :is-folded="isFolded" />
     </div>
     <button class="text-sm px-6 py-2 bg-green-500 text-white rounded cursor-pointer hover:bg-green-600 mt-2 mb-4 mx-4"
       @click="addCodeChunk">
@@ -22,8 +21,11 @@
     </div>
     <div class="rounded p-5 mt-5 w-full max-w-3xl bg-gray-900">
       <ResponseTokensInfo :responseTokens="responseTokens" :actualTokens="actualTokens" />
-      <div class="whitespace-pre-wrap text-lg">{{ response }}</div>
+      <HighlightedCode :response="response" />
+      <!-- {{ response }} -->
     </div>
+    <Settings @save-api-key="saveApiKey" class="w-full max-w-3xl mt-4" />
+
   </div>
 </template>
 
@@ -31,10 +33,11 @@
 import { ref, watch } from "vue";
 import axios from "axios";
 import Loader from "./Loader.vue";
-import ApiKeyInput from "./ApiKeyInput.vue";
+import Settings from "./Settings.vue";
 import TextInput from "./TextInput.vue";
 import CodeInput from "./CodeInput.vue";
 import ResponseTokensInfo from "./ResponseTokensInfo.vue";
+import HighlightedCode from "./HighlightedCode.vue";
 
 const description = ref("");
 const response = ref("");
@@ -44,6 +47,7 @@ const responseTokens = ref(0);
 const loading = ref(false);
 const apiKey = ref(localStorage.getItem("openai_api_key") || "");
 const codeChunks = ref([]);
+const isFolded = ref(false);
 
 const saveApiKey = (key) => {
   localStorage.setItem("openai_api_key", key);
@@ -59,6 +63,8 @@ const removeCodeChunk = (index) => {
 };
 
 async function submitPrompt() {
+  isFolded.value = true;
+  response.value = "";
   if (!description.value || codeChunks.value.length === 0) return;
   loading.value = true;
 
@@ -97,6 +103,7 @@ async function submitPrompt() {
     console.error("Error:", error);
     response.value = "An error occurred while fetching the response.";
   }
+  console.log("Response:", response.value)
 }
 
 async function fetchTokenCount() {
