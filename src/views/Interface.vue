@@ -1,6 +1,6 @@
-
 <template>
   <div class="container">
+    {{ loading }}
     <Loader :loading="loading" />
     <TextInput v-model="description" placeholder="Enter your description" class="input" :rows="5" />
     <CodeChunkList :codeChunks="codeChunks" @remove="removeCodeChunk" />
@@ -21,13 +21,10 @@ import CodeChunkList from "../components/CodeChunkList.vue";
 import AddCodeChunkButton from "../components/AddCodeChunkButton.vue";
 import TokenInfo from "../components/TokenInfo.vue";
 import ResponseSection from "../components/ResponseSection.vue";
+import useSubmitPrompt from "../composables/useSubmitPrompt.js";
 
 const description = ref("");
-const response = ref("");
 const tokenCount = ref(0);
-const actualTokens = ref(0);
-const responseTokens = ref(0);
-const loading = ref(false);
 const apiKey = ref(localStorage.getItem("openai_api_key") || "");
 const codeChunks = ref([]);
 
@@ -44,55 +41,7 @@ const removeCodeChunk = (index) => {
   codeChunks.value.splice(index, 1);
 };
 
-async function submitPrompt() {
-  response.value = "";
-  if (!description.value || codeChunks.value.length === 0) return;
-  loading.value = true;
-
-  const formattedCodeChunks = codeChunks.value
-    .map((chunk) => `\n${chunk.name}\n\`\`\`${chunk.code}\`\`\``)
-    .join("");
-
-  const formattedPrompt = `${description.value}${formattedCodeChunks}`;
-  const url = "https://api.openai.com/v1/chat/completions";
-  console.log("Prompt:", formattedPrompt)
-  try {
-    const result = await axios.post(
-      url,
-      {
-        model: "gpt-4",
-        messages: [
-          {
-            role: "user",
-            content: formattedPrompt,
-          },
-        ],
-        temperature: 0.7,
-      },
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${apiKey.value}`,
-        },
-      }
-    );
-    handleResponse(result);
-  } catch (error) {
-    handleError(error);
-  }
-}
-
-function handleResponse(result) {
-  loading.value = false;
-  response.value = result.data.choices[0].message.content.trim();
-  actualTokens.value = result.data.usage.prompt_tokens;
-  responseTokens.value = result.data.usage.completion_tokens;
-}
-
-function handleError(error) {
-  console.error("Error:", error);
-  response.value = "An error occurred while fetching the response.";
-}
+const { submitPrompt, response, loading, actualTokens, responseTokens } = useSubmitPrompt(apiKey, description, codeChunks);
 
 async function fetchTokenCount() {
   const text = `${description.value}${codeChunks.value.map((chunk) => `\n${chunk.name}\n\`\`\`${chunk.code}\`\`\``).join("")}`;
@@ -112,6 +61,10 @@ async function fetchTokenCount() {
 watch([description, codeChunks], async () => {
   tokenCount.value = await fetchTokenCount();
 }, { deep: true });
+watch(loading, (newValue) => {
+  console.log("Loading value changed:", newValue);
+});
+
 </script>
 
 <style scoped>
