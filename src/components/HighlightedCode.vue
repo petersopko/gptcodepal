@@ -1,5 +1,5 @@
 <template>
-    <div class="w-full whitespace-pre-wrap text-lg text-left">
+    <div class="min-w-full code-container whitespace-pre-wrap text-lg text-left">
         <span v-for="(part, index) in parts" :key="index">
             <span v-if="part.isCode" class="bg-gray-800 p-1 rounded inline-block relative">
                 <highlightjs :code="part.text" />
@@ -28,7 +28,9 @@ const parts = computed(() => {
         if (match.index > lastIndex) {
             parts.push({ text: props.response.slice(lastIndex, match.index), isCode: false });
         }
-        parts.push({ text: match[1], isCode: true });
+        // Remove the language name from the beginning of the code block
+        const code = match[1].replace(/^[a-zA-Z]+\n/, '');
+        parts.push({ text: code, isCode: true });
         lastIndex = regex.lastIndex;
     }
 
@@ -47,4 +49,4 @@ const copyToClipboard = (text) => {
     document.body.removeChild(el);
 };
 
-</script> 
+</script>

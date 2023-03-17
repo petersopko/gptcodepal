@@ -10,7 +10,7 @@
 
 <script setup>
 import CodeInput from './CodeInput.vue';
-import AddCodeChunkButton from './AddCodeChunkButton.vue';
+import AddCodeChunkButton from './CodeInputAddButton.vue';
 
 const props = defineProps({
     codeChunks: Array,

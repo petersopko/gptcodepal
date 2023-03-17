@@ -15,7 +15,7 @@ import axios from "axios";
 import Loader from "../components/Loader.vue";
 import Settings from "../components/Settings.vue";
 import TextInput from "../components/TextInput.vue";
-import CodeChunkList from "../components/CodeChunkList.vue";
+import CodeChunkList from "../components/CodeInputList.vue";
 import TokenInfo from "../components/TokenInfo.vue";
 import ResponseSection from "../components/ResponseSection.vue";
 import useSubmitPrompt from "../composables/useSubmitPrompt.js";
@@ -63,27 +63,3 @@ watch(loading, (newValue) => {
 });
 
 </script>
-
-<style scoped>
-.container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  color: #fff;
-  width: 100%;
-  max-width: 3xl;
-}
-
-.input {
-  width: 100%;
-  max-width: 3xl;
-}
-
-.settings {
-  width: 100%;
-  max-width: 3xl;
-  margin-top: 1rem;
-}
-</style>
