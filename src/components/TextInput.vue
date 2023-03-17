@@ -1,6 +1,6 @@
 <template>
     <textarea v-model="value" :placeholder="placeholder" :rows="rows"
-        class="w-full max-w-xl p-2 text-lg border border-green-500 rounded resize-y mb-2 mx-auto bg-gray-800"></textarea>
+        class="w-full max-w-3xl p-2 text-lg border border-green-500 rounded resize-y mb-2 mx-auto bg-gray-800"></textarea>
 </template>
 
 <script setup>
