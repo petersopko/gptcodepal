@@ -1,7 +1,7 @@
 <template>
     <div class="border border-gray-300 p-4 rounded mb-4 input">
         <div v-for="(codeInput, index) in codeInputs" :key="index">
-            <CodeInput v-model="codeInputs[index]" name-placeholder="Name your code chunk"
+            <CodeInput v-model="codeInputs[index]" name-placeholder="Name your code input"
                 code-placeholder="Enter your code" :rows="20" :index="index" @remove="removeCodeInput(index)" />
         </div>
         <AddCodeInputButton @add="addCodeInput" />
