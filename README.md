@@ -8,6 +8,8 @@ This template should help get you started developing with Vue 3 in Vite. The tem
 
 ```
 gpt-4-prompt-interface
+├─ backend
+│  └─ app.py
 ├─ index.html
 ├─ package-lock.json
 ├─ package.json
@@ -20,16 +22,18 @@ gpt-4-prompt-interface
 │  ├─ assets
 │  │  └─ vue.svg
 │  ├─ components
-│  │  ├─ ApiKeyInput.vue
-│  │  ├─ Gpt4Prompt.vue
+│  │  ├─ CodeInput.vue
+│  │  ├─ HighlightedCode.vue
 │  │  ├─ Loader.vue
 │  │  ├─ ResponseTokensInfo.vue
+│  │  ├─ Settings.vue
 │  │  └─ TextInput.vue
 │  ├─ main.js
+│  └─ views
+│     └─ Interface.vue
+├─ styles
 │  └─ style.css
 ├─ tailwind.config.cjs
-├─ tokenizer
-│  └─ app.py
 └─ vite.config.js
 
 ```

@@ -33,12 +33,12 @@
 <script setup>
 import { ref, watch } from "vue";
 import axios from "axios";
-import Loader from "./Loader.vue";
-import Settings from "./Settings.vue";
-import TextInput from "./TextInput.vue";
-import CodeInput from "./CodeInput.vue";
-import ResponseTokensInfo from "./ResponseTokensInfo.vue";
-import HighlightedCode from "./HighlightedCode.vue";
+import Loader from "../components/Loader.vue";
+import Settings from "../components/Settings.vue";
+import TextInput from "../components/TextInput.vue";
+import CodeInput from "../components/CodeInput.vue";
+import ResponseTokensInfo from "../components/ResponseTokensInfo.vue";
+import HighlightedCode from "../components/HighlightedCode.vue";
 
 const description = ref("");
 const response = ref("");

@@ -1,12 +1,11 @@
 import { createApp } from "vue";
-import "./style.css";
+import "../styles/style.css";
 import App from "./App.vue";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import {
   faChevronDown,
   faChevronUp,
   faClipboard,
-  faRemove,
   faTrashAlt,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
