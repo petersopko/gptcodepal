@@ -1,3 +1,4 @@
+
 <template>
     <div class="border border-gray-300 p-4 rounded mb-4">
         <div class="flex items-center justify-between text-xl font-bold mb-">
@@ -13,7 +14,7 @@
                 </button>
             </div>
         </div>
-        <div v-show="!isFolded">
+        <div v-show="!refIsFolded">
             <input v-model="name" type="text"
                 class="min-w-full max-w-3xl p-2 text-lg border border-green-500 rounded mb-2 mx-auto bg-gray-800"
                 :placeholder="namePlaceholder" />
@@ -25,7 +26,7 @@
 </template>
 
 <script setup>
-import { ref, watch } from "vue";
+import { ref, watch, computed } from "vue";
 
 const props = defineProps({
     modelValue: Object,
@@ -47,6 +48,7 @@ const emit = defineEmits(["update:modelValue", "remove"]);
 
 const name = ref(props.modelValue.name);
 const value = ref(props.modelValue.code);
+const refIsFolded = ref(props.isFolded);
 
 watch(
     [name, value],
@@ -56,7 +58,15 @@ watch(
     { deep: true }
 );
 
+watch(
+    () => props.isFolded,
+    (newVal) => {
+        refIsFolded.value = newVal;
+    }
+);
+
 const toggleFold = () => {
-    props.isFolded.value = !isFolded.value;
+    refIsFolded.value = !refIsFolded.value;
+    emit("update:isFolded", refIsFolded.value);
 };
 </script>
