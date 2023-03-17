@@ -1,5 +1,5 @@
 <template>
-    <div class="whitespace-pre-wrap text-lg text-left">
+    <div class="w-full whitespace-pre-wrap text-lg text-left">
         <span v-for="(part, index) in parts" :key="index">
             <span v-if="part.isCode" class="bg-gray-800 p-1 rounded inline-block relative">
                 <code>{{ part.text }}</code>
