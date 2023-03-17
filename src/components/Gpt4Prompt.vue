@@ -5,10 +5,10 @@
       Estimated Prompt Tokens: {{ tokenCount }} (${{ (tokenCount * 0.001 * 0.03).toFixed(3) }})
     </div>
     <ApiKeyInput @save-api-key="saveApiKey" />
-    <TextInput v-model="description" placeholder="Enter your description" :rows="5" />
-    <div v-for="(codeChunk, index) in codeChunks" :key="index">
+    <TextInput v-model="description" placeholder="Enter your description" class="w-full max-w-3xl" :rows="5" />
+    <div v-for="(codeChunk, index) in codeChunks" class="w-full max-w-3xl" :key="index">
       <CodeInput v-model="codeChunks[index]" name-placeholder="Name your code chunk" code-placeholder="Enter your code"
-        :rows="20" />
+        :rows="20" :index="index" />
       <button class="text-sm px-6 py-2 bg-red-500 text-white rounded cursor-pointer hover:bg-red-600 mt-2 mb-4"
         @click="removeCodeChunk(index)">
         Remove Code Chunk
@@ -115,5 +115,5 @@ async function fetchTokenCount() {
 
 watch([description, codeChunks], async () => {
   tokenCount.value = await fetchTokenCount();
-});
+}, { deep: true });
 </script>
