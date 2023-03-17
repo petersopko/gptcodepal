@@ -23,7 +23,7 @@ gpt-4-prompt-interface
 │  │  └─ vue.svg
 │  ├─ components
 │  │  ├─ CodeInput.vue
-│  │  ├─ HighlightedCode.vue
+│  │  ├─ ResponseContent.vue
 │  │  ├─ Loader.vue
 │  │  ├─ ResponseTokensInfo.vue
 │  │  ├─ Settings.vue
