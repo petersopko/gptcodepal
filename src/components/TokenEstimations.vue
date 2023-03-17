@@ -1,14 +1,18 @@
 <template>
-    <div v-show="responseTokens > 0" class="token-info-container">
+    <div class="token-info-container">
         <div class="text-sm font-bold">
             Required Tokens (estimate): {{ tokenCount }}
             (${{ (tokenCount * 0.001 * 0.03).toFixed(3) }})
         </div>
-        <div class="token-info-item">
-            Real Response Tokens: {{ responseTokens }} (${{ (responseTokens * 0.001 * 0.03).toFixed(3) }})
-        </div>
-        <div class="token-info-item">
-            Real Prompt Tokens: {{ actualTokens }} (${{ (actualTokens * 0.001 * 0.03).toFixed(3) }})
+        <div v-if="responseTokens > 0">
+            <div class="token-info-item">
+                Real Response Tokens: {{ responseTokens }}
+                (${{ (responseTokens * 0.001 * 0.03).toFixed(3) }})
+            </div>
+            <div class="token-info-item">
+                Real Prompt Tokens: {{ actualTokens }}
+                (${{ (actualTokens * 0.001 * 0.03).toFixed(3) }})
+            </div>
         </div>
     </div>
 </template>
@@ -17,11 +21,11 @@
 const props = defineProps({
     responseTokens: {
         type: Number,
-        required: true,
+        required: false,
     },
     actualTokens: {
         type: Number,
-        required: true,
+        required: false,
     },
     tokenCount: {
         type: Number,

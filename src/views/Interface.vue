@@ -3,11 +3,15 @@
     <Loader :loading="loading" />
     <TextInput v-model="description" placeholder="Enter your description" class="input" :rows="5" />
     <CodeInputList :codeInputs="codeInputs" @remove="removeCodeInput" @add="addCodeInput" />
-    <TokenInfo :tokenCount="tokenCount" @submit="submitPrompt" />
-    <ResponseSection :response="response" :responseTokens="responseTokens" :actualTokens="actualTokens" />
+    <div class="flex justify-between items-center">
+      <SubmitButton @submit="submitPrompt" class="mx-4" />
+      <TokenEstimations :tokenCount="tokenCount" :responseTokens="responseTokens" :actualTokens="actualTokens" />
+    </div>
+    <ResponseSection :response="response" />
     <Settings @save-api-key="saveApiKey" class="settings" />
   </div>
 </template>
+
 
 <script setup>
 import { ref } from "vue";
@@ -15,7 +19,8 @@ import Loader from "../components/Loader.vue";
 import Settings from "../components/Settings.vue";
 import TextInput from "../components/TextInput.vue";
 import CodeInputList from "../components/CodeInputList.vue";
-import TokenInfo from "../components/TokenInfo.vue";
+import SubmitButton from "../components/SubmitButton.vue";
+import TokenEstimations from "../components/TokenEstimations.vue";
 import ResponseSection from "../components/ResponseSection.vue";
 import useSubmitPrompt from "../composables/useSubmitPrompt.js";
 import useDescription from "../composables/useDescription.js";

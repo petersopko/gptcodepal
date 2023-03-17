@@ -1,5 +1,5 @@
 <template>
-    <div class="bg-gray-900">
+    <div class="bg-gray-900 border border-gray-700">
         <ResponseSectionHeadline />
         <ResponseTokensInfo :responseTokens="responseTokens" :actualTokens="actualTokens" />
         <ResponseContent :response="response" />
