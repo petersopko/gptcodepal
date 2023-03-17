@@ -32,13 +32,13 @@ const props = defineProps({
     codePlaceholder: String,
     rows: Number,
     index: Number,
-    isFolded: Boolean,
 });
 
 const emit = defineEmits(["update:modelValue", "remove"]);
 
 const name = ref(props.modelValue.name);
 const value = ref(props.modelValue.code);
+const isFolded = ref(false);
 
 watch(
     [name, value],
@@ -49,6 +49,6 @@ watch(
 );
 
 const toggleFold = () => {
-    props.isFolded = !props.isFolded;
+    isFolded.value = !isFolded.value;
 };
 </script>

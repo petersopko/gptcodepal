@@ -1,10 +1,11 @@
+
 <template>
   <div class="flex flex-col items-center justify-center relative text-gray-100 w-full max-w-3xl">
     <Loader :loading="loading" />
     <TextInput v-model="description" placeholder="Enter your description" class="w-full max-w-3xl" :rows="5" />
     <div v-for="(codeChunk, index) in codeChunks" class="w-full max-w-3xl" :key="index">
       <CodeInput v-model="codeChunks[index]" name-placeholder="Name your code chunk" code-placeholder="Enter your code"
-        :rows="20" :index="index" @remove="removeCodeChunk(index)" :is-folded="isFolded" />
+        :rows="20" :index="index" @remove="removeCodeChunk(index)" />
     </div>
     <button class="text-sm px-6 py-2 bg-green-500 text-white rounded cursor-pointer hover:bg-green-600 mt-2 mb-4 mx-4"
       @click="addCodeChunk">
@@ -47,7 +48,6 @@ const responseTokens = ref(0);
 const loading = ref(false);
 const apiKey = ref(localStorage.getItem("openai_api_key") || "");
 const codeChunks = ref([]);
-const isFolded = ref(false);
 
 const saveApiKey = (key) => {
   localStorage.setItem("openai_api_key", key);
@@ -63,7 +63,6 @@ const removeCodeChunk = (index) => {
 };
 
 async function submitPrompt() {
-  isFolded.value = true;
   response.value = "";
   if (!description.value || codeChunks.value.length === 0) return;
   loading.value = true;
@@ -107,17 +106,20 @@ async function submitPrompt() {
 }
 
 async function fetchTokenCount() {
+  const text = `${description.value}${codeChunks.value.map((chunk) => `\n${chunk.name}\n\`\`\`${chunk.code}\`\`\``).join("")}`;
+
+  if (!text) {
+    return 0;
+  }
+
   try {
-    const response = await axios.post("http://localhost:5000/count_tokens", {
-      text: `${description.value}${codeChunks.value.map((chunk) => `\n${chunk.name}\n\`\`\`${chunk.code}\`\`\``).join("")}`,
-    });
+    const response = await axios.post("http://localhost:5000/count_tokens", { text });
     return response.data.token_count;
   } catch (error) {
     console.error("Error fetching token count:", error);
     return 0;
   }
 }
-
 watch([description, codeChunks], async () => {
   tokenCount.value = await fetchTokenCount();
 }, { deep: true });
