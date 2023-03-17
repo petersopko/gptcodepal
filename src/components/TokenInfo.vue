@@ -5,7 +5,7 @@
             Submit
         </button>
         <div class="text-sm font-bold">
-            Estimated Prompt Tokens: {{ tokenCount }}
+            Required Tokens (estimate): {{ tokenCount }}
             (${{ (tokenCount * 0.001 * 0.03).toFixed(3) }})
         </div>
     </div>
