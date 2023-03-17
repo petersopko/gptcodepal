@@ -15,10 +15,10 @@
         </div>
         <div v-show="!refIsFolded">
             <input v-model="name" type="text"
-                class="w-full max-w-3xl p-2 text-lg border-b border-green-500 rounded-none mb-2 mx-auto bg-gray-800"
+                class="w-full max-w-3xl p-2 text-lg border border-green-500 rounded-none mb-2 mx-auto bg-gray-800"
                 :placeholder="namePlaceholder" />
             <textarea v-model="value" :placeholder="codePlaceholder" :rows="rows"
-                class="w-full max-w-3xl p-2 text-lg border-b border-green-500 rounded-none resize-y mb-2 mx-auto bg-gray-800"
+                class="w-full max-w-3xl p-2 text-lg border border-green-500 rounded-none resize-y mb-2 mx-auto bg-gray-800"
                 :style="{ 'min-height': minHeight + 'px' }"></textarea>
         </div>
     </div>

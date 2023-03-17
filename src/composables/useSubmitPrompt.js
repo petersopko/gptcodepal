@@ -20,7 +20,9 @@ export default function useSubmitPrompt(apiKey, description, codeInputs) {
     const specialText =
       "Please note: If you are replying with code make sure to wrap the code with ``` . Make sure that the code contents is ready to be pasted as is. Don't mark the code with the language name. The application will automatically detect the language.";
 
-    const formattedPrompt = `${description.value}${formattedCodeInputs}\n${specialText}`;
+    const formattedPrompt = `${description.value}${formattedCodeInputs}\n${
+      specialText ? specialText : ""
+    }`;
     const url = "https://api.openai.com/v1/chat/completions";
     console.log("Prompt:", formattedPrompt);
     try {

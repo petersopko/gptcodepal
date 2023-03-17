@@ -4,7 +4,7 @@
             <div>Description</div>
         </div>
         <textarea :value="modelValue" @input="updateValue" :placeholder="placeholder" :rows="rows"
-            class="w-full max-w-3xl p-2 text-lg border-b border-green-500 rounded-none resize-y mb-2 mx-auto bg-gray-800"></textarea>
+            class="w-full max-w-3xl p-2 text-lg border border-white-500 rounded-none resize-y mb-2 mx-auto bg-gray-800"></textarea>
     </div>
 </template>
 
