@@ -57,6 +57,7 @@ export default {
 
 .tab-name {
     margin-right: 10px;
+    min-width: 50px;
 }
 
 .delete-tab {

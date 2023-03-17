@@ -1,9 +1,9 @@
 <template>
   <div class="container">
     <Loader :loading="loading" />
-    <Tabs :tabs="tabs" :activeTab="activeTabIndex" @update:activeTab="activeTabIndex = $event" @add-tab="addTab"
+    <Tabs :tabs="tabs" :activeTab="activeTabIndex" @update:activeTab="updateActiveTab" @add-tab="addTab"
       @delete-tab="deleteTab" />
-    <TextInput v-model="description" placeholder="Enter your description" class="input" :rows="5" />
+    <TextInput v-model="descriptionRef" placeholder="Enter your description" class="input" :rows="5" />
     <CodeInputList :codeInputs="codeInputs" @remove="removeCodeInput" @add="addCodeInput" />
     <div class="flex justify-between items-center">
       <SubmitButton @submit="submitPrompt" class="mx-4" />
@@ -31,10 +31,12 @@ import useTokenCount from "../composables/useTokenCount.js";
 
 const apiKey = ref(localStorage.getItem("openai_api_key") || "");
 
-const { description, saveDescription } = useDescription();
+const description = ref(localStorage.getItem("description") || ""); // Replace the useDescription import with this line
+
 const { codeInputs, addCodeInput, removeCodeInput } = useCodeInputs();
 const { tokenCount, fetchTokenCount } = useTokenCount(description, codeInputs);
 
+const descriptionRef = ref(description.value);
 const saveApiKey = (key) => {
   localStorage.setItem("openai_api_key", key);
   apiKey.value = key;
@@ -47,30 +49,37 @@ function deleteTab(index) {
 const { submitPrompt, response, loading, actualTokens, responseTokens } = useSubmitPrompt(apiKey, description, codeInputs);
 
 const tabs = reactive(
-  JSON.parse(localStorage.getItem("tabs") || '[{ "description": "", "response": "" }]')
-);
-const activeTabIndex = ref(0);
-watch(
-  () => tabs[activeTabIndex.value],
-  (tab) => {
-    description.value = tab.description;
-    response.value = tab.response;
-  },
-  { immediate: true }
+  JSON.parse(localStorage.getItem("tabs") || '[{ "description": "", "response": "", "codeInputs": [] }]')
 );
 
+const activeTabIndex = ref(0);
+
+function updateActiveTab(index) {
+  activeTabIndex.value = index;
+  descriptionRef.value = tabs[index].description;
+  response.value = tabs[index].response;
+  codeInputs.value = tabs[index].codeInputs;
+}
+
 function addTab() {
-  tabs.push({ description: "", response: "" });
-  activeTabIndex.value = tabs.length - 1;
+  tabs.push({ description: "", response: "", codeInputs: [] });
+  updateActiveTab(tabs.length - 1);
   localStorage.setItem("tabs", JSON.stringify(tabs));
 }
 
+// Watch descriptionRef value and update localStorage
+watch(descriptionRef, (newDescription) => {
+  localStorage.setItem("description", newDescription);
+});
+
 watch(
-  () => description.value,
-  (newDescription) => {
+  () => [descriptionRef.value, codeInputs.value],
+  ([newDescription, newCodeInputs]) => {
     tabs[activeTabIndex.value].description = newDescription;
+    tabs[activeTabIndex.value].codeInputs = newCodeInputs;
     localStorage.setItem("tabs", JSON.stringify(tabs));
-  }
+  },
+  { deep: true }
 );
 
 watch(
@@ -80,4 +89,5 @@ watch(
     localStorage.setItem("tabs", JSON.stringify(tabs));
   }
 );
+
 </script>
