@@ -1,10 +1,8 @@
 <template>
   <div class="container">
-    {{ loading }}
     <Loader :loading="loading" />
     <TextInput v-model="description" placeholder="Enter your description" class="input" :rows="5" />
-    <CodeChunkList :codeChunks="codeChunks" @remove="removeCodeChunk" />
-    <AddCodeChunkButton @add="addCodeChunk" />
+    <CodeChunkList :codeChunks="codeChunks" @remove="removeCodeChunk" @add="addCodeChunk" />
     <TokenInfo :tokenCount="tokenCount" @submit="submitPrompt" />
     <ResponseSection :response="response" :responseTokens="responseTokens" :actualTokens="actualTokens" />
     <Settings @save-api-key="saveApiKey" class="settings" />
@@ -18,7 +16,6 @@ import Loader from "../components/Loader.vue";
 import Settings from "../components/Settings.vue";
 import TextInput from "../components/TextInput.vue";
 import CodeChunkList from "../components/CodeChunkList.vue";
-import AddCodeChunkButton from "../components/AddCodeChunkButton.vue";
 import TokenInfo from "../components/TokenInfo.vue";
 import ResponseSection from "../components/ResponseSection.vue";
 import useSubmitPrompt from "../composables/useSubmitPrompt.js";

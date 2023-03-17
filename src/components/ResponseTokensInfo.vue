@@ -1,9 +1,9 @@
 <template>
-    <div>
-        <div class="text-sm font-bold mb-1">
+    <div v-show="responseTokens > 0" class="token-info-container">
+        <div class="token-info-item">
             Real Response Tokens: {{ responseTokens }} (${{ (responseTokens * 0.001 * 0.03).toFixed(3) }})
         </div>
-        <div class="text-sm font-bold mb-1">
+        <div class="token-info-item">
             Real Prompt Tokens: {{ actualTokens }} (${{ (actualTokens * 0.001 * 0.03).toFixed(3) }})
         </div>
     </div>
@@ -21,3 +21,19 @@ const props = defineProps({
     },
 });
 </script>
+
+<style scoped>
+.token-info-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.token-info-item {
+    font-size: 0.875rem;
+    font-weight: bold;
+    margin-bottom: 0.25rem;
+}
+</style>
