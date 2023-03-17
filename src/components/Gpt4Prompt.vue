@@ -1,43 +1,33 @@
 <template>
-  <div class="flex flex-col items-center justify-center w-full relative text-gray-100">
-    <div
-      class="animate-spin absolute top-1/2 left-1/2 transform-gpu -translate-x-1/2 -translate-y-1/2 border-t-4 border-white border-opacity-50 w-14 h-14 rounded-full"
-      v-show="loading"></div>
-    {{ loading }}
+  <div class="flex flex-col items-center justify-center relative text-gray-100">
+    <Loader :loading="loading" />
     <div class="text-sm font-bold mb-1">
-      Estimated PROMPT token usage: {{ tokenCount }}
+      Estimated Prompt Tokens: {{ tokenCount }} (${{ (tokenCount * 0.001 * 0.03).toFixed(3) }})
     </div>
-    <div class="text-sm font-bold mb-1">
-      Real PROMPT token usage: {{ actualTokens }}
-    </div>
-    <div class="flex items-center mb-5">
-      <label for="api-key-input" class="font-bold mr-2">OpenAI API Key:</label>
-      <input id="api-key-input" v-model="apiKey" type="text"
-        class="w-full max-w-md p-1 text-sm border border-green-500 rounded mr-2 bg-gray-800" />
-      <button class="text-sm px-2 py-1 bg-green-500 text-white rounded cursor-pointer hover:bg-green-600"
-        @click="saveApiKey">
-        Save API Key
-      </button>
-    </div>
-
-    <textarea v-model="prompt" placeholder="Enter your prompt" rows="5"
-      class="w-full max-w-xl min-h-24 p-2 text-lg border border-green-500 rounded resize-y mb-2 mx-auto bg-gray-800"></textarea>
+    <ApiKeyInput @save-api-key="saveApiKey" />
+    <TextInput v-model="description" placeholder="Enter your description" :rows="5" />
+    <TextInput v-model="code" placeholder="Enter your code" :rows="20" />
     <button class="text-lg px-6 py-2 bg-green-500 text-white rounded cursor-pointer hover:bg-green-600 mt-2"
-      @click="submitPrompt">Submit</button>
+      @click="submitPrompt">
+      Submit
+    </button>
     <div class="rounded p-5 mt-5 w-full max-w-xl bg-gray-900">
-      <div class="text-sm font-bold mb-1">
-        Real RESPONSE token usage: {{ responseTokens }}
-      </div>
-      <div class="font-bold text-xl mb-2">Response:</div>
+      <ResponseTokensInfo :responseTokens="responseTokens" :actualTokens="actualTokens" />
       <div class="whitespace-pre-wrap text-lg">{{ response }}</div>
     </div>
   </div>
 </template>
+
 <script setup>
 import { ref, watch } from "vue";
 import axios from "axios";
+import Loader from "./Loader.vue";
+import ApiKeyInput from "./ApiKeyInput.vue";
+import TextInput from "./TextInput.vue";
+import ResponseTokensInfo from "./ResponseTokensInfo.vue";
 
-const prompt = ref("");
+const description = ref("");
+const code = ref("");
 const response = ref("");
 const tokenCount = ref(0);
 const actualTokens = ref(0);
@@ -45,14 +35,16 @@ const responseTokens = ref(0);
 const loading = ref(false);
 const apiKey = ref(localStorage.getItem("openai_api_key") || "");
 
-const saveApiKey = () => {
-  localStorage.setItem("openai_api_key", apiKey.value);
+const saveApiKey = (key) => {
+  localStorage.setItem("openai_api_key", key);
+  apiKey.value = key;
 };
 
 async function submitPrompt() {
-  if (!prompt.value) return;
+  if (!description.value || !code.value) return;
   loading.value = true;
 
+  const formattedPrompt = `${description.value}\n\`\`\`${code.value}\`\`\``;
   const url = "https://api.openai.com/v1/chat/completions";
 
   try {
@@ -63,7 +55,7 @@ async function submitPrompt() {
         messages: [
           {
             role: "user",
-            content: prompt.value,
+            content: formattedPrompt,
           },
         ],
         temperature: 0.7,
@@ -88,7 +80,7 @@ async function submitPrompt() {
 async function fetchTokenCount() {
   try {
     const response = await axios.post("http://localhost:5000/count_tokens", {
-      text: prompt.value
+      text: `${description.value}\n\`\`\`${code.value}\`\`\``
     });
     return response.data.token_count;
   } catch (error) {
@@ -97,7 +89,7 @@ async function fetchTokenCount() {
   }
 }
 
-watch(prompt, async () => {
+watch([description, code], async () => {
   tokenCount.value = await fetchTokenCount();
 });
 </script>

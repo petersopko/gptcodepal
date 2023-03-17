@@ -73,10 +73,14 @@ button:focus-visible {
 }
 
 #app {
-  max-width: 1280px;
-  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   padding: 2rem;
   text-align: center;
+  width: 60%;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 @media (prefers-color-scheme: light) {
