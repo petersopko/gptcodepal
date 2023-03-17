@@ -1,27 +1,25 @@
 <template>
   <div class="flex flex-col items-center justify-center relative text-gray-100 w-full max-w-3xl">
     <Loader :loading="loading" />
-    <div class="text-sm font-bold mb-1">
-      Estimated Prompt Tokens: {{ tokenCount }} (${{ (tokenCount * 0.001 * 0.03).toFixed(3) }})
-    </div>
     <ApiKeyInput @save-api-key="saveApiKey" />
     <TextInput v-model="description" placeholder="Enter your description" class="w-full max-w-3xl" :rows="5" />
     <div v-for="(codeChunk, index) in codeChunks" class="w-full max-w-3xl" :key="index">
       <CodeInput v-model="codeChunks[index]" name-placeholder="Name your code chunk" code-placeholder="Enter your code"
-        :rows="20" :index="index" />
-      <button class="text-sm px-6 py-2 bg-red-500 text-white rounded cursor-pointer hover:bg-red-600 mt-2 mb-4"
-        @click="removeCodeChunk(index)">
-        Remove Code Chunk
-      </button>
+        :rows="20" :index="index" @remove="removeCodeChunk(index)" />
     </div>
     <button class="text-sm px-6 py-2 bg-green-500 text-white rounded cursor-pointer hover:bg-green-600 mt-2 mb-4 mx-4"
       @click="addCodeChunk">
       Add Code Section
     </button>
-    <button class="text-lg px-6 py-2 bg-green-500 text-white rounded cursor-pointer hover:bg-green-600 mt-2 mx-4"
-      @click="submitPrompt">
-      Submit
-    </button>
+    <div class="flex items-center mt-2 mb-4">
+      <div class="text-sm font-bold mr-4">
+        Estimated Prompt Tokens: {{ tokenCount }} (${{ (tokenCount * 0.001 * 0.03).toFixed(3) }})
+      </div>
+      <button class="text-lg px-6 py-2 bg-green-500 text-white rounded cursor-pointer hover:bg-green-600"
+        @click="submitPrompt">
+        Submit
+      </button>
+    </div>
     <div class="rounded p-5 mt-5 w-full max-w-3xl bg-gray-900">
       <ResponseTokensInfo :responseTokens="responseTokens" :actualTokens="actualTokens" />
       <div class="whitespace-pre-wrap text-lg">{{ response }}</div>
