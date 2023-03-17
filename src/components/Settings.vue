@@ -34,7 +34,7 @@ const emit = defineEmits(["save-api-key"]);
 const apiKey = ref("");
 const inputFocused = ref(false);
 const apiKeyHidden = computed(() => (apiKey.value ? "*".repeat(apiKey.value.length) : ""));
-const isFolded = ref(false);
+const isFolded = ref(true);
 
 onMounted(() => {
     const savedApiKey = localStorage.getItem("openai_api_key");
