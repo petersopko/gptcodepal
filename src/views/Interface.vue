@@ -15,7 +15,7 @@
 </template>
 
 <script setup>
-import { ref, reactive, watch } from "vue";
+import { ref, reactive, watch, onMounted } from "vue";
 import Loader from "../components/Loader.vue";
 import Settings from "../components/Settings.vue";
 import TextInput from "../components/TextInput.vue";
@@ -25,13 +25,12 @@ import TokenEstimations from "../components/TokenEstimations.vue";
 import ResponseSection from "../components/ResponseSection.vue";
 import Tabs from "../components/Tabs.vue";
 import useSubmitPrompt from "../composables/useSubmitPrompt.js";
-import useDescription from "../composables/useDescription.js";
 import useCodeInputs from "../composables/useCodeInputs.js";
 import useTokenCount from "../composables/useTokenCount.js";
 
 const apiKey = ref(localStorage.getItem("openai_api_key") || "");
 
-const description = ref(localStorage.getItem("description") || ""); // Replace the useDescription import with this line
+const description = ref("");
 
 const { codeInputs, addCodeInput, removeCodeInput } = useCodeInputs();
 const { tokenCount, fetchTokenCount } = useTokenCount(description, codeInputs);
@@ -41,16 +40,11 @@ const saveApiKey = (key) => {
   localStorage.setItem("openai_api_key", key);
   apiKey.value = key;
 };
-function deleteTab(index) {
-  tabs.splice(index, 1);
-  activeTabIndex.value = Math.min(activeTabIndex.value, tabs.length - 1);
-  localStorage.setItem("tabs", JSON.stringify(tabs));
-}
-const { submitPrompt, response, loading, actualTokens, responseTokens } = useSubmitPrompt(apiKey, description, codeInputs);
+
+const { submitPrompt, response, loading, actualTokens, responseTokens } = useSubmitPrompt(apiKey, descriptionRef, codeInputs);
 
 const tabs = reactive(
-  JSON.parse(localStorage.getItem("tabs") || '[{ "description": "", "response": "", "codeInputs": [] }]')
-);
+  JSON.parse(localStorage.getItem("tabs") || '[{ "description": "", "response": "", "codeInputs": [] }]'));
 
 const activeTabIndex = ref(0);
 
@@ -67,9 +61,16 @@ function addTab() {
   localStorage.setItem("tabs", JSON.stringify(tabs));
 }
 
-// Watch descriptionRef value and update localStorage
+function deleteTab(index) {
+  tabs.splice(index, 1);
+  activeTabIndex.value = Math.min(activeTabIndex.value, tabs.length - 1);
+  localStorage.setItem("tabs", JSON.stringify(tabs));
+  updateActiveTab(activeTabIndex.value);
+}
+
+// Watch descriptionRef value and update current tab
 watch(descriptionRef, (newDescription) => {
-  localStorage.setItem("description", newDescription);
+  tabs[activeTabIndex.value].description = newDescription;
 });
 
 watch(
@@ -89,5 +90,10 @@ watch(
     localStorage.setItem("tabs", JSON.stringify(tabs));
   }
 );
+
+onMounted(() => {
+  // Initialize the active tab on first load
+  updateActiveTab(activeTabIndex.value);
+});
 
 </script>

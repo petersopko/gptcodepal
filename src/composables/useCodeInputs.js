@@ -1,7 +1,7 @@
-import { ref, watch } from "vue";
+import { ref } from "vue";
 
-export default function useCodeInputs() {
-  const codeInputs = ref(JSON.parse(localStorage.getItem("codeInputs")) || []);
+export default function useCodeInputs(initialCodeInputs = []) {
+  const codeInputs = ref(initialCodeInputs);
 
   const addCodeInput = () => {
     codeInputs.value.push({ name: "", code: "" });
@@ -10,14 +10,6 @@ export default function useCodeInputs() {
   const removeCodeInput = (index) => {
     codeInputs.value.splice(index, 1);
   };
-
-  watch(
-    codeInputs,
-    () => {
-      localStorage.setItem("codeInputs", JSON.stringify(codeInputs.value));
-    },
-    { deep: true }
-  );
 
   return { codeInputs, addCodeInput, removeCodeInput };
 }

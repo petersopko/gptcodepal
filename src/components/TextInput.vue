@@ -1,4 +1,3 @@
-
 <template>
     <div class="border border-gray-300 p-4 rounded mb-4">
         <div class="flex items-center justify-between text-xl font-bold mb-2">

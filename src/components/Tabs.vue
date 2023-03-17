@@ -2,7 +2,7 @@
     <div class="tabs">
         <div v-for="(tab, index) in tabs" :key="index" class="tab" :class="{ active: activeTab === index }">
             <span class="tab-name" @click.stop="setActiveTab(index)">{{ index }}</span>
-            <span class="delete-tab" @click.stop="deleteTab(index)">&#10005;</span>
+            <span v-if="tabs.length > 1" class="delete-tab" @click.stop="deleteTab(index)">&#10005;</span>
         </div>
         <div class="tab add-tab" @click="addTab">
             <span class="plus-sign">+</span>
