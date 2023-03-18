@@ -1,7 +1,7 @@
 <template>
   <div class="container">
-    <Loader :loading="loading" />
     <n-card>
+      <Loader :loading="loading" />
       <PageHeader class="mb-6" />
       <n-card>
         <Tabs :tabs="tabs" :activeTab="activeTabIndex" @update:activeTab="updateActiveTab" @add-tab="addTab"
