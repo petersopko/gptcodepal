@@ -22,7 +22,6 @@ import { ref, reactive, watch, onMounted } from "vue";
 import Loader from "../components/Loader.vue";
 import TextInput from "../components/TextInput.vue";
 import CodeInputList from "../components/CodeInputList.vue";
-import TokenEstimations from "../components/TokenEstimations.vue";
 import ResponseSection from "../components/ResponseSection.vue";
 import Tabs from "../components/Tabs.vue";
 import useSubmitPrompt from "../composables/useSubmitPrompt.js";
@@ -39,10 +38,6 @@ const { codeInputs, addCodeInput, removeCodeInput } = useCodeInputs();
 const { tokenCount } = useTokenCount(description, codeInputs);
 
 const descriptionRef = ref(description.value);
-const saveApiKey = (key) => {
-  localStorage.setItem("openai_api_key", key);
-  apiKey.value = key;
-};
 
 const { submitPrompt, response, loading, promptTokens, responseTokens } = useSubmitPrompt(apiKey, descriptionRef, codeInputs);
 
