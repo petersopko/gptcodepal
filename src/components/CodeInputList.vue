@@ -5,7 +5,7 @@
                 code-placeholder="Enter your code" :rows="20" :index="index" @remove="removeCodeInput(index)"
                 :is-folded="!isLastCodeInput(index)" @update:isFolded="updateIsFolded(index, $event)" />
         </div>
-        <CodeInputAddButton @add="addCodeInput" />
+        <n-button @click="addCodeInput">Add Code Section</n-button>
     </div>
 </template>
 
