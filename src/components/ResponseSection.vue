@@ -1,14 +1,10 @@
 <template>
-    <div class="bg-gray-900 border border-gray-700">
-        <ResponseSectionHeadline />
-        <ResponseTokensInfo :responseTokens="responseTokens" :actualTokens="actualTokens" />
+    <n-card title="Response">
         <ResponseContent :response="response" />
-    </div>
+    </n-card>
 </template>
 
 <script setup>
-import ResponseSectionHeadline from './ResponseSectionHeadline.vue';
-import ResponseTokensInfo from './ResponseTokensInfo.vue';
 import ResponseContent from './ResponseContent.vue';
 
 const props = defineProps({

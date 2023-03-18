@@ -1,6 +1,8 @@
 <template>
   <div class="container">
     <Loader :loading="loading" />
+    <Settings @save-api-key="saveApiKey" class="settings" />
+
     <Tabs :tabs="tabs" :activeTab="activeTabIndex" @update:activeTab="updateActiveTab" @add-tab="addTab"
       @delete-tab="deleteTab" />
     <TextInput v-model.value="descriptionRef" placeholder="Enter your description" :activeTab="activeTabIndex" />
@@ -10,7 +12,6 @@
       <TokenEstimations :tokenCount="tokenCount" :responseTokens="responseTokens" :actualTokens="actualTokens" />
     </div>
     <ResponseSection :response="response" />
-    <Settings @save-api-key="saveApiKey" class="settings" />
   </div>
 </template>
 
