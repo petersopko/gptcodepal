@@ -2,6 +2,7 @@
   <div class="container">
     <Loader :loading="loading" />
     <n-card>
+      <PageHeader class="mb-6" />
       <Tabs :tabs="tabs" :activeTab="activeTabIndex" @update:activeTab="updateActiveTab" @add-tab="addTab"
         @delete-tab="deleteTab" />
       <TextInput v-model.value="descriptionRef" placeholder="Enter your description" :activeTab="activeTabIndex" />
@@ -10,8 +11,6 @@
         <n-button @click="submitPrompt">Submit 🚀</n-button>
         <TokenEstimations :tokenCount="tokenCount" :responseTokens="responseTokens" :actualTokens="actualTokens" />
       </n-card>
-      <Settings @save-api-key="saveApiKey" class="settings" />
-
       <ResponseSection :response="response" />
     </n-card>
   </div>
@@ -21,7 +20,6 @@
 <script setup>
 import { ref, reactive, watch, onMounted } from "vue";
 import Loader from "../components/Loader.vue";
-import Settings from "../components/Settings.vue";
 import TextInput from "../components/TextInput.vue";
 import CodeInputList from "../components/CodeInputList.vue";
 import TokenEstimations from "../components/TokenEstimations.vue";
@@ -30,6 +28,7 @@ import Tabs from "../components/Tabs.vue";
 import useSubmitPrompt from "../composables/useSubmitPrompt.js";
 import useCodeInputs from "../composables/useCodeInputs.js";
 import useTokenCount from "../composables/useTokenCount.js";
+import PageHeader from "../components/PageHeader.vue";
 
 const apiKey = ref(localStorage.getItem("openai_api_key") || "");
 

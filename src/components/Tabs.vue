@@ -39,7 +39,7 @@ const addableRef = computed(() => {
     return {
         disabled: tabsRef.value.length >= 10
     }
-})
+});
 
-const closable = props.tabs.length > 1;
+const closable = computed(() => { return props.tabs.length > 1; });
 </script>
