@@ -1,6 +1,7 @@
 
 <template>
     <n-page-header subtitle="Your GPT-4 powered coding friend">
+        {{ test }}
         <n-card title="Stats & Settings">
             <n-grid class="mb-2" cols="3">
                 <n-gi class="flex justify-center">
@@ -44,17 +45,22 @@
 <script setup>
 import { ref, onMounted, computed } from "vue";
 import ApiKeyInput from "./ApiKeyInput.vue";
+import { useStatsStore } from '../../stores/statsStore'
 const emit = defineEmits(["save-api-key"]);
 
-const promptTokensTotal = ref(0);
-const completionTokensTotal = ref(0);
-const totalPromptsSent = ref(0);
+const promptTokensTotal = computed(() => store.promptTokensTotal);
+const completionTokensTotal = computed(() => store.completionTokensTotal);
+const totalPromptsSent = computed(() => store.totalPromptsSent);
+const store = useStatsStore();
+const test = localStorage.getItem("statsStore").promptTokensTotal
 
 onMounted(() => {
-    promptTokensTotal.value = localStorage.getItem("promptTokensTotal") || 0;
-    completionTokensTotal.value = localStorage.getItem("completionTokensTotal") || 0;
-    totalPromptsSent.value = localStorage.getItem("totalPromptsSent") || 0;
+    const storedData = JSON.parse(localStorage.getItem("statsStore")) || {};
+    store.promptTokensTotal = storedData.promptTokensTotal || 0;
+    store.completionTokensTotal = storedData.completionTokensTotal || 0;
+    store.totalPromptsSent = storedData.totalPromptsSent || 0;
 });
+
 
 const totalMoneySpent = computed(() => {
     const promptCost = (promptTokensTotal.value / 1000) * 0.03;

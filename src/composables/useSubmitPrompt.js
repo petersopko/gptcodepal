@@ -1,11 +1,13 @@
 import { ref, watch } from "vue";
 import axios from "axios";
+import { useStatsStore } from "../../stores/statsStore"; // Add this import
 
 export default function useSubmitPrompt(apiKey, description, codeInputs) {
   const response = ref("");
   const loading = ref(false);
   const promptTokens = ref(0);
   const responseTokens = ref(0);
+  const statsStore = useStatsStore(); // Add this line
 
   async function submitPrompt() {
     response.value = "";
@@ -45,7 +47,6 @@ export default function useSubmitPrompt(apiKey, description, codeInputs) {
       );
       console.log("Result:", result);
       handleResponse(result);
-      updateLocalStorage();
     } catch (error) {
       handleError(error);
     }
@@ -56,32 +57,16 @@ export default function useSubmitPrompt(apiKey, description, codeInputs) {
     response.value = result.data.choices[0].message.content.trim();
     promptTokens.value = result.data.usage.prompt_tokens;
     responseTokens.value = result.data.usage.completion_tokens;
-    localStorage.setItem(
-      "promptTokensTotal",
-      parseInt(localStorage.getItem("promptTokensTotal") || 0) +
-        promptTokens.value
-    );
-    localStorage.setItem(
-      "completionTokensTotal",
-      parseInt(localStorage.getItem("completionTokensTotal") || 0) +
-        responseTokens.value
-    );
-    localStorage.setItem(
-      "totalPromptsSent",
-      parseInt(localStorage.getItem("totalPromptsSent") || 0) + 1
-    );
-    console.log("Result data:", result.data);
+    statsStore.incrementPromptTokens(promptTokens.value);
+    statsStore.incrementCompletionTokens(responseTokens.value);
+    statsStore.incrementTotalPromptsSent();
+    localStorage.setItem("statsStore", JSON.stringify(statsStore));
+    console.log(localStorage.getItem("statsStore"));
   }
 
   function handleError(error) {
     console.error("Error:", error);
     response.value = "An error occurred while fetching the response.";
-  }
-  function updateLocalStorage() {
-    watch([promptTokens, responseTokens], () => {
-      localStorage.setItem("promptTokens", promptTokens.value);
-      localStorage.setItem("responseTokens", responseTokens.value);
-    });
   }
   return { submitPrompt, response, loading, promptTokens, responseTokens };
 }
