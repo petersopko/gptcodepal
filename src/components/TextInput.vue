@@ -1,5 +1,5 @@
 <template>
-    <n-card title="Prompt Input">
+    <n-card title="Description">
         <n-input v-model:value="modelValueRef" :default-value="modelValue" :placeholder="placeholder" type="textarea"
             @input="updateValue" />
     </n-card>

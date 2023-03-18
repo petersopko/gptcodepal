@@ -3,15 +3,15 @@
     <Loader :loading="loading" />
     <n-card>
       <PageHeader class="mb-6" />
-      <Tabs :tabs="tabs" :activeTab="activeTabIndex" @update:activeTab="updateActiveTab" @add-tab="addTab"
-        @delete-tab="deleteTab" />
-      <TextInput v-model.value="descriptionRef" placeholder="Enter your description" :activeTab="activeTabIndex" />
-      <CodeInputList :codeInputs="codeInputs" @remove="removeCodeInput" @add="addCodeInput" />
-      <n-card class="flex">
-        <n-button @click="submitPrompt">Submit 🚀</n-button>
-        <TokenEstimations :tokenCount="tokenCount" :responseTokens="responseTokens" :actualTokens="actualTokens" />
+      <n-card>
+        <Tabs :tabs="tabs" :activeTab="activeTabIndex" @update:activeTab="updateActiveTab" @add-tab="addTab"
+          @delete-tab="deleteTab" />
+        <TextInput v-model.value="descriptionRef" placeholder="Enter your description" :activeTab="activeTabIndex" />
+        <CodeInputList :codeInputs="codeInputs" @remove="removeCodeInput" @add="addCodeInput" />
+        <SubmitCard :tokenCount="tokenCount" :responseTokens="responseTokens" :actualTokens="actualTokens"
+          @submit="submitPrompt" />
+        <ResponseSection :response="response" />
       </n-card>
-      <ResponseSection :response="response" />
     </n-card>
   </div>
 </template>
@@ -29,6 +29,7 @@ import useSubmitPrompt from "../composables/useSubmitPrompt.js";
 import useCodeInputs from "../composables/useCodeInputs.js";
 import useTokenCount from "../composables/useTokenCount.js";
 import PageHeader from "../components/PageHeader.vue";
+import SubmitCard from "../components/SubmitCard.vue";
 
 const apiKey = ref(localStorage.getItem("openai_api_key") || "");
 
