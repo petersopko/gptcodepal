@@ -10,7 +10,6 @@
 </template>
 
 <script setup>
-import { defineProps, defineEmits } from "vue";
 import TokenEstimations from './TokenEstimations.vue';
 const emit = defineEmits(["submit"]);
 

@@ -6,7 +6,7 @@
       <n-card>
         <Tabs />
         <TextInput v-model.value="tabsStore.activeTab.description" placeholder="Enter your description"
-          :activeTab="activeTabIndex" />
+          :activeTab="activeTabIndex" @update:model-value="tabsStore.updateDescription($event)" />
         <CodeInputList :codeInputs="tabsStore.activeTab.codeInputs" @remove="tabsStore.removeCodeInput"
           @add="tabsStore.addCodeInput" />
         <SubmitCard :tokenCount="tokenCount" :responseTokens="responseTokens" :promptTokens="promptTokens"
@@ -43,8 +43,8 @@ const descriptionRef = ref(description.value);
 
 const { submitPrompt, response, loading, promptTokens, responseTokens } = useSubmitPrompt(
   apiKey,
-  descriptionRef,
-  codeInputs
+  tabsStore.activeTab.description,
+  tabsStore.activeTab.codeInputs
 );
 
 const activeTabIndex = computed(() => {
