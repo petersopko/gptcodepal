@@ -3,7 +3,7 @@
     <Loader :loading="loading" />
     <Tabs :tabs="tabs" :activeTab="activeTabIndex" @update:activeTab="updateActiveTab" @add-tab="addTab"
       @delete-tab="deleteTab" />
-    <TextInput v-model="descriptionRef" placeholder="Enter your description" class="input" :rows="5" />
+    <TextInput v-model.value="descriptionRef" placeholder="Enter your description" :activeTab="activeTabIndex" />
     <CodeInputList :codeInputs="codeInputs" @remove="removeCodeInput" @add="addCodeInput" />
     <div class="flex justify-between items-center">
       <SubmitButton @submit="submitPrompt" class="mx-4" />
@@ -34,7 +34,7 @@ const apiKey = ref(localStorage.getItem("openai_api_key") || "");
 const description = ref("");
 
 const { codeInputs, addCodeInput, removeCodeInput } = useCodeInputs();
-const { tokenCount, fetchTokenCount } = useTokenCount(description, codeInputs);
+const { tokenCount } = useTokenCount(description, codeInputs);
 
 const descriptionRef = ref(description.value);
 const saveApiKey = (key) => {

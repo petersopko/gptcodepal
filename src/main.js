@@ -1,7 +1,16 @@
+// Vue and main app
 import { createApp } from "vue";
-import "../styles/style.css";
 import App from "./App.vue";
+
+// Libraries and plugins
+import naive from "naive-ui";
 import { library } from "@fortawesome/fontawesome-svg-core";
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+import hljs from "highlight.js/lib/core";
+import javascript from "highlight.js/lib/languages/javascript";
+import hljsVuePlugin from "@highlightjs/vue-plugin";
+
+// Icons
 import {
   faChevronDown,
   faChevronUp,
@@ -9,17 +18,18 @@ import {
   faTrashAlt,
   faCog,
 } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
-import "highlight.js/styles/default.css"; // You can change 'default' to the theme you prefer
-import hljs from "highlight.js/lib/core";
-import javascript from "highlight.js/lib/languages/javascript";
-import hljsVuePlugin from "@highlightjs/vue-plugin";
 
+// Styles
+import "highlight.js/styles/default.css";
+import "../styles/style.css";
+
+// Register languages and icons
 hljs.registerLanguage("javascript", javascript);
-
 library.add(faChevronDown, faChevronUp, faTrashAlt, faClipboard, faCog);
 
+// Create and configure application
 const app = createApp(App);
 app.component("font-awesome-icon", FontAwesomeIcon);
 app.use(hljsVuePlugin);
+app.use(naive);
 app.mount("#app");

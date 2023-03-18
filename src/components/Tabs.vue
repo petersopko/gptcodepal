@@ -8,8 +8,7 @@
 </template>
 
 <script setup>
-import { computed, ref } from "vue";
-import { NTabPane, NTabs } from "naive-ui";
+import { computed } from "vue";
 
 const props = defineProps({
     tabs: Array,
