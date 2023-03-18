@@ -2,7 +2,7 @@ import { ref, watch } from "vue";
 import axios from "axios";
 import { useStatsStore } from "../../store/statsStore"; // Add this import
 
-export default function useSubmitPrompt(apiKey, description, codeInputs) {
+export default function useSubmitPrompt(apiKey, tabsStore) {
   const response = ref("");
   const loading = ref(false);
   const promptTokens = ref(0);
@@ -10,19 +10,20 @@ export default function useSubmitPrompt(apiKey, description, codeInputs) {
   const statsStore = useStatsStore(); // Add this line
 
   async function submitPrompt() {
+    console.log("this gets triggered");
     response.value = "";
 
-    if (!description.value) return;
+    if (!tabsStore.activeTab.description) return;
     loading.value = true;
 
-    const formattedCodeInputs = codeInputs.value
+    const formattedCodeInputs = tabsStore.activeTab.codeInputs
       .map((chunk) => `\n${chunk.name}\n\`\`\`${chunk.code}\`\`\``)
       .join("");
 
     const specialText =
       "Please note: If you are replying with code make sure to wrap the code with ``` . Make sure that the code contents is ready to be pasted as is. Don't mark the code with the language name. The application will automatically detect the language.";
 
-    const formattedPrompt = `${description.value}${formattedCodeInputs}\n${specialText}`;
+    const formattedPrompt = `${tabsStore.activeTab.description}${formattedCodeInputs}\n${specialText}`;
     const url = "https://api.openai.com/v1/chat/completions";
     console.log("Prompt:", formattedPrompt);
     try {

@@ -39,12 +39,9 @@ const description = ref("");
 const codeInputs = ref(tabsStore.activeTab.codeInputs);
 const { tokenCount } = useTokenCount(description, codeInputs);
 
-const descriptionRef = ref(description.value);
-
 const { submitPrompt, response, loading, promptTokens, responseTokens } = useSubmitPrompt(
   apiKey,
-  tabsStore.activeTab.description,
-  tabsStore.activeTab.codeInputs
+  tabsStore
 );
 
 const activeTabIndex = computed(() => {

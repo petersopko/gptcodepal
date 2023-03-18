@@ -30,6 +30,7 @@ const props = defineProps({
 
 // emit submit prompt 
 const submitPrompt = () => {
+    console.log('test')
     emit('submit');
 }
 </script>
