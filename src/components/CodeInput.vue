@@ -5,12 +5,9 @@
                 <span>{{ !modelValue.name ? 'Code Input ' + (index + 1) : modelValue.name }}</span>
             </div>
             <div>
-                <n-button @click="toggleFold" class="text-lg text-white p-2 rounded-none mx-4">
-                    <font-awesome-icon :icon="['fas', `chevron-${refIsFolded ? 'down' : 'up'}`]" />
-                </n-button>
-                <n-button @click="$emit('remove')" class="text-lg text-red p-2 rounded-none">
-                    <font-awesome-icon icon="trash-alt" />
-                </n-button>
+                <IconButton icon="chevron-down" v-if="refIsFolded" @click="toggleFold" />
+                <IconButton icon="chevron-up" v-else @click="toggleFold" />
+                <IconButton icon="trash-alt" class="text-red" @click="$emit('remove')" />
             </div>
         </div>
         <div v-show="!refIsFolded">
@@ -20,9 +17,9 @@
         </div>
     </div>
 </template>
-
 <script setup>
 import { ref, watch, computed } from "vue";
+import IconButton from "./IconButton.vue";
 
 const props = defineProps({
     modelValue: Object,

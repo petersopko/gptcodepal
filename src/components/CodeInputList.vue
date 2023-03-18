@@ -12,7 +12,6 @@
 
 <script setup>
 import CodeInput from './CodeInput.vue';
-import CodeInputAddButton from './CodeInputAddButton.vue';
 
 const props = defineProps({
     codeInputs: Array,

@@ -2,7 +2,6 @@
     <n-tabs :value="activeTab" type="card" @update:value="updateActiveTab" :addable="addableRef" :closable="closable"
         tab-style="min-width: 80px;" @close="deleteTab" @add="addTab">
         <n-tab-pane v-for="(tab, index) in tabsRef" :key="index" :name="index">
-            {{ index }}
         </n-tab-pane>
     </n-tabs>
 </template>

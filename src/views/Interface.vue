@@ -6,7 +6,7 @@
     <TextInput v-model.value="descriptionRef" placeholder="Enter your description" :activeTab="activeTabIndex" />
     <CodeInputList :codeInputs="codeInputs" @remove="removeCodeInput" @add="addCodeInput" />
     <div class="flex justify-between items-center">
-      <SubmitButton @submit="submitPrompt" class="mx-4" />
+      <n-button @click="submitPrompt">Submit</n-button>
       <TokenEstimations :tokenCount="tokenCount" :responseTokens="responseTokens" :actualTokens="actualTokens" />
     </div>
     <ResponseSection :response="response" />
@@ -21,7 +21,6 @@ import Loader from "../components/Loader.vue";
 import Settings from "../components/Settings.vue";
 import TextInput from "../components/TextInput.vue";
 import CodeInputList from "../components/CodeInputList.vue";
-import SubmitButton from "../components/SubmitButton.vue";
 import TokenEstimations from "../components/TokenEstimations.vue";
 import ResponseSection from "../components/ResponseSection.vue";
 import Tabs from "../components/Tabs.vue";
