@@ -1,6 +1,6 @@
 import { ref, watch } from "vue";
 import axios from "axios";
-import { useStatsStore } from "../../stores/statsStore"; // Add this import
+import { useStatsStore } from "../../store/statsStore"; // Add this import
 
 export default function useSubmitPrompt(apiKey, description, codeInputs) {
   const response = ref("");

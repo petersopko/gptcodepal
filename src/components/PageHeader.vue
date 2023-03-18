@@ -1,7 +1,5 @@
-
 <template>
     <n-page-header subtitle="Your GPT-4 powered coding friend">
-        {{ test }}
         <n-card title="Stats & Settings">
             <n-grid class="mb-2" cols="3">
                 <n-gi class="flex justify-center">
@@ -43,17 +41,15 @@
 </template>
 
 <script setup>
-import { ref, onMounted, computed } from "vue";
+import { onMounted, computed } from "vue";
 import ApiKeyInput from "./ApiKeyInput.vue";
-import { useStatsStore } from '../../stores/statsStore'
+import { useStatsStore } from '../../store/statsStore'
 const emit = defineEmits(["save-api-key"]);
 
 const promptTokensTotal = computed(() => store.promptTokensTotal);
 const completionTokensTotal = computed(() => store.completionTokensTotal);
 const totalPromptsSent = computed(() => store.totalPromptsSent);
 const store = useStatsStore();
-const test = localStorage.getItem("statsStore").promptTokensTotal
-
 onMounted(() => {
     const storedData = JSON.parse(localStorage.getItem("statsStore")) || {};
     store.promptTokensTotal = storedData.promptTokensTotal || 0;

@@ -1,34 +1,36 @@
 <template>
     <div class="mb-2">
-        <n-input v-model:value="name" :default-value="modelValue.name" placeholder="Name your code input" class="mb-4" />
-        <n-input v-model:value="value" :default-value="modelValue.code" placeholder="Enter your code" type="textarea"
-            @input="updateValue" />
+        <n-input v-model="name" placeholder="Name your code input" class="mb-4" />
+        <n-input v-model:value="value" placeholder="Enter your code" type="textarea" @input="updateValue" />
     </div>
 </template>
 <script setup>
-import { ref, watch } from "vue";
+import { ref, computed, watch } from "vue";
 
 const props = defineProps({
     modelValue: Object,
     index: Number,
-
 });
 
 const emit = defineEmits(["update:modelValue", "remove"]);
 
-const name = ref(props.modelValue.name);
+const name = computed({
+    get: () => props.modelValue.name,
+    set: (value) => {
+        props.modelValue.name = value;
+    },
+});
 const value = ref(props.modelValue.code);
 
 watch(
-    [name, value],
+    () => value.value,
     () => {
-        emit("update:modelValue", { name: name.value, code: value.value });
+        emit("update:modelValue", { index: props.index, name: name.value, code: value.value });
     },
     { deep: true }
 );
 
-
 function updateValue(event) {
-    emit("update:modelValue", { name: name.value, code: event });
+    emit("update:modelValue", { index: props.index, name: name.value, code: event });
 }
 </script>
