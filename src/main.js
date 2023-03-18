@@ -9,6 +9,7 @@ import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import hljs from "highlight.js/lib/core";
 import javascript from "highlight.js/lib/languages/javascript";
 import hljsVuePlugin from "@highlightjs/vue-plugin";
+import { createPinia } from "pinia"; // Import createPinia
 
 // Icons
 import {
@@ -32,4 +33,5 @@ const app = createApp(App);
 app.component("font-awesome-icon", FontAwesomeIcon);
 app.use(hljsVuePlugin);
 app.use(naive);
+app.use(createPinia()); // Add Pinia instance to the app
 app.mount("#app");
