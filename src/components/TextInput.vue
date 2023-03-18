@@ -1,24 +1,27 @@
 <template>
-    <div class="bg-gray-800 border border-gray-300 p-4 rounded-none mb-4">
-        <div class="flex items-center justify-between text-xl font-bold mb-2">
-            <div>Description</div>
-        </div>
-        <textarea :value="modelValue" @input="updateValue" :placeholder="placeholder" :rows="rows"
-            class="w-full max-w-3xl p-2 text-lg border border-white-500 rounded-none resize-y mb-2 mx-auto bg-gray-800"></textarea>
-    </div>
+    <n-card title="Description">
+        <n-input v-model:value="modelValueRef" :default-value="modelValue" :placeholder="placeholder" type="textarea"
+            @input="updateValue" />
+    </n-card>
 </template>
 
-
 <script setup>
+import { ref, watchEffect } from "vue";
 const props = defineProps({
     modelValue: String,
     placeholder: String,
-    rows: Number,
+    activeTab: Number,
 });
+
+const modelValueRef = ref(props.modelValue);
 
 const emit = defineEmits(["update:modelValue"]);
 
 function updateValue(event) {
-    emit("update:modelValue", event.target.value);
+    emit("update:modelValue", event);
 }
+
+watchEffect(() => {
+    modelValueRef.value = props.modelValue;
+});
 </script>

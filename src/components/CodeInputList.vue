@@ -1,18 +1,23 @@
 <template>
-    <div class="bg-gray-900 border border-gray-300 p-4 rounded-none mb-4 input">
-        <div v-for="(codeInput, index) in codeInputs" :key="index">
-            <CodeInput v-model="codeInputs[index]" name-placeholder="Name your code input"
-                code-placeholder="Enter your code" :rows="20" :index="index" @remove="removeCodeInput(index)"
-                :is-folded="!isLastCodeInput(index)" @update:isFolded="updateIsFolded(index, $event)" />
-        </div>
-        <CodeInputAddButton @add="addCodeInput" />
-    </div>
+    <n-card title="Code Inputs">
+        <n-collapse class="mb-6">
+            <n-collapse-item v-for="(codeInput, index) in codeInputs"
+                :title="!codeInput.name ? 'Code Input ' + (index + 1) : codeInput.name" :name="String(index)"
+                default-expanded-names="1" accordion :key="index">
+                <CodeInput v-model="codeInputs[index]" :index="index" />
+                <template #header-extra>
+                    <IconButton icon="trash-alt" class="text-red" @click="removeCodeInput(index)" />
+                </template>
+            </n-collapse-item>
+        </n-collapse>
+        <n-button @click="addCodeInput">Add Code Section</n-button>
+    </n-card>
 </template>
 
 
 <script setup>
 import CodeInput from './CodeInput.vue';
-import CodeInputAddButton from './CodeInputAddButton.vue';
+import IconButton from './IconButton.vue';
 
 const props = defineProps({
     codeInputs: Array,
@@ -28,12 +33,4 @@ const addCodeInput = () => {
     emit('add');
 };
 
-const isLastCodeInput = (index) => {
-    return index === props.codeInputs?.length - 1;
-};
-const updateIsFolded = (index, newVal) => {
-    if (index < props.codeInputs.length - 1) {
-        props.codeInputs[index].isFolded = newVal;
-    }
-};
 </script>

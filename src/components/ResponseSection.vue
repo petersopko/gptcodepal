@@ -1,19 +1,14 @@
 <template>
-    <div class="bg-gray-900 border border-gray-700">
-        <ResponseSectionHeadline />
-        <ResponseTokensInfo :responseTokens="responseTokens" :actualTokens="actualTokens" />
+    <n-card title="Response">
+        <div v-if="!response"> There is no response from the bot now. Don't hesitate and start prompting! </div>
         <ResponseContent :response="response" />
-    </div>
+    </n-card>
 </template>
 
 <script setup>
-import ResponseSectionHeadline from './ResponseSectionHeadline.vue';
-import ResponseTokensInfo from './ResponseTokensInfo.vue';
 import ResponseContent from './ResponseContent.vue';
 
 const props = defineProps({
     response: String,
-    responseTokens: Number,
-    actualTokens: Number,
 });
 </script>

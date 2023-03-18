@@ -1,77 +1,45 @@
 <template>
-    <div class="tabs">
-        <div v-for="(tab, index) in tabs" :key="index" class="tab" :class="{ active: activeTab === index }">
-            <span class="tab-name" @click.stop="setActiveTab(index)">{{ index }}</span>
-            <span v-if="tabs.length > 1" class="delete-tab" @click.stop="deleteTab(index)">&#10005;</span>
-        </div>
-        <div class="tab add-tab" @click="addTab">
-            <span class="plus-sign">+</span>
-        </div>
-    </div>
+    <n-tabs :value="activeTab" type="card" @update:value="updateActiveTab" :addable="addableRef" :closable="closable"
+        tab-style="min-width: 80px;" @close="deleteTab" @add="addTab">
+        <n-tab-pane v-for="(tab, index) in tabsRef" :key="index" :name="index">
+        </n-tab-pane>
+    </n-tabs>
 </template>
 
+<script setup>
+import { computed } from "vue";
 
-<script>
-export default {
-    props: {
-        tabs: Array,
-        activeTab: Number,
-    },
-    methods: {
-        setActiveTab(index) {
-            this.$emit("update:activeTab", index);
-        },
-        addTab() {
-            this.$emit("add-tab");
-        },
-        deleteTab(index) {
-            this.$emit("delete-tab", index);
-        },
-    },
+const props = defineProps({
+    tabs: Array,
+    activeTab: Number,
+});
+
+const emits = defineEmits([
+    "update:activeTab",
+    "add-tab",
+    "delete-tab",
+]);
+
+const updateActiveTab = (index) => {
+    emits("update:activeTab", index);
 };
+
+const addTab = () => {
+    emits("add-tab");
+};
+
+const deleteTab = (index) => {
+    emits("delete-tab", index);
+};
+
+const tabsRef = computed(() => {
+    return props.tabs;
+});
+const addableRef = computed(() => {
+    return {
+        disabled: tabsRef.value.length >= 10
+    }
+});
+
+const closable = computed(() => { return props.tabs.length > 1; });
 </script>
-
-<style scoped>
-.tabs {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-}
-
-.tab,
-.add-tab {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px 15px;
-    border: 1px solid #ccc;
-    border-radius: 0;
-    cursor: pointer;
-    min-width: 80px;
-}
-
-.tab.active,
-.add-tab:hover {
-    background-color: #ccc;
-}
-
-.tab-name {
-    margin-right: 10px;
-    min-width: 50px;
-}
-
-.delete-tab {
-    font-size: 20px;
-    font-weight: bold;
-    cursor: pointer;
-    border: 1px solid #ccc;
-    border-radius: 0;
-    padding: 2px 5px;
-}
-
-.plus-sign {
-    font-size: 20px;
-    font-weight: bold;
-    margin: 0 auto;
-}
-</style>

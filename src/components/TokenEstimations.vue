@@ -1,30 +1,29 @@
 <template>
-    <div class="token-info-container">
-        <div class="text-sm font-bold">
-            Required Tokens (estimate): {{ tokenCount }}
-            (${{ (tokenCount * 0.001 * 0.03).toFixed(3) }})
-        </div>
-        <div v-if="responseTokens > 0">
-            <div class="token-info-item">
-                Real Response Tokens: {{ responseTokens }}
-                (${{ (responseTokens * 0.001 * 0.03).toFixed(3) }})
-            </div>
-            <div class="token-info-item">
-                Real Prompt Tokens: {{ actualTokens }}
-                (${{ (actualTokens * 0.001 * 0.03).toFixed(3) }})
-            </div>
-        </div>
-    </div>
+    <n-grid :cols="3">
+        <n-gi>
+            <n-statistic label="Required Tokens (estimate)"
+                :value="`${tokenCount} ($${(tokenCount * 0.001 * 0.03).toFixed(3)})`" />
+        </n-gi>
+        <n-gi>
+            <n-statistic label="Real Response Tokens"
+                :value="`${responseTokens} ($${(responseTokens * 0.001 * 0.03).toFixed(3)})`" />
+        </n-gi>
+        <n-gi>
+            <n-statistic label="Real Prompt Tokens"
+                :value="`${promptTokens} ($${(promptTokens * 0.001 * 0.03).toFixed(3)})`" />
+        </n-gi>
+    </n-grid>
 </template>
 
-
 <script setup>
+import { defineProps } from "vue";
+
 const props = defineProps({
     responseTokens: {
         type: Number,
-        required: false,
+        default: 0,
     },
-    actualTokens: {
+    promptTokens: {
         type: Number,
         required: false,
     },
@@ -34,22 +33,3 @@ const props = defineProps({
     },
 });
 </script>
-
-<style scoped>
-.token-info-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-top: 0.5rem;
-    margin-bottom: 1rem;
-    border: 2px solid #4CAF50;
-    border-radius: 0;
-    padding: 1rem;
-}
-
-.token-info-item {
-    font-size: 0.875rem;
-    font-weight: bold;
-    margin-bottom: 0.25rem;
-}
-</style>

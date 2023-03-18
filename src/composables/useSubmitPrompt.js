@@ -1,10 +1,10 @@
-import { ref } from "vue";
+import { ref, watch } from "vue";
 import axios from "axios";
 
 export default function useSubmitPrompt(apiKey, description, codeInputs) {
   const response = ref("");
   const loading = ref(false);
-  const actualTokens = ref(0);
+  const promptTokens = ref(0);
   const responseTokens = ref(0);
 
   async function submitPrompt() {
@@ -47,6 +47,7 @@ export default function useSubmitPrompt(apiKey, description, codeInputs) {
       );
       console.log("Result:", result);
       handleResponse(result);
+      updateLocalStorage();
     } catch (error) {
       handleError(error);
     }
@@ -55,8 +56,22 @@ export default function useSubmitPrompt(apiKey, description, codeInputs) {
   function handleResponse(result) {
     loading.value = false;
     response.value = result.data.choices[0].message.content.trim();
-    actualTokens.value = result.data.usage.prompt_tokens;
+    promptTokens.value = result.data.usage.prompt_tokens;
     responseTokens.value = result.data.usage.completion_tokens;
+    localStorage.setItem(
+      "promptTokensTotal",
+      parseInt(localStorage.getItem("promptTokensTotal") || 0) +
+        promptTokens.value
+    );
+    localStorage.setItem(
+      "completionTokensTotal",
+      parseInt(localStorage.getItem("completionTokensTotal") || 0) +
+        responseTokens.value
+    );
+    localStorage.setItem(
+      "totalPromptsSent",
+      parseInt(localStorage.getItem("totalPromptsSent") || 0) + 1
+    );
     console.log("Result data:", result.data);
   }
 
@@ -64,6 +79,11 @@ export default function useSubmitPrompt(apiKey, description, codeInputs) {
     console.error("Error:", error);
     response.value = "An error occurred while fetching the response.";
   }
-
-  return { submitPrompt, response, loading, actualTokens, responseTokens };
+  function updateLocalStorage() {
+    watch([promptTokens, responseTokens], () => {
+      localStorage.setItem("promptTokens", promptTokens.value);
+      localStorage.setItem("responseTokens", responseTokens.value);
+    });
+  }
+  return { submitPrompt, response, loading, promptTokens, responseTokens };
 }
