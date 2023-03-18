@@ -14,16 +14,12 @@
             </div>
         </div>
         <div v-show="!refIsFolded">
-            <input v-model="name" type="text"
-                class="w-full max-w-3xl p-2 text-lg border-b border-green-500 rounded-none mb-2 mx-auto bg-gray-800"
-                :placeholder="namePlaceholder" />
-            <textarea v-model="value" :placeholder="codePlaceholder" :rows="rows"
-                class="w-full max-w-3xl p-2 text-lg border-b border-green-500 rounded-none resize-y mb-2 mx-auto bg-gray-800"
-                :style="{ 'min-height': minHeight + 'px' }"></textarea>
+            <n-input v-model:value="name" :default-value="modelValue.name" :placeholder="namePlaceholder" class="mb-4" />
+            <n-input v-model:value="value" :default-value="modelValue.code" :placeholder="codePlaceholder" type="textarea"
+                :rows="rows" :style="{ 'min-height': minHeight + 'px' }" @input="updateValue" />
         </div>
     </div>
 </template>
-
 
 <script setup>
 import { ref, watch, computed } from "vue";
@@ -69,4 +65,8 @@ const toggleFold = () => {
     refIsFolded.value = !refIsFolded.value;
     emit("update:isFolded", refIsFolded.value);
 };
+
+function updateValue(event) {
+    emit("update:modelValue", { name: name.value, code: event });
+}
 </script>

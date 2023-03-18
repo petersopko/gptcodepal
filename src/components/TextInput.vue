@@ -3,7 +3,7 @@
         <div class="flex items-center justify-between text-xl font-bold mb-2">
             <div>Description</div>
         </div>
-        <n-input v-model:value="modelValueRef" :default-value="modelValue" :placeholder="placeholder"
+        <n-input v-model:value="modelValueRef" :default-value="modelValue" :placeholder="placeholder" type="textarea"
             @input="updateValue" />
     </div>
 </template>
