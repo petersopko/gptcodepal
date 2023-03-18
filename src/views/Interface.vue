@@ -8,7 +8,7 @@
           @delete-tab="deleteTab" />
         <TextInput v-model.value="descriptionRef" placeholder="Enter your description" :activeTab="activeTabIndex" />
         <CodeInputList :codeInputs="codeInputs" @remove="removeCodeInput" @add="addCodeInput" />
-        <SubmitCard :tokenCount="tokenCount" :responseTokens="responseTokens" :actualTokens="actualTokens"
+        <SubmitCard :tokenCount="tokenCount" :responseTokens="responseTokens" :promptTokens="promptTokens"
           @submit="submitPrompt" />
         <ResponseSection :response="response" />
       </n-card>
@@ -44,7 +44,7 @@ const saveApiKey = (key) => {
   apiKey.value = key;
 };
 
-const { submitPrompt, response, loading, actualTokens, responseTokens } = useSubmitPrompt(apiKey, descriptionRef, codeInputs);
+const { submitPrompt, response, loading, promptTokens, responseTokens } = useSubmitPrompt(apiKey, descriptionRef, codeInputs);
 
 const tabs = reactive(
   JSON.parse(localStorage.getItem("tabs") || '[{ "description": "", "response": "", "codeInputs": [] }]'));

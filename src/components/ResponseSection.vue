@@ -10,7 +10,5 @@ import ResponseContent from './ResponseContent.vue';
 
 const props = defineProps({
     response: String,
-    responseTokens: Number,
-    actualTokens: Number,
 });
 </script>

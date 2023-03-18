@@ -4,7 +4,7 @@
             <n-button class="w-1/3 mt-4 mb-4" @click="submitPrompt">Submit 🚀</n-button>
         </div>
         <n-card>
-            <TokenEstimations :tokenCount="tokenCount" :responseTokens="responseTokens" :actualTokens="actualTokens" />
+            <TokenEstimations :tokenCount="tokenCount" :responseTokens="responseTokens" :promptTokens="promptTokens" />
         </n-card>
     </n-card>
 </template>
@@ -23,7 +23,7 @@ const props = defineProps({
         type: Number,
         default: 0,
     },
-    actualTokens: {
+    promptTokens: {
         type: Number,
         required: false,
     },

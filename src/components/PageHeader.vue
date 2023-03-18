@@ -1,15 +1,16 @@
+
 <template>
     <n-page-header subtitle="Your GPT-4 powered coding friend">
-        <n-card>
+        <n-card title="Stats & Settings">
             <n-grid class="mb-2" cols="3">
                 <n-gi class="flex justify-center">
-                    <n-statistic label="Tokens 🪙" value="12409" />
+                    <n-statistic label="Prompt Tokens 🪙" :value="promptTokensTotal" />
+                </n-gi>
+                <n-gi class="flex justify-center">
+                    <n-statistic label="Completion Tokens 🪙" :value="completionTokensTotal" />
                 </n-gi>
                 <n-gi class="flex justify-center items-center">
-                    <n-statistic label="Money 💲 " value="$22" />
-                </n-gi>
-                <n-gi class="flex justify-center items-center">
-                    <n-statistic label="Prompts 🗣️" value="36" />
+                    <n-statistic label="Prompts Sent 🗣️" :value="totalPromptsSent" />
                 </n-gi>
             </n-grid>
             <n-card>
@@ -33,6 +34,7 @@
         </template>
         <template #extra>
             <n-space>
+                <n-statistic label="Money Spent 💲" :value="`$${totalMoneySpent}`" class="mr-4" />
                 <n-button>Wipe session data 🧹</n-button>
             </n-space>
         </template>
@@ -40,8 +42,25 @@
 </template>
 
 <script setup>
+import { ref, onMounted, computed } from "vue";
 import ApiKeyInput from "./ApiKeyInput.vue";
 const emit = defineEmits(["save-api-key"]);
+
+const promptTokensTotal = ref(0);
+const completionTokensTotal = ref(0);
+const totalPromptsSent = ref(0);
+
+onMounted(() => {
+    promptTokensTotal.value = localStorage.getItem("promptTokensTotal") || 0;
+    completionTokensTotal.value = localStorage.getItem("completionTokensTotal") || 0;
+    totalPromptsSent.value = localStorage.getItem("totalPromptsSent") || 0;
+});
+
+const totalMoneySpent = computed(() => {
+    const promptCost = (promptTokensTotal.value / 1000) * 0.03;
+    const completionCost = (completionTokensTotal.value / 1000) * 0.06;
+    return (promptCost + completionCost).toFixed(2);
+});
 
 const saveApiKey = (apiKey) => {
     emit("save-api-key", apiKey);

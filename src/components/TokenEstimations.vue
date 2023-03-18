@@ -10,7 +10,7 @@
         </n-gi>
         <n-gi>
             <n-statistic label="Real Prompt Tokens"
-                :value="`${actualTokens} ($${(actualTokens * 0.001 * 0.03).toFixed(3)})`" />
+                :value="`${promptTokens} ($${(promptTokens * 0.001 * 0.03).toFixed(3)})`" />
         </n-gi>
     </n-grid>
 </template>
@@ -23,7 +23,7 @@ const props = defineProps({
         type: Number,
         default: 0,
     },
-    actualTokens: {
+    promptTokens: {
         type: Number,
         required: false,
     },
