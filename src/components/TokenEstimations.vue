@@ -34,22 +34,3 @@ const props = defineProps({
     },
 });
 </script>
-
-<style scoped>
-.token-info-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-top: 0.5rem;
-    margin-bottom: 1rem;
-    border: 2px solid #4CAF50;
-    border-radius: 0;
-    padding: 1rem;
-}
-
-.token-info-item {
-    font-size: 0.875rem;
-    font-weight: bold;
-    margin-bottom: 0.25rem;
-}
-</style>

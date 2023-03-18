@@ -1,7 +1,7 @@
 <template>
     <n-card>
         <n-collapse accordion>
-            <n-collapse-item title="Settings" name="1">
+            <n-collapse-item title="OpenAI Api Key" name="1">
                 <ApiKeyInput @save-api-key="saveApiKey" />
             </n-collapse-item>
         </n-collapse>

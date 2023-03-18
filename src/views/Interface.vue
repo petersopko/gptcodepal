@@ -1,17 +1,19 @@
 <template>
   <div class="container">
     <Loader :loading="loading" />
-    <Settings @save-api-key="saveApiKey" class="settings" />
+    <n-card>
+      <Tabs :tabs="tabs" :activeTab="activeTabIndex" @update:activeTab="updateActiveTab" @add-tab="addTab"
+        @delete-tab="deleteTab" />
+      <TextInput v-model.value="descriptionRef" placeholder="Enter your description" :activeTab="activeTabIndex" />
+      <CodeInputList :codeInputs="codeInputs" @remove="removeCodeInput" @add="addCodeInput" />
+      <n-card class="flex">
+        <n-button @click="submitPrompt">Submit 🚀</n-button>
+        <TokenEstimations :tokenCount="tokenCount" :responseTokens="responseTokens" :actualTokens="actualTokens" />
+      </n-card>
+      <Settings @save-api-key="saveApiKey" class="settings" />
 
-    <Tabs :tabs="tabs" :activeTab="activeTabIndex" @update:activeTab="updateActiveTab" @add-tab="addTab"
-      @delete-tab="deleteTab" />
-    <TextInput v-model.value="descriptionRef" placeholder="Enter your description" :activeTab="activeTabIndex" />
-    <CodeInputList :codeInputs="codeInputs" @remove="removeCodeInput" @add="addCodeInput" />
-    <div class="flex justify-between items-center">
-      <n-button @click="submitPrompt">Submit</n-button>
-      <TokenEstimations :tokenCount="tokenCount" :responseTokens="responseTokens" :actualTokens="actualTokens" />
-    </div>
-    <ResponseSection :response="response" />
+      <ResponseSection :response="response" />
+    </n-card>
   </div>
 </template>
 

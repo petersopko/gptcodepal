@@ -1,6 +1,5 @@
 <template>
-    <div class="flex items-center">
-        <label for="api-key-input" class="font-bold mr-2">OpenAI API Key:</label>
+    <div class="flex justify-between">
         <div class="relative w-full max-w-md">
             <n-input id="api-key-input" v-model:value="apiKey" type="password" show-password-on="mousedown"
                 placeholder="API Key" />

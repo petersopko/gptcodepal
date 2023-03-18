@@ -1,6 +1,6 @@
 <template>
-    <n-card>
-        <n-collapse>
+    <n-card title="Code Inputs">
+        <n-collapse class="mb-6">
             <n-collapse-item v-for="(codeInput, index) in codeInputs"
                 :title="!codeInput.name ? 'Code Input ' + (index + 1) : codeInput.name" :name="String(index)"
                 default-expanded-names="1" accordion :key="index">

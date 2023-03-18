@@ -1,11 +1,8 @@
 <template>
-    <div class="bg-gray-800 border border-gray-300 p-4 rounded-none mb-4">
-        <div class="flex items-center justify-between text-xl font-bold mb-2">
-            <div>Description</div>
-        </div>
+    <n-card title="Prompt Input">
         <n-input v-model:value="modelValueRef" :default-value="modelValue" :placeholder="placeholder" type="textarea"
             @input="updateValue" />
-    </div>
+    </n-card>
 </template>
 
 <script setup>
