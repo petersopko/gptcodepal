@@ -1,6 +1,5 @@
 <template>
     <n-card title="Code Inputs">
-        {{ codeInputsComputed }}
         <n-collapse class="mb-6">
             <n-collapse-item v-for="(codeInput, index) in codeInputsComputed"
                 :title="!codeInput.name ? 'Code Input ' + (index + 1) : codeInput.name" :name="index"

@@ -1,10 +1,5 @@
 <template>
   <div class="container">
-    {{ tabsStore.tabs }}
-    {{ "------------" }}
-    {{ tabsStore.activeTab }}
-    {{ "------------" }}
-    {{ tabsStore.activeTabIndex }}
     <n-card>
       <Loader :loading="loading" />
       <PageHeader class="mb-6" />
@@ -23,7 +18,7 @@
 </template>
 
 <script setup>
-import { ref, computed, watch, onMounted } from "vue";
+import { ref, computed, onMounted } from "vue";
 import Loader from "../components/Loader.vue";
 import TextInput from "../components/TextInput.vue";
 import CodeInputList from "../components/CodeInputList.vue";
