@@ -7,8 +7,7 @@
       <PageHeader class="mb-6" />
       <n-card>
         <Tabs />
-        <TextInput v-model:value="tabsStore.activeTab.description" placeholder="Enter your description"
-          :activeTab="activeTabIndex" @update:model-value="tabsStore.updateDescription($event)" />
+        <TextInput placeholder="Enter your description" :activeTab="activeTabIndex" />
         <CodeInputList :codeInputs="tabsStore.activeTab.codeInputs" @remove="tabsStore.removeCodeInput"
           @add="tabsStore.addCodeInput" />
         <SubmitCard :tokenCount="tokenEstimate" :responseTokens="responseTokens" :promptTokens="promptTokens"
@@ -31,12 +30,10 @@ import useTokenCount from "../composables/useTokenCount.js";
 import PageHeader from "../components/PageHeader.vue";
 import SubmitCard from "../components/SubmitCard.vue";
 import { useTabsStore } from "../../store/tabsStore.js";
-import { useStatsStore } from "../../store/statsStore";
 import { useTokenEstimateStore } from "../../store/tokenEstimateStore.js";
 
 
 const tabsStore = useTabsStore();
-const statsStore = useStatsStore();
 const tokenEstimateStore = useTokenEstimateStore();
 const apiKey = ref(localStorage.getItem("openai_api_key") || "");
 const description = computed(() => {
