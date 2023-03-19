@@ -25,8 +25,8 @@ const value = ref(props.modelValue.code);
 
 watch(
     () => value.value,
-    () => {
-        emit("update:modelValue", { index: props.index, name: name.value, code: value.value });
+    (newValue) => {
+        emit("update:modelValue", { index: props.index, name: name.value, code: newValue });
     },
     { deep: true }
 );

@@ -9,7 +9,7 @@ export default function useTabs(apiKey) {
 
   const tabs = reactive(
     JSON.parse(
-      localStorage.getItem("tabs") ||
+      localStorage.getItem("tabsStore") ||
         '[{ "description": "", "response": "", "codeInputs": [] }]'
     )
   );
@@ -25,13 +25,13 @@ export default function useTabs(apiKey) {
   function addTab() {
     tabs.push({ description: "", response: "", codeInputs: [] });
     updateActiveTab(tabs.length - 1);
-    localStorage.setItem("tabs", JSON.stringify(tabs));
+    localStorage.setItem("tabsStore", JSON.stringify(tabs));
   }
 
   function deleteTab(index) {
     tabs.splice(index, 1);
     activeTabIndex.value = Math.min(activeTabIndex.value, tabs.length - 1);
-    localStorage.setItem("tabs", JSON.stringify(tabs));
+    localStorage.setItem("tabsStore", JSON.stringify(tabs));
     updateActiveTab(activeTabIndex.value);
   }
 
@@ -45,7 +45,7 @@ export default function useTabs(apiKey) {
     ([newDescription, newCodeInputs]) => {
       tabs[activeTabIndex.value].description = newDescription;
       tabs[activeTabIndex.value].codeInputs = newCodeInputs;
-      localStorage.setItem("tabs", JSON.stringify(tabs));
+      localStorage.setItem("tabsStore", JSON.stringify(tabs));
     },
     { deep: true }
   );
@@ -54,7 +54,7 @@ export default function useTabs(apiKey) {
     () => response.value,
     (newResponse) => {
       tabs[activeTabIndex.value].response = newResponse;
-      localStorage.setItem("tabs", JSON.stringify(tabs));
+      localStorage.setItem("tabsStore", JSON.stringify(tabs));
     }
   );
 

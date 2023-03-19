@@ -5,7 +5,7 @@
       <PageHeader class="mb-6" />
       <n-card>
         <Tabs />
-        <TextInput v-model.value="tabsStore.activeTab.description" placeholder="Enter your description"
+        <TextInput v-model:value="tabsStore.activeTab.description" placeholder="Enter your description"
           :activeTab="activeTabIndex" @update:model-value="tabsStore.updateDescription($event)" />
         <CodeInputList :codeInputs="tabsStore.activeTab.codeInputs" @remove="tabsStore.removeCodeInput"
           @add="tabsStore.addCodeInput" />

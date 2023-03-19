@@ -6,7 +6,7 @@
 </template>
 
 <script setup>
-import { ref, watchEffect } from "vue";
+import { ref } from "vue";
 const props = defineProps({
     modelValue: String,
     placeholder: String,
@@ -20,8 +20,4 @@ const emit = defineEmits(["update:modelValue"]);
 function updateValue(event) {
     emit("update:modelValue", event);
 }
-
-watchEffect(() => {
-    modelValueRef.value = props.modelValue;
-});
 </script>

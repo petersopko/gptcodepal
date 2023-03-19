@@ -1,10 +1,10 @@
 import { defineStore } from "pinia";
 import { ref, computed } from "vue";
 
-export const useTabsStore = defineStore("tabs", () => {
+export const useTabsStore = defineStore("tabsStore", () => {
   const tabs = ref(
     JSON.parse(
-      localStorage.getItem("tabs") ||
+      localStorage.getItem("tabsStore") ||
         '[{ "description": "", "response": "", "codeInputs": [] }]'
     )
   );
@@ -21,7 +21,7 @@ export const useTabsStore = defineStore("tabs", () => {
   function addTab() {
     tabs.value.push({ description: "", response: "", codeInputs: [] });
     updateActiveTab(tabs.value.length - 1);
-    localStorage.setItem("tabs", JSON.stringify(tabs.value));
+    localStorage.setItem("tabsStore", JSON.stringify(tabs.value));
   }
 
   function deleteTab(index) {
@@ -30,27 +30,27 @@ export const useTabsStore = defineStore("tabs", () => {
       activeTabIndex.value,
       tabs.value.length - 1
     );
-    localStorage.setItem("tabs", JSON.stringify(tabs.value));
+    localStorage.setItem("tabsStore", JSON.stringify(tabs.value));
     updateActiveTab(activeTabIndex.value);
   }
 
   function addCodeInput() {
     activeTab.value.codeInputs.push({ name: "", code: "" });
-    localStorage.setItem("tabs", JSON.stringify(tabs.value));
+    localStorage.setItem("tabsStore", JSON.stringify(tabs.value));
   }
 
   function removeCodeInput(index) {
     activeTab.value.codeInputs.splice(index, 1);
-    localStorage.setItem("tabs", JSON.stringify(tabs.value));
+    localStorage.setItem("tabsStore", JSON.stringify(tabs.value));
   }
   function updateCodeInput({ index, name, code }) {
     activeTab.value.codeInputs[index] = { name, code };
-    localStorage.setItem("tabs", JSON.stringify(tabs.value));
+    localStorage.setItem("tabsStore", JSON.stringify(tabs.value));
   }
 
   function updateDescription(description) {
     activeTab.value.description = description;
-    localStorage.setItem("tabs", JSON.stringify(tabs.value));
+    localStorage.setItem("tabsStore", JSON.stringify(tabs.value));
   }
 
   function $reset() {
@@ -58,7 +58,7 @@ export const useTabsStore = defineStore("tabs", () => {
       '[{ "description": "", "response": "", "codeInputs": [] }]'
     );
     activeTabIndex.value = 0;
-    localStorage.setItem("tabs", JSON.stringify(tabs.value));
+    localStorage.setItem("tabsStore", JSON.stringify(tabs.value));
   }
 
   return {
