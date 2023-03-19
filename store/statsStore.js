@@ -18,6 +18,12 @@ export const useStatsStore = defineStore("main", () => {
     totalPromptsSent.value++;
   }
 
+  function $reset() {
+    promptTokensTotal.value = 0;
+    completionTokensTotal.value = 0;
+    totalPromptsSent.value = 0;
+  }
+
   return {
     promptTokensTotal,
     completionTokensTotal,
@@ -25,5 +31,6 @@ export const useStatsStore = defineStore("main", () => {
     incrementPromptTokens,
     incrementCompletionTokens,
     incrementTotalPromptsSent,
+    $reset,
   };
 });

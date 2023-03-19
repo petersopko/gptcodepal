@@ -17,7 +17,7 @@
 
 
 <script setup>
-import { ref, computed, defineProps } from 'vue';
+import { computed, defineProps } from 'vue';
 const props = defineProps({ response: String, });
 const parts = computed(() => {
     const regex = /```(.*?)```/gs;
