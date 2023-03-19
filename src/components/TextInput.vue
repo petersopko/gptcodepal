@@ -1,6 +1,5 @@
 <template>
     <n-card title="Description">
-        {{ description }}
         <n-input :value="description" :placeholder="placeholder" type="textarea" @input="updateDescription($event)" />
     </n-card>
 </template>

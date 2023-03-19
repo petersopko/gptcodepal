@@ -1,42 +1,43 @@
 <template>
-    {{ showModal }}
     <n-button @click="showModal = true">
         Stats & Settings 📊
     </n-button>
     <n-modal v-model:show="showModal">
         <n-card style=" width: 600px" title="Stats & Settings" :bordered="false" size="huge" role="dialog"
             aria-modal="true">
-            <n-grid class="mb-2" cols="3">
+            <n-grid class="mb-2" cols="4">
                 <n-gi class="flex justify-center">
-                    <n-statistic label="Prompt Tokens 🪙" :value="promptTokensTotal" />
+                    <n-statistic label="Prompts🪙" :value="promptTokensTotal" />
                 </n-gi>
                 <n-gi class="flex justify-center">
-                    <n-statistic label="Completion Tokens 🪙" :value="completionTokensTotal" />
+                    <n-statistic label="Completions🪙" :value="completionTokensTotal" />
                 </n-gi>
                 <n-gi class="flex justify-center items-center">
-                    <n-statistic label="Prompts Sent 🤖" :value="totalPromptsSent" />
+                    <n-statistic label="# of Prompts🤖" :value="totalPromptsSent" />
+                </n-gi>
+                <n-gi class="flex justify-center items-center">
+                    <n-statistic label="Money 🪙" :value="totalMoneySpent" />
                 </n-gi>
             </n-grid>
-            <ApiKeyInput @save-api-key="saveApiKey" />
+            <ApiKeyInput />
         </n-card>
     </n-modal>
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, computed } from "vue";
 import ApiKeyInput from "./ApiKeyInput.vue";
 import { useStatsStore } from "../../store/statsStore";
-
-const emit = defineEmits(["save-api-key"]);
 
 const store = useStatsStore();
 const showModal = ref(false);
 
-const promptTokensTotal = ref(store.promptTokensTotal);
-const completionTokensTotal = ref(store.completionTokensTotal);
-const totalPromptsSent = ref(store.totalPromptsSent);
-
-const saveApiKey = (apiKey) => {
-    emit("save-api-key", apiKey);
-};
+const promptTokensTotal = computed(() => store.promptTokensTotal);
+const completionTokensTotal = computed(() => store.completionTokensTotal);
+const totalPromptsSent = computed(() => store.totalPromptsSent);
+const totalMoneySpent = computed(() => {
+    const promptCost = (store.promptTokensTotal / 1000) * 0.03;
+    const completionCost = (store.completionTokensTotal / 1000) * 0.06;
+    return (promptCost + completionCost).toFixed(2);
+});
 </script>

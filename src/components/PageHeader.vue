@@ -13,7 +13,7 @@
             <n-space>
                 <n-statistic label="Money Spent 💲" :value="`$${totalMoneySpent}`" class="mr-4" />
                 <WipeSessionModal />
-                <StatsSettingsModal @save-api-key="saveApiKey" />
+                <StatsSettingsModal />
             </n-space>
         </template>
     </n-page-header>
@@ -24,8 +24,6 @@ import { onMounted, computed } from "vue";
 import { useStatsStore } from '../../store/statsStore'
 import WipeSessionModal from "./WipeSessionModal.vue";
 import StatsSettingsModal from "./StatsSettingsModal.vue";
-
-const emit = defineEmits(["save-api-key"]);
 
 const store = useStatsStore();
 onMounted(() => {
@@ -40,8 +38,4 @@ const totalMoneySpent = computed(() => {
     const completionCost = (store.completionTokensTotal / 1000) * 0.06;
     return (promptCost + completionCost).toFixed(2);
 });
-
-const saveApiKey = (apiKey) => {
-    emit("save-api-key", apiKey);
-};
 </script>

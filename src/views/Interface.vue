@@ -12,7 +12,7 @@
           @add="tabsStore.addCodeInput" />
         <SubmitCard :tokenCount="tokenEstimate" :responseTokens="responseTokens" :promptTokens="promptTokens"
           @submit="submitPrompt" />
-        <ResponseSection :response="response" />
+        <ResponseSection v-if="response" :response="response" />
       </n-card>
     </n-card>
   </div>
@@ -31,11 +31,11 @@ import PageHeader from "../components/PageHeader.vue";
 import SubmitCard from "../components/SubmitCard.vue";
 import { useTabsStore } from "../../store/tabsStore.js";
 import { useTokenEstimateStore } from "../../store/tokenEstimateStore.js";
-
+import { useApiKeyStore } from "../../store/apiKeyStore.js";
 
 const tabsStore = useTabsStore();
 const tokenEstimateStore = useTokenEstimateStore();
-const apiKey = ref(localStorage.getItem("openai_api_key") || "");
+const apiKeyStore = useApiKeyStore();
 const description = computed(() => {
   return tabsStore.activeTab.description;
 });
@@ -43,13 +43,9 @@ const codeInputs = computed(() => {
   return tabsStore.activeTab.codeInputs;
 });
 
-
 const { tokenEstimate } = useTokenCount(description.value, codeInputs.value);
 
-const { submitPrompt, response, loading, promptTokens, responseTokens } = useSubmitPrompt(
-  apiKey,
-  tabsStore
-);
+const { submitPrompt, response, loading, promptTokens, responseTokens } = useSubmitPrompt(apiKeyStore, tabsStore);
 
 const activeTabIndex = computed(() => {
   return tabsStore.activeTabIndex;
