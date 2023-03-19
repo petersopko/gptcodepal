@@ -1,97 +1,45 @@
 <template>
   <div class="container">
+
     <n-card>
       <Loader :loading="loading" />
       <PageHeader class="mb-6" />
       <n-card>
-        <Tabs :tabs="tabs" :activeTab="activeTabIndex" @update:activeTab="updateActiveTab" @add-tab="addTab"
-          @delete-tab="deleteTab" />
-        <TextInput v-model.value="descriptionRef" placeholder="Enter your description" :activeTab="activeTabIndex" />
-        <CodeInputList :codeInputs="codeInputs" @remove="removeCodeInput" @add="addCodeInput" />
-        <SubmitCard :tokenCount="tokenCount" :responseTokens="responseTokens" :promptTokens="promptTokens"
-          @submit="submitPrompt" />
-        <ResponseSection :response="response" />
+        <Tabs />
+        <TextInput placeholder="Enter your description" :activeTab="activeTabIndex" />
+        <CodeInputList :codeInputs="tabsStore.activeTab.codeInputs" @remove="tabsStore.removeCodeInput"
+          @add="tabsStore.addCodeInput" />
+        <SubmitCard :responseTokens="responseTokens" :promptTokens="promptTokens" @submit="submitPrompt" />
+        <ResponseSection v-if="response" :response="response" />
       </n-card>
     </n-card>
   </div>
 </template>
 
-
 <script setup>
-import { ref, reactive, watch, onMounted } from "vue";
+import { onMounted, ref, computed } from "vue";
 import Loader from "../components/Loader.vue";
 import TextInput from "../components/TextInput.vue";
 import CodeInputList from "../components/CodeInputList.vue";
 import ResponseSection from "../components/ResponseSection.vue";
 import Tabs from "../components/Tabs.vue";
 import useSubmitPrompt from "../composables/useSubmitPrompt.js";
-import useCodeInputs from "../composables/useCodeInputs.js";
-import useTokenCount from "../composables/useTokenCount.js";
 import PageHeader from "../components/PageHeader.vue";
 import SubmitCard from "../components/SubmitCard.vue";
+import { useTabsStore } from "../../store/tabsStore.js";
+import { useApiKeyStore } from "../../store/apiKeyStore.js";
 
-const apiKey = ref(localStorage.getItem("openai_api_key") || "");
+const tabsStore = useTabsStore();
+const apiKeyStore = useApiKeyStore();
 
-const description = ref("");
+const { submitPrompt, response, loading, promptTokens, responseTokens } = useSubmitPrompt(apiKeyStore, tabsStore);
 
-const { codeInputs, addCodeInput, removeCodeInput } = useCodeInputs();
-const { tokenCount } = useTokenCount(description, codeInputs);
-
-const descriptionRef = ref(description.value);
-
-const { submitPrompt, response, loading, promptTokens, responseTokens } = useSubmitPrompt(apiKey, descriptionRef, codeInputs);
-
-const tabs = reactive(
-  JSON.parse(localStorage.getItem("tabs") || '[{ "description": "", "response": "", "codeInputs": [] }]'));
-
-const activeTabIndex = ref(0);
-
-function updateActiveTab(index) {
-  activeTabIndex.value = index;
-  descriptionRef.value = tabs[index].description;
-  response.value = tabs[index].response;
-  codeInputs.value = tabs[index].codeInputs;
-}
-
-function addTab() {
-  tabs.push({ description: "", response: "", codeInputs: [] });
-  updateActiveTab(tabs.length - 1);
-  localStorage.setItem("tabs", JSON.stringify(tabs));
-}
-
-function deleteTab(index) {
-  tabs.splice(index, 1);
-  activeTabIndex.value = Math.min(activeTabIndex.value, tabs.length - 1);
-  localStorage.setItem("tabs", JSON.stringify(tabs));
-  updateActiveTab(activeTabIndex.value);
-}
-
-// Watch descriptionRef value and update current tab
-watch(descriptionRef, (newDescription) => {
-  tabs[activeTabIndex.value].description = newDescription;
+const activeTabIndex = computed(() => {
+  return tabsStore.activeTabIndex;
 });
 
-watch(
-  () => [descriptionRef.value, codeInputs.value],
-  ([newDescription, newCodeInputs]) => {
-    tabs[activeTabIndex.value].description = newDescription;
-    tabs[activeTabIndex.value].codeInputs = newCodeInputs;
-    localStorage.setItem("tabs", JSON.stringify(tabs));
-  },
-  { deep: true }
-);
-
-watch(
-  () => response.value,
-  (newResponse) => {
-    tabs[activeTabIndex.value].response = newResponse;
-    localStorage.setItem("tabs", JSON.stringify(tabs));
-  }
-);
-
 onMounted(() => {
-  // Initialize the active tab on first load
-  updateActiveTab(activeTabIndex.value);
+  tabsStore.updateActiveTab(activeTabIndex.value);
 });
 
 </script>

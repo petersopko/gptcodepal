@@ -1,27 +1,20 @@
 <template>
     <n-card title="Description">
-        <n-input v-model:value="modelValueRef" :default-value="modelValue" :placeholder="placeholder" type="textarea"
-            @input="updateValue" />
+        <n-input :value="description" :placeholder="placeholder" type="textarea" @input="updateDescription($event)" />
     </n-card>
 </template>
 
 <script setup>
-import { ref, watchEffect } from "vue";
+import { computed } from "vue";
+import { useTabsStore } from "../../store/tabsStore";
 const props = defineProps({
-    modelValue: String,
     placeholder: String,
-    activeTab: Number,
 });
 
-const modelValueRef = ref(props.modelValue);
+const tabsStore = useTabsStore();
+const description = computed(() => tabsStore.activeTab.description);
 
-const emit = defineEmits(["update:modelValue"]);
-
-function updateValue(event) {
-    emit("update:modelValue", event);
+const updateDescription = (event) => {
+    tabsStore.updateDescription(event);
 }
-
-watchEffect(() => {
-    modelValueRef.value = props.modelValue;
-});
 </script>

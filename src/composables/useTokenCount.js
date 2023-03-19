@@ -1,45 +1,32 @@
-import { ref, watch, onMounted } from "vue";
+import { watch } from "vue";
+import GPT3Tokenizer from "gpt3-tokenizer";
+import { useTokenEstimateStore } from "../../store/tokenEstimateStore.js";
 
-// Function to count tokens in a given text
-function countTokens(text) {
-  // Define a regex pattern to match tokens: spaces, word characters, or non-word and non-space characters
-  const tokenRegex = /\s+|[\w]|[^\w\s]+/g;
-  let tokens = text.match(tokenRegex);
-  // Example: "Hello, world!" will be tokenized as ["Hello", ",", " ", "world", "!"]
-  return tokens ? tokens.length : 0;
+const tokenizer = new GPT3Tokenizer({ type: "gpt3" });
+
+export function countTokens(text) {
+  const encoded = tokenizer.encode(text);
+  return encoded.bpe.length;
 }
 
 export default function useTokenCount(description, codeInputs) {
-  const tokenCount = ref(0);
+  const tokenEstimateStore = useTokenEstimateStore();
 
-  // Function to fetch token count from description and codeInputs
-  function fetchTokenCount() {
-    // Build a string combining description and code inputs
+  const updateTokenCount = () => {
     const text = `${description.value}${codeInputs.value
       .map((chunk) => `\n${chunk.name}\n\`\`\`${chunk.code}\`\`\``)
       .join("")}`;
 
     if (!text) {
-      return 0;
+      tokenEstimateStore.updateTokenEstimate(0);
+      return;
     }
+    tokenEstimateStore.updateTokenEstimate(countTokens(text));
+  };
 
-    // Count tokens in the combined text
-    return countTokens(text);
-  }
+  watch([description, codeInputs], updateTokenCount, { immediate: true });
 
-  // On component mounted, update the tokenCount with fetched token count
-  onMounted(() => {
-    tokenCount.value = fetchTokenCount();
-  });
-
-  // Watch for changes in description and codeInputs, update tokenCount accordingly
-  watch(
-    [description, codeInputs],
-    () => {
-      tokenCount.value = fetchTokenCount();
-    },
-    { deep: true }
-  );
-
-  return { tokenCount, fetchTokenCount };
+  return {
+    tokenEstimate: tokenEstimateStore.tokenEstimate,
+  };
 }

@@ -1,68 +1,58 @@
-
 <template>
-    <n-page-header subtitle="Your GPT-4 powered coding friend">
-        <n-card title="Stats & Settings">
-            <n-grid class="mb-2" cols="3">
-                <n-gi class="flex justify-center">
-                    <n-statistic label="Prompt Tokens 🪙" :value="promptTokensTotal" />
-                </n-gi>
-                <n-gi class="flex justify-center">
-                    <n-statistic label="Completion Tokens 🪙" :value="completionTokensTotal" />
-                </n-gi>
-                <n-gi class="flex justify-center items-center">
-                    <n-statistic label="Prompts Sent 🗣️" :value="totalPromptsSent" />
-                </n-gi>
-            </n-grid>
-            <n-card>
-                <n-collapse>
-                    <n-collapse-item title="API Key">
-                        <ApiKeyInput @save-api-key="saveApiKey" />
-                    </n-collapse-item>
-                </n-collapse>
-            </n-card>
-        </n-card>
+    <n-page-header>
         <template #title>
             <a href="https://github.com/petersopko/gptcodepal/" style="text-decoration: none; color: inherit">
-                GptCodePal
+                <n-gradient-text gradient="linear-gradient(90deg, red 0%, green 50%, blue 100%)">
+                    GptCodePal
+                </n-gradient-text>
             </a>
-        </template>
-        <template #header>
-            Made with love, Vue.js, NaiveUI and GPT-4 🤝
         </template>
         <template #avatar>
             <n-avatar src="https://image.lexica.art/full_jpg/bac6aa81-cd0f-4da4-8cfa-2a0a5d1680c3" />
         </template>
         <template #extra>
-            <n-space>
-                <n-statistic label="Money Spent 💲" :value="`$${totalMoneySpent}`" class="mr-4" />
-                <n-button>Wipe session data 🧹</n-button>
-            </n-space>
+            <div>
+                <div>
+                    <n-space>
+                        <WipeSessionModal />
+                        <StatsSettingsModal />
+                    </n-space>
+                </div>
+                <div class="flex justify-center mt-4">
+                    <n-statistic label=" This Session 💲" :value="`$${totalMoneySpent}`" class="text-center mr-4" />
+                </div>
+            </div>
         </template>
     </n-page-header>
 </template>
 
 <script setup>
-import { ref, onMounted, computed } from "vue";
-import ApiKeyInput from "./ApiKeyInput.vue";
-const emit = defineEmits(["save-api-key"]);
+import { onMounted, computed } from "vue";
+import { useStatsStore } from '../../store/statsStore'
+import WipeSessionModal from "./WipeSessionModal.vue";
+import StatsSettingsModal from "./StatsSettingsModal.vue";
 
-const promptTokensTotal = ref(0);
-const completionTokensTotal = ref(0);
-const totalPromptsSent = ref(0);
-
+const store = useStatsStore();
 onMounted(() => {
-    promptTokensTotal.value = localStorage.getItem("promptTokensTotal") || 0;
-    completionTokensTotal.value = localStorage.getItem("completionTokensTotal") || 0;
-    totalPromptsSent.value = localStorage.getItem("totalPromptsSent") || 0;
+    const storedData = JSON.parse(localStorage.getItem("statsStore")) || {};
+    store.promptTokensTotal = storedData.promptTokensTotal || 0;
+    store.completionTokensTotal = storedData.completionTokensTotal || 0;
+    store.totalPromptsSent = storedData.totalPromptsSent || 0;
 });
 
 const totalMoneySpent = computed(() => {
-    const promptCost = (promptTokensTotal.value / 1000) * 0.03;
-    const completionCost = (completionTokensTotal.value / 1000) * 0.06;
+    const promptCost = (store.promptTokensTotal / 1000) * 0.03;
+    const completionCost = (store.completionTokensTotal / 1000) * 0.06;
     return (promptCost + completionCost).toFixed(2);
 });
-
-const saveApiKey = (apiKey) => {
-    emit("save-api-key", apiKey);
-};
 </script>
+<style scoped>
+.n-gradient-text {
+    font-size: 2rem;
+}
+
+.n-avatar {
+    width: 100px;
+    height: 100px;
+}
+</style>

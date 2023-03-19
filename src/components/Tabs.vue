@@ -1,45 +1,41 @@
 <template>
-    <n-tabs :value="activeTab" type="card" @update:value="updateActiveTab" :addable="addableRef" :closable="closable"
+    <n-tabs :value="activeTabIndex" type="card" @update:value="updateActiveTab" :addable="addableRef" :closable="closable"
         tab-style="min-width: 80px;" @close="deleteTab" @add="addTab">
-        <n-tab-pane v-for="(tab, index) in tabsRef" :key="index" :name="index">
-        </n-tab-pane>
+        <n-tab-pane v-for="(tab, index) in tabs" :key="index" :name="index"></n-tab-pane>
     </n-tabs>
 </template>
 
 <script setup>
 import { computed } from "vue";
+import { useTabsStore } from "../../store/tabsStore.js";
 
-const props = defineProps({
-    tabs: Array,
-    activeTab: Number,
-});
-
-const emits = defineEmits([
-    "update:activeTab",
-    "add-tab",
-    "delete-tab",
-]);
+const tabsStore = useTabsStore();
 
 const updateActiveTab = (index) => {
-    emits("update:activeTab", index);
+    tabsStore.updateActiveTab(index);
 };
 
 const addTab = () => {
-    emits("add-tab");
+    tabsStore.addTab();
 };
 
 const deleteTab = (index) => {
-    emits("delete-tab", index);
+    tabsStore.deleteTab(index);
 };
 
-const tabsRef = computed(() => {
-    return props.tabs;
+const tabs = computed(() => {
+    return tabsStore.tabs;
 });
 const addableRef = computed(() => {
     return {
-        disabled: tabsRef.value.length >= 10
-    }
+        disabled: tabsStore.tabs.length >= 10,
+    };
 });
 
-const closable = computed(() => { return props.tabs.length > 1; });
+const closable = computed(() => {
+    return tabsStore.tabs.length > 1;
+});
+const activeTabIndex = computed(() => {
+    return tabsStore.activeTabIndex;
+});
 </script>
