@@ -62,7 +62,6 @@ export default function useSubmitPrompt(apiKeyStore, tabsStore) {
     statsStore.incrementCompletionTokens(responseTokens.value);
     statsStore.incrementTotalPromptsSent();
     localStorage.setItem("statsStore", JSON.stringify(statsStore));
-    console.log(localStorage.getItem("statsStore"));
   }
 
   function handleError(error) {
