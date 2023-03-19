@@ -27,7 +27,7 @@ export default function useTokenCount(description, codeInputs) {
     setInterval(() => {
       console.log("check", description);
       tokenEstimateStore.updateTokenEstimate(fetchTokenCount());
-    }, 3000);
+    }, 10000);
   });
 
   return { tokenEstimate: tokenEstimateStore.tokenEstimate };

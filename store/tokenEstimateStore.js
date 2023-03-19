@@ -1,13 +1,20 @@
 import { defineStore } from "pinia";
+import { ref } from "vue";
 
-export const useTokenEstimateStore = defineStore({
-  id: "tokenEstimate",
-  state: () => ({
-    tokenEstimate: 0,
-  }),
-  actions: {
-    updateTokenEstimate(newTokenEstimate) {
-      this.tokenEstimate = newTokenEstimate;
-    },
-  },
+export const useTokenEstimateStore = defineStore("tokenEstimate", () => {
+  const tokenEstimate = ref(0);
+
+  function updateTokenEstimate(newTokenEstimate) {
+    tokenEstimate.value = newTokenEstimate;
+  }
+
+  function $reset() {
+    tokenEstimate.value = 0;
+  }
+
+  return {
+    tokenEstimate,
+    updateTokenEstimate,
+    $reset,
+  };
 });
