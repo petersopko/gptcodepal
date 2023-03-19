@@ -6,14 +6,21 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { computed } from "vue";
 const props = defineProps({
     modelValue: String,
     placeholder: String,
     activeTab: Number,
 });
 
-const modelValueRef = ref(props.modelValue);
+const modelValueRef = computed({
+    get() {
+        return props.modelValue;
+    },
+    set(value) {
+        emit("update:modelValue", value);
+    },
+});
 
 const emit = defineEmits(["update:modelValue"]);
 

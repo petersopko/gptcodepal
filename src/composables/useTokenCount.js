@@ -1,20 +1,18 @@
-import { ref, watch, onMounted } from "vue";
+import { ref, onMounted } from "vue";
+import GPT3Tokenizer from "gpt3-tokenizer";
+import { useTokenEstimateStore } from "../../store/tokenEstimateStore.js";
 
-// Function to count tokens in a given text
+const tokenizer = new GPT3Tokenizer({ type: "gpt3" });
+
 function countTokens(text) {
-  // Define a regex pattern to match tokens: spaces, word characters, or non-word and non-space characters
-  const tokenRegex = /\s+|[\w]|[^\w\s]+/g;
-  let tokens = text.match(tokenRegex);
-  // Example: "Hello, world!" will be tokenized as ["Hello", ",", " ", "world", "!"]
-  return tokens ? tokens.length : 0;
+  const encoded = tokenizer.encode(text);
+  return encoded.bpe.length;
 }
 
 export default function useTokenCount(description, codeInputs) {
-  const tokenCount = ref(0);
+  const tokenEstimateStore = useTokenEstimateStore();
 
-  // Function to fetch token count from description and codeInputs
   function fetchTokenCount() {
-    // Build a string combining description and code inputs
     const text = `${description}${codeInputs
       .map((chunk) => `\n${chunk.name}\n\`\`\`${chunk.code}\`\`\``)
       .join("")}`;
@@ -22,24 +20,15 @@ export default function useTokenCount(description, codeInputs) {
     if (!text) {
       return 0;
     }
-
-    // Count tokens in the combined text
     return countTokens(text);
   }
 
-  // On component mounted, update the tokenCount with fetched token count
   onMounted(() => {
-    tokenCount.value = fetchTokenCount();
+    setInterval(() => {
+      console.log("check", description);
+      tokenEstimateStore.updateTokenEstimate(fetchTokenCount());
+    }, 3000);
   });
 
-  // Watch for changes in description and codeInputs, update tokenCount accordingly
-  watch(
-    [description, codeInputs],
-    () => {
-      tokenCount.value = fetchTokenCount();
-    },
-    { deep: true }
-  );
-
-  return { tokenCount, fetchTokenCount };
+  return { tokenEstimate: tokenEstimateStore.tokenEstimate };
 }

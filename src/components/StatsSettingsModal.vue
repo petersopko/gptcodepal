@@ -2,7 +2,7 @@
     <n-button @click="showModal = true">
         Stats & Settings 📊
     </n-button>
-    <n-modal v-model:show="showModal">
+    <n-modal v-if="showModal">
         <n-card style=" width: 600px" title="Stats & Settings" :bordered="false" size="huge" role="dialog"
             aria-modal="true">
             <n-grid class="mb-2" cols="3">

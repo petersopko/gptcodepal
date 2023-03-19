@@ -1,5 +1,7 @@
 <template>
   <div class="container">
+    {{ tokenEstimateStore }}
+    {{ tabsStore.activeTab.description }}
     <n-card>
       <Loader :loading="loading" />
       <PageHeader class="mb-6" />
@@ -9,7 +11,7 @@
           :activeTab="activeTabIndex" @update:model-value="tabsStore.updateDescription($event)" />
         <CodeInputList :codeInputs="tabsStore.activeTab.codeInputs" @remove="tabsStore.removeCodeInput"
           @add="tabsStore.addCodeInput" />
-        <SubmitCard :tokenCount="tokenCount" :responseTokens="responseTokens" :promptTokens="promptTokens"
+        <SubmitCard :tokenCount="tokenEstimate" :responseTokens="responseTokens" :promptTokens="promptTokens"
           @submit="submitPrompt" />
         <ResponseSection :response="response" />
       </n-card>
@@ -18,7 +20,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from "vue";
+import { onMounted, ref, computed } from "vue";
 import Loader from "../components/Loader.vue";
 import TextInput from "../components/TextInput.vue";
 import CodeInputList from "../components/CodeInputList.vue";
@@ -30,16 +32,22 @@ import PageHeader from "../components/PageHeader.vue";
 import SubmitCard from "../components/SubmitCard.vue";
 import { useTabsStore } from "../../store/tabsStore.js";
 import { useStatsStore } from "../../store/statsStore";
+import { useTokenEstimateStore } from "../../store/tokenEstimateStore.js";
+
 
 const tabsStore = useTabsStore();
 const statsStore = useStatsStore();
-
+const tokenEstimateStore = useTokenEstimateStore();
 const apiKey = ref(localStorage.getItem("openai_api_key") || "");
+const description = computed(() => {
+  return tabsStore.activeTab.description;
+});
+const codeInputs = computed(() => {
+  return tabsStore.activeTab.codeInputs;
+});
 
 
-const codeInputs = ref(tabsStore.activeTab.codeInputs);
-const description = ref(tabsStore.activeTab.description);
-const { tokenCount } = useTokenCount(description.value, codeInputs.value);
+const { tokenEstimate } = useTokenCount(description.value, codeInputs.value);
 
 const { submitPrompt, response, loading, promptTokens, responseTokens } = useSubmitPrompt(
   apiKey,
@@ -50,7 +58,6 @@ const activeTabIndex = computed(() => {
   return tabsStore.activeTabIndex;
 });
 
-// Initialize the active tab on first load
 onMounted(() => {
   tabsStore.updateActiveTab(activeTabIndex.value);
 });
