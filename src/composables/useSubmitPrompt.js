@@ -61,7 +61,14 @@ export default function useSubmitPrompt(apiKeyStore, tabsStore) {
     statsStore.incrementPromptTokens(promptTokens.value);
     statsStore.incrementCompletionTokens(responseTokens.value);
     statsStore.incrementTotalPromptsSent();
-    localStorage.setItem("statsStore", JSON.stringify(statsStore));
+
+    const simplifiedStatsStore = {
+      promptTokensTotal: statsStore.promptTokensTotal.value,
+      completionTokensTotal: statsStore.completionTokensTotal.value,
+      totalPromptsSent: statsStore.totalPromptsSent.value,
+    };
+
+    localStorage.setItem("statsStore", JSON.stringify(simplifiedStatsStore));
   }
 
   function handleError(error) {
