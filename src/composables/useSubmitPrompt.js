@@ -11,7 +11,6 @@ export default function useSubmitPrompt(apiKeyStore, tabsStore) {
 
   async function submitPrompt() {
     loading.value = true;
-    console.log("this gets triggered");
     response.value = "";
 
     if (!tabsStore.activeTab.description) return;
