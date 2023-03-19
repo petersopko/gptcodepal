@@ -4,7 +4,6 @@
       <Loader :loading="loading" />
       <PageHeader class="mb-6" />
       <n-card>
-        {{ statsStore }}
         <Tabs />
         <TextInput v-model.value="tabsStore.activeTab.description" placeholder="Enter your description"
           :activeTab="activeTabIndex" @update:model-value="tabsStore.updateDescription($event)" />
