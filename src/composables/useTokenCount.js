@@ -15,7 +15,7 @@ export default function useTokenCount(description, codeInputs) {
   // Function to fetch token count from description and codeInputs
   function fetchTokenCount() {
     // Build a string combining description and code inputs
-    const text = `${description.value}${codeInputs.value
+    const text = `${description}${codeInputs
       .map((chunk) => `\n${chunk.name}\n\`\`\`${chunk.code}\`\`\``)
       .join("")}`;
 

@@ -3,7 +3,8 @@
         Stats & Settings 📊
     </n-button>
     <n-modal v-model:show="showModal">
-        <n-card style="width: 600px" title="Stats & Settings" :bordered="false" size="huge" role="dialog" aria-modal="true">
+        <n-card style=" width: 600px" title="Stats & Settings" :bordered="false" size="huge" role="dialog"
+            aria-modal="true">
             <n-grid class="mb-2" cols="3">
                 <n-gi class="flex justify-center">
                     <n-statistic label="Prompt Tokens 🪙" :value="promptTokensTotal" />
@@ -12,19 +13,10 @@
                     <n-statistic label="Completion Tokens 🪙" :value="completionTokensTotal" />
                 </n-gi>
                 <n-gi class="flex justify-center items-center">
-                    <n-statistic label="Prompts Sent 🗣️" :value="totalPromptsSent" />
+                    <n-statistic label="Prompts Sent 🤖" :value="totalPromptsSent" />
                 </n-gi>
             </n-grid>
-            <n-card>
-                <n-collapse>
-                    <n-collapse-item title="API Key">
-                        <ApiKeyInput @save-api-key="saveApiKey" />
-                    </n-collapse-item>
-                </n-collapse>
-            </n-card>
-            <template #footer>
-                Close
-            </template>
+            <ApiKeyInput @save-api-key="saveApiKey" />
         </n-card>
     </n-modal>
 </template>
