@@ -16,7 +16,7 @@
                     <n-statistic label="# of Prompts🤖" :value="totalPromptsSent" />
                 </n-gi>
                 <n-gi class="flex justify-center items-center">
-                    <n-statistic label="Money 🪙" :value="totalMoneySpent" />
+                    <n-statistic label="Money 💲" :value="totalMoneySpent" />
                 </n-gi>
             </n-grid>
             <ApiKeyInput />
