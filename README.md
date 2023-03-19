@@ -1,20 +1,26 @@
 # GptCodePal: Interface with Vue 3 and Vite
 
-GptCodePal is a friendly tool for developers and tinkerers. It provides an interactive interface for working with the GPT-4 API, helping you generate code and content with ease. Built with Vue 3 and Vite, the interface is clean, efficient, and easy to use and adjust.
+GptCodePal is a friendly tool for developers and tinkerers, built using [Vue3](https://vuejs.org/), [Vite](https://vitejs.dev/), [Pinia](https://pinia.vuejs.org/), [NaiveUI](https://www.naiveui.com/), and [highlight.js](https://highlightjs.org/). It provides an interactive interface for working with the GPT-4 API, helping you generate code and content with ease.
+
+## Beta
+
+This project is currently in beta. Feel free to try it out, but please be aware that it may not be stable. If you encounter any bugs, please submit an issue (or even better, a pull request) and I'll do my best to fix it.
 
 ## Features
 
-- Write and submit code to GPT-4
+- Write and submit code to GPT-4 API
 - Receive generated content based on your input
 - Support for multiple tabs
 - Real-time token counter
 - Code highlighted responses powered by highlight.js
 - Easy to copy code chunks
+- No data stored on the server, all code is processed locally (and can be wiped with one click)
 
 ## Project Structure
 
 The project is organized as follows:
 
+```
 gptcodepal
 ├─ backend
 │ └─ app.py
@@ -57,6 +63,7 @@ gptcodepal
 │ └─ style.css
 ├─ tailwind.config.cjs
 └─ vite.config.js
+```
 
 ## Installation
 
