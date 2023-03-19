@@ -32,3 +32,8 @@ const submitCallback = () => {
     message.success("Submit");
 };
 </script>
+<style scoped>
+.button {
+    width: 50px
+}
+</style>

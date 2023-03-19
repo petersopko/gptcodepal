@@ -14,10 +14,14 @@
 
 <script setup>
 import { useApiKeyStore } from "../../store/apiKeyStore.js";
+import { useMessage } from "naive-ui";
+
+const message = useMessage();
 
 const apiKeyStore = useApiKeyStore();
 
 const saveApiKey = () => {
+    message.success("API Key saved!");
     apiKeyStore.saveApiKey(apiKeyStore.apiKey);
 };
 </script>

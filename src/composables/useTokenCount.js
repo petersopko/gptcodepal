@@ -1,10 +1,10 @@
-import { ref, onMounted } from "vue";
+import { watch } from "vue";
 import GPT3Tokenizer from "gpt3-tokenizer";
 import { useTokenEstimateStore } from "../../store/tokenEstimateStore.js";
 
 const tokenizer = new GPT3Tokenizer({ type: "gpt3" });
 
-function countTokens(text) {
+export function countTokens(text) {
   const encoded = tokenizer.encode(text);
   return encoded.bpe.length;
 }
@@ -12,23 +12,21 @@ function countTokens(text) {
 export default function useTokenCount(description, codeInputs) {
   const tokenEstimateStore = useTokenEstimateStore();
 
-  function fetchTokenCount() {
-    const text = `${description}${codeInputs
+  const updateTokenCount = () => {
+    const text = `${description.value}${codeInputs.value
       .map((chunk) => `\n${chunk.name}\n\`\`\`${chunk.code}\`\`\``)
       .join("")}`;
 
     if (!text) {
-      return 0;
+      tokenEstimateStore.updateTokenEstimate(0);
+      return;
     }
-    return countTokens(text);
-  }
+    tokenEstimateStore.updateTokenEstimate(countTokens(text));
+  };
 
-  onMounted(() => {
-    setInterval(() => {
-      console.log("check", description);
-      tokenEstimateStore.updateTokenEstimate(fetchTokenCount());
-    }, 10000);
-  });
+  watch([description, codeInputs], updateTokenCount, { immediate: true });
 
-  return { tokenEstimate: tokenEstimateStore.tokenEstimate };
+  return {
+    tokenEstimate: tokenEstimateStore.tokenEstimate,
+  };
 }

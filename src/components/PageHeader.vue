@@ -2,19 +2,26 @@
     <n-page-header>
         <template #title>
             <a href="https://github.com/petersopko/gptcodepal/" style="text-decoration: none; color: inherit">
-                GptCodePal
+                <n-gradient-text gradient="linear-gradient(90deg, red 0%, green 50%, blue 100%)">
+                    GptCodePal
+                </n-gradient-text>
             </a>
         </template>
-
         <template #avatar>
             <n-avatar src="https://image.lexica.art/full_jpg/bac6aa81-cd0f-4da4-8cfa-2a0a5d1680c3" />
         </template>
         <template #extra>
-            <n-space>
-                <n-statistic label="Money Spent 💲" :value="`$${totalMoneySpent}`" class="mr-4" />
-                <WipeSessionModal />
-                <StatsSettingsModal />
-            </n-space>
+            <div>
+                <div>
+                    <n-space>
+                        <WipeSessionModal />
+                        <StatsSettingsModal />
+                    </n-space>
+                </div>
+                <div class="flex justify-center mt-4">
+                    <n-statistic label=" This Session 💲" :value="`$${totalMoneySpent}`" class="text-center mr-4" />
+                </div>
+            </div>
         </template>
     </n-page-header>
 </template>
@@ -39,3 +46,13 @@ const totalMoneySpent = computed(() => {
     return (promptCost + completionCost).toFixed(2);
 });
 </script>
+<style scoped>
+.n-gradient-text {
+    font-size: 2rem;
+}
+
+.n-avatar {
+    width: 100px;
+    height: 100px;
+}
+</style>
