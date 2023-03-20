@@ -5,6 +5,7 @@
 </template>
 
 <script setup>
+import { NButton } from "naive-ui";
 import { defineProps, defineEmits } from "vue";
 
 const props = defineProps({

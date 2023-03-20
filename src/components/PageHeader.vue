@@ -2,8 +2,12 @@
     <n-grid cols="6">
         <n-grid-item span="2">
             <n-space vertical align="start">
-                <n-button><a href="https://www.buymeacoffee.com/petersopko" target=”_blank”>☕</a></n-button>
-                <n-button><a href="https://github.com/petersopko/gptcodepal" target=”_blank”>🤖</a></n-button>
+                <a href="https://www.buymeacoffee.com/petersopko" target=”_blank”>
+                    <n-button>☕</n-button>
+                </a>
+                <a href="https://github.com/petersopko/gptcodepal" target=”_blank”>
+                    <n-button>🤖</n-button>
+                </a>
             </n-space>
         </n-grid-item>
         <n-grid-item span="2">

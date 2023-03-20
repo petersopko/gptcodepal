@@ -5,6 +5,7 @@
     </div>
 </template>
 <script setup>
+import { NInput } from "naive-ui";
 import { ref, computed, watch } from "vue";
 
 const props = defineProps({

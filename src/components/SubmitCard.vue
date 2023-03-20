@@ -8,6 +8,7 @@
 </template>
 
 <script setup>
+import { NCard, NButton } from "naive-ui";
 import { computed } from "vue";
 import { useTabsStore } from "../../store/tabsStore";
 import { countTokens } from "../composables/useTokenCount";

@@ -15,6 +15,7 @@
 </template>
 
 <script setup>
+import { NCard, NCollapse, NCollapseItem, NButton } from "naive-ui";
 import CodeInput from './CodeInput.vue';
 import IconButton from './IconButton.vue';
 import { useTabsStore } from "../../store/tabsStore.js";

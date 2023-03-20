@@ -13,6 +13,7 @@
 </template>
 
 <script setup>
+import { NCard, NInput, NButton } from "naive-ui";
 import { useApiKeyStore } from "../../store/apiKeyStore.js";
 import { useMessage } from "naive-ui";
 

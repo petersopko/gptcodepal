@@ -6,6 +6,7 @@
 </template>
 
 <script setup>
+import { NTabs, NTabPane } from "naive-ui";
 import { computed } from "vue";
 import { useTabsStore } from "../../store/tabsStore.js";
 

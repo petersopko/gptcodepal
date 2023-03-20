@@ -8,6 +8,7 @@
 </template>
 
 <script setup>
+import { NButton, NModal } from "naive-ui";
 import { ref } from "vue";
 import { useMessage } from "naive-ui";
 import { useStatsStore } from "../../store/statsStore";

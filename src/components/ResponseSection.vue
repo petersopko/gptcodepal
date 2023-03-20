@@ -6,6 +6,7 @@
 </template>
 
 <script setup>
+import { NCard } from "naive-ui";
 import ResponseContent from './ResponseContent.vue';
 
 const props = defineProps({

@@ -1,6 +1,6 @@
 <script setup>
 import Interface from './views/Interface.vue';
-import { darkTheme } from 'naive-ui'
+import { NConfigProvider, NMessageProvider, darkTheme } from 'naive-ui'
 </script>
 
 <template>

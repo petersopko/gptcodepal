@@ -1,6 +1,5 @@
 <template>
   <div class="container">
-
     <n-card>
       <Loader :loading="loading" />
       <PageHeader class="mb-6" />
@@ -17,6 +16,7 @@
 </template>
 
 <script setup>
+import { NCard } from "naive-ui";
 import { onMounted, ref, computed } from "vue";
 import Loader from "../components/Loader.vue";
 import TextInput from "../components/TextInput.vue";
