@@ -23,7 +23,7 @@ import TextInput from "../components/TextInput.vue";
 import CodeInputList from "../components/CodeInputList.vue";
 import ResponseSection from "../components/ResponseSection.vue";
 import Tabs from "../components/Tabs.vue";
-import useSubmitPrompt from "../composables/useSubmitPrompt.js";
+import useSubmit from "../composables/useSubmit.js";
 import PageHeader from "../components/PageHeader.vue";
 import SubmitCard from "../components/SubmitCard.vue";
 import { useTabsStore } from "../../store/tabsStore.js";
@@ -32,7 +32,7 @@ import { useApiKeyStore } from "../../store/apiKeyStore.js";
 const tabsStore = useTabsStore();
 const apiKeyStore = useApiKeyStore();
 
-const { submitPrompt, response, loading, promptTokens, responseTokens } = useSubmitPrompt(apiKeyStore, tabsStore);
+const { submitPrompt, response, loading, promptTokens, responseTokens } = useSubmit(apiKeyStore, tabsStore);
 
 const activeTabIndex = computed(() => {
   return tabsStore.activeTabIndex;

@@ -2,7 +2,7 @@ import { ref } from "vue";
 import { useStatsStore } from "../../store/statsStore";
 import axios from "axios";
 
-export default function useSubmitPrompt(apiKeyStore, tabsStore) {
+export default function useSubmit(apiKeyStore, tabsStore) {
   const statsStore = useStatsStore();
   const loading = ref(false);
   const response = ref("");

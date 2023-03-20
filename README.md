@@ -55,7 +55,7 @@ gptcodepal
 │ ├─ composables
 │ │ ├─ useCodeInputs.js
 │ │ ├─ useDescription.js
-│ │ ├─ useSubmitPrompt.js
+│ │ ├─ useSubmit.js
 │ │ ├─ useTabs.js
 │ │ └─ useTokenCount.js
 │ ├─ main.js
