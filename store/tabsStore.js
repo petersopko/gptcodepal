@@ -56,6 +56,10 @@ export const useTabsStore = defineStore("tabsStore", () => {
     activeTab.value.response = newResponse;
     localStorage.setItem("tabsStore", JSON.stringify(tabs.value));
   }
+  function addCodeInputFromFile(name, code) {
+    activeTab.value.codeInputs.push({ name, code });
+    localStorage.setItem("tabsStore", JSON.stringify(tabs.value));
+  }
 
   function $reset() {
     tabs.value = JSON.parse(
@@ -77,6 +81,8 @@ export const useTabsStore = defineStore("tabsStore", () => {
     updateCodeInput,
     updateDescription,
     updateResponse,
+    addCodeInputFromFile,
+
     $reset,
   };
 });
