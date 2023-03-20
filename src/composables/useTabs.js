@@ -35,7 +35,6 @@ export default function useTabs(apiKey) {
     updateActiveTab(activeTabIndex.value);
   }
 
-  // Watchers
   watch(descriptionRef, (newDescription) => {
     tabs[activeTabIndex.value].description = newDescription;
   });
@@ -49,15 +48,6 @@ export default function useTabs(apiKey) {
     },
     { deep: true }
   );
-
-  watch(
-    () => response.value,
-    (newResponse) => {
-      tabs[activeTabIndex.value].response = newResponse;
-      localStorage.setItem("tabsStore", JSON.stringify(tabs));
-    }
-  );
-
   return {
     descriptionRef,
     saveApiKey,

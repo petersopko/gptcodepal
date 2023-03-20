@@ -9,7 +9,7 @@
         <CodeInputList :codeInputs="tabsStore.activeTab.codeInputs" @remove="tabsStore.removeCodeInput"
           @add="tabsStore.addCodeInput" />
         <SubmitCard :responseTokens="responseTokens" :promptTokens="promptTokens" @submit="submitPrompt" />
-        <ResponseSection v-if="response" :response="response" />
+        <ResponseSection v-if="tabsStore.activeTab.response" :response="tabsStore.activeTab.response" />
       </n-card>
     </n-card>
   </div>
@@ -32,7 +32,7 @@ import { useApiKeyStore } from "../../store/apiKeyStore.js";
 const tabsStore = useTabsStore();
 const apiKeyStore = useApiKeyStore();
 
-const { submitPrompt, response, loading, promptTokens, responseTokens } = useSubmit(apiKeyStore, tabsStore);
+const { submitPrompt, loading, promptTokens, responseTokens } = useSubmit(apiKeyStore, tabsStore);
 
 const activeTabIndex = computed(() => {
   return tabsStore.activeTabIndex;

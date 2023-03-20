@@ -52,7 +52,6 @@ export default function useSubmit(apiKeyStore, tabsStore) {
       handleError(error);
     }
   }
-
   function handleResponse(result) {
     loading.value = false;
     response.value = result.data.choices[0].message.content.trim();
@@ -69,6 +68,7 @@ export default function useSubmit(apiKeyStore, tabsStore) {
     };
 
     localStorage.setItem("statsStore", JSON.stringify(simplifiedStatsStore));
+    tabsStore.updateResponse(response.value);
   }
 
   function handleError(error) {
