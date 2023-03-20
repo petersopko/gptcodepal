@@ -1,10 +1,12 @@
-# GptCodePal: Interface with Vue 3 and Vite
+# GptCodePal
 
 GptCodePal is a friendly tool for developers and tinkerers, built using [Vue3](https://vuejs.org/), [Vite](https://vitejs.dev/), [Pinia](https://pinia.vuejs.org/), [NaiveUI](https://www.naiveui.com/), and [highlight.js](https://highlightjs.org/). It provides an interactive interface for working with the GPT-4 API, helping you generate code and content with ease.
 
 ## Beta
 
 This project is currently in beta. Feel free to try it out, but please be aware that it may not be stable. If you encounter any bugs, please submit an issue (or even better, a pull request) and I'll do my best to fix it.
+
+[Your support is greatly appreciated!](https://www.buymeacoffee.com/petersopko)
 
 ## Features
 
@@ -69,29 +71,39 @@ gptcodepal
 
 1. Clone the repository.
 
-`git clone https://github.com/petersopko/gptcodepal.git`
+```
+git clone https://github.com/petersopko/gptcodepal.git
+```
 
 2. Change into the project directory.
 
-`cd gptcodepal`
+```
+cd gptcodepal
+```
 
 3. Install the required dependencies.
 
-`npm install`
+```
+npm install
+```
 
 ## Running the App
 
 1. Start the development server.
 
-`npm run dev`
+```
+npm run dev
+```
 
-2. Open the app in the browser at `http://127.0.0.1:5173/`.
+2. Open the app in the browser at http://127.0.0.1:5173/
 
 ## Building for Production
 
 To build the app for production, run:
 
-`npm run build`
+```
+npm run build
+```
 
 Then, serve the generated `dist` folder with any static file server.
 
