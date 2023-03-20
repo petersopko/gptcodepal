@@ -1,32 +1,29 @@
 <template>
-    <n-page-header>
-        <template #title>
-            <a href="https://github.com/petersopko/gptcodepal/" style="text-decoration: none; color: inherit">
-                <n-gradient-text gradient="linear-gradient(90deg, red 0%, green 50%, blue 100%)">
-                    GptCodePal
-                </n-gradient-text>
-            </a>
-        </template>
-        <template #avatar>
-            <n-avatar src="https://image.lexica.art/full_jpg/bac6aa81-cd0f-4da4-8cfa-2a0a5d1680c3" />
-        </template>
-        <template #extra>
-            <div>
-                <div>
-                    <n-space>
-                        <WipeSessionModal />
-                        <StatsSettingsModal />
-                    </n-space>
-                </div>
-                <div class="flex justify-center mt-4">
-                    <n-statistic label=" This Session 💲" :value="`$${totalMoneySpent}`" class="text-center mr-4" />
-                </div>
-            </div>
-        </template>
-    </n-page-header>
+    <n-grid cols="6">
+        <n-grid-item span="2">
+            <n-space vertical align="start">
+                <n-button><a href="https://www.buymeacoffee.com/petersopko" target=”_blank”>☕</a></n-button>
+                <n-button><a href="https://github.com/petersopko/gptcodepal" target=”_blank”>🤖</a></n-button>
+            </n-space>
+        </n-grid-item>
+        <n-grid-item span="2">
+            <n-space class="heading-title" justify="center">
+                <n-h1>
+                    GptCodePal 🤖
+                </n-h1>
+            </n-space>
+        </n-grid-item>
+        <n-grid-item span="2">
+            <n-space vertical align="end">
+                <StatsSettingsModal />
+                <WipeSessionModal />
+                <n-h3 class="price text-center mb-0" size="large">{{ `$ ${totalMoneySpent}` }}</n-h3>
+            </n-space>
+        </n-grid-item>
+    </n-grid>
 </template>
-
 <script setup>
+import { NButton, NGridItem, NGrid, NSpace, NH1, NH3 } from "naive-ui";
 import { onMounted, computed } from "vue";
 import { useStatsStore } from '../../store/statsStore'
 import WipeSessionModal from "./WipeSessionModal.vue";
@@ -47,12 +44,28 @@ const totalMoneySpent = computed(() => {
 });
 </script>
 <style scoped>
-.n-gradient-text {
-    font-size: 2rem;
+.price {
+    width: 90px;
 }
 
-.n-avatar {
-    width: 100px;
-    height: 100px;
+.heading-title {
+    height: 100%;
+    align-items: center;
+}
+
+.light-green {
+    height: 108px;
+    background-color: rgba(0, 128, 0, 0.12);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.green {
+    height: 108px;
+    background-color: rgba(0, 128, 0, 0.24);
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 </style>

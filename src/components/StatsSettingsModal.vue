@@ -1,6 +1,6 @@
 <template>
-    <n-button @click="showModal = true">
-        Stats & Settings 📊
+    <n-button class="header-button-right" ghost type="info" size="large" @click="showModal = true">
+        📈⚙️
     </n-button>
     <n-modal v-model:show="showModal">
         <n-card style=" width: 600px" title="Stats & Settings" :bordered="false" size="huge" role="dialog"

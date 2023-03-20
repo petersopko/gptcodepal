@@ -1,6 +1,6 @@
 <template>
-    <n-button @click="showModal = true">
-        Wipe Session 🧹
+    <n-button class="header-button-right" ghost type="warning" size="large" @click="showModal = true">
+        🔥🧹
     </n-button>
     <n-modal v-model:show="showModal" preset="dialog" title="WARNING" :content="warningMessage" positive-text="Submit"
         :positiveButtonProps="{ type: 'default' }" negative-text="Cancel" @positive-click="submitCallback"
@@ -32,8 +32,3 @@ const submitCallback = () => {
     message.success("Submit");
 };
 </script>
-<style scoped>
-.button {
-    width: 50px
-}
-</style>
