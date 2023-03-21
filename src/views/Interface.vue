@@ -1,19 +1,20 @@
 <template>
-  <div class="container">
+  <div class="container ">
     <Loader :loading="loading" />
-    <PageHeader class="mb-6" />
-    <n-card>
+    <div>
+      <PageHeader class="heading-title w-full block my-5 text-center" />
+
       <Tabs />
       <CodeInputList :codeInputs="tabsStore.activeTab.codeInputs" @remove="tabsStore.removeCodeInput"
         @add="tabsStore.addCodeInput" />
       <SubmitCard :responseTokens="responseTokens" :promptTokens="promptTokens" @submit="submitPrompt" />
       <ResponseSection v-if="tabsStore.activeTab.response" :response="tabsStore.activeTab.response" />
-    </n-card>
+    </div>
   </div>
 </template>
 
 <script setup>
-import { NCard } from "naive-ui";
+import { NCard, NSpace } from "naive-ui";
 import { onMounted, ref, computed } from "vue";
 import Loader from "../components/Loader.vue";
 import TextInput from "../components/TextInput.vue";

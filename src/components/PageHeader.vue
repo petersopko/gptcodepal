@@ -1,12 +1,12 @@
 <template>
-    <n-space class="heading-title mt-5" justify="center">
+    <div>
         <n-gradient-text :size="36">
             GptCodePal 🤖
         </n-gradient-text>
-    </n-space>
+    </div>
 </template>
 <script setup>
-import { NSpace, NGradientText, NH3 } from "naive-ui";
+import { NSpace, NGradientText, NCard } from "naive-ui";
 import { onMounted, computed } from "vue";
 import { useStatsStore } from '../store/statsStore'
 

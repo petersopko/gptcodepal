@@ -1,6 +1,7 @@
 <template>
     <n-card title="Code Inputs" @dragenter.prevent="dragCounter++" @dragleave.prevent="dragCounter--" @dragover.prevent
         @drop.prevent="fileDropHandler">
+        <div class="text-center text-gray-600">Drop your code here</div>
         <n-collapse accordion default-expanded-names="0" class="mb-6">
             <n-collapse-item v-for="(codeInput, index) in codeInputsComputed"
                 :title="!codeInput.name ? 'Code Input ' + (index + 1) : codeInput.name" :name="String(index)" :key="index">

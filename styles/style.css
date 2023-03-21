@@ -9,6 +9,7 @@
 
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
+  background-color: #18181c;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -17,11 +18,10 @@
   -webkit-text-size-adjust: 100%;
 }
 
-#app {
-  margin-left: auto;
-  margin-right: auto;
-}
-
 .header-button-right {
   width: 90px;
+}
+
+.n-tab-pane {
+  padding: 0 !important;
 }
