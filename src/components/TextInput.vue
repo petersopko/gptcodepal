@@ -1,16 +1,28 @@
 <template>
-    <n-card title="Description">
-        <n-input :value="description" :placeholder="placeholder" type="textarea" @input="updateDescription($event)" />
-    </n-card>
+    <n-input placeholder="Ask and you shall receive 🤖" type="textarea" :autosize="{ minRows: 1, maxRows: 10 }"
+        :value="description" @input="updateDescription($event)">
+        <template #suffix>
+            <n-button class=" mt-4 mb-4" @click="submitPrompt">
+                Submit 🚀 {{ `(Estimated tokens ${tokenCount || 0})` }}
+            </n-button>
+        </template></n-input>
 </template>
 
 <script setup>
-import { NCard, NInput } from "naive-ui";
+import { NCard, NInput, NButton } from "naive-ui";
 import { computed } from "vue";
 import { useTabsStore } from "../store/tabsStore";
+import { useSettingsStore } from "../store/settingsStore";
+import { countTokens } from "../composables/useTokenCount";
+import { promptSelection, contextForGpt, noContext } from "../store/promptStore";
 const props = defineProps({
     placeholder: String,
 });
+
+const emit = defineEmits(["submit"]);
+
+const settingsStore = useSettingsStore();
+const maxTokens = computed(() => settingsStore.maxTokens);
 
 const tabsStore = useTabsStore();
 const description = computed(() => tabsStore.activeTab.description);
@@ -18,4 +30,20 @@ const description = computed(() => tabsStore.activeTab.description);
 const updateDescription = (event) => {
     tabsStore.updateDescription(event);
 }
+
+const tokenCount = computed(() => {
+    const context = promptSelection.value === 'contextForGpt' ? contextForGpt : noContext;
+    const text = `${context}${description.value}${tabsStore.activeTab.codeInputs
+        .map((chunk) => `\n${chunk.name}\n\`\`\`${chunk.code}\`\`\``)
+        .join("")}`;
+
+    if (!text) {
+        return 0;
+    }
+    return countTokens(text);
+});
+
+const submitPrompt = () => {
+    emit("submit");
+};
 </script>

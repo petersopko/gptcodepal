@@ -1,10 +1,10 @@
 <template>
     <n-card title="Code Inputs" @dragenter.prevent="dragCounter++" @dragleave.prevent="dragCounter--" @dragover.prevent
         @drop.prevent="fileDropHandler">
-        <n-collapse class="mb-6">
+        <n-collapse accordion default-expanded-names="1" class="mb-6">
             <n-collapse-item v-for="(codeInput, index) in codeInputsComputed"
                 :title="!codeInput.name ? 'Code Input ' + (index + 1) : codeInput.name" :name="index"
-                default-expanded-names="1" accordion :key="index">
+                default-expanded-names="1" :key="index">
                 <CodeInput :model-value="codeInput" :index="index" @update:modelValue="tabsStore.updateCodeInput($event)" />
                 <template #header-extra>
                     <IconButton icon="trash-alt" class="text-red" @click="tabsStore.removeCodeInput(index)" />
