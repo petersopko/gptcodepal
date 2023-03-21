@@ -8,6 +8,7 @@ export const useMessagesStore = defineStore("messagesStore", () => {
 
   function addMessage(role, content, activeTabIndex) {
     allMessages.value[activeTabIndex].messages.push({ role, content });
+    localStorage.setItem("messagesStore", JSON.stringify(allMessages.value));
   }
 
   function resetMessages() {
