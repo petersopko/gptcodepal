@@ -3,19 +3,23 @@ import { ref } from "vue";
 
 export const useMessagesStore = defineStore("messagesStore", () => {
   const allMessages = ref(
-    JSON.parse(localStorage.getItem("messagesStore")) || { 0: [] }
+    JSON.parse(localStorage.getItem("messagesStore")) || [[]]
   );
 
   function addMessage(activeTabIndex, role, content) {
     if (!role) {
-      // Create a new object with contents messages${activeTabIndex}: []
-      allMessages.value[activeTabIndex] = [];
+      allMessages.value.splice(activeTabIndex, 0, []);
     } else {
       allMessages.value[activeTabIndex].push({
         role,
         content,
       });
     }
+    localStorage.setItem("messagesStore", JSON.stringify(allMessages.value));
+  }
+
+  function deleteMessage(index) {
+    allMessages.value.splice(index, 1);
     localStorage.setItem("messagesStore", JSON.stringify(allMessages.value));
   }
 
@@ -26,6 +30,7 @@ export const useMessagesStore = defineStore("messagesStore", () => {
   return {
     allMessages,
     addMessage,
+    deleteMessage,
     resetMessages,
   };
 });

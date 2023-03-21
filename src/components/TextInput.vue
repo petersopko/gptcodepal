@@ -2,9 +2,9 @@
     <n-input placeholder="Ask and you shall receive 🤖" type="textarea" :autosize="{ minRows: 1, maxRows: 10 }"
         :value="description" @input="updateDescription($event)">
         <template #suffix>
-            <n-button :disabled="!description" class="my-1" @click="submitPrompt">
-                Submit 🚀
-            </n-button>
+            <button class="text-gray-700" :disabled="!description" @click="submitPrompt">
+                🚀
+            </button>
             <!-- {{ `(Estimated tokens ${tokenCount || 0})` }} -->
         </template></n-input>
 </template>

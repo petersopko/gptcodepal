@@ -27,6 +27,7 @@ export const useTabsStore = defineStore("tabsStore", () => {
   }
 
   function deleteTab(index) {
+    messagesStore.deleteMessage(index);
     tabs.value.splice(index, 1);
     activeTabIndex.value = Math.min(
       activeTabIndex.value,

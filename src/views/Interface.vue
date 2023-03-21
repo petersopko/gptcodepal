@@ -1,5 +1,6 @@
 <template>
   <div class="container ">
+    {{ messagesStore }}
     <Loader :loading="loading" />
     <div>
       <ApiKeyInput />
