@@ -12,22 +12,17 @@
         </n-grid-item>
         <n-grid-item span="2">
             <n-space class="heading-title" justify="center">
-                <n-h1>
+                <n-gradient-text :size="36">
                     GptCodePal 🤖
-                </n-h1>
+                </n-gradient-text>
             </n-space>
         </n-grid-item>
         <n-grid-item span="2">
-            <n-space vertical align="end">
-                <StatsSettingsModal />
-                <WipeSessionModal />
-                <n-h3 class="price text-center mb-0" size="large">{{ `$ ${totalMoneySpent}` }}</n-h3>
-            </n-space>
         </n-grid-item>
     </n-grid>
 </template>
 <script setup>
-import { NButton, NGridItem, NGrid, NSpace, NH1, NH3 } from "naive-ui";
+import { NButton, NGridItem, NGrid, NSpace, NGradientText, NH3 } from "naive-ui";
 import { onMounted, computed } from "vue";
 import { useStatsStore } from '../store/statsStore'
 import WipeSessionModal from "./WipeSessionModal.vue";
