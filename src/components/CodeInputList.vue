@@ -25,7 +25,7 @@
 import { NCard, NCollapse, NCollapseItem, NButton } from "naive-ui";
 import CodeInput from "./CodeInput.vue";
 import IconButton from "./IconButton.vue";
-import { useTabsStore } from "../../store/tabsStore.js";
+import { useTabsStore } from "../store/tabsStore.js";
 import { computed, ref } from "vue";
 
 const tabsStore = useTabsStore();

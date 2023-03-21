@@ -29,7 +29,7 @@
 <script setup>
 import { NButton, NGridItem, NGrid, NSpace, NH1, NH3 } from "naive-ui";
 import { onMounted, computed } from "vue";
-import { useStatsStore } from '../../store/statsStore'
+import { useStatsStore } from '../store/statsStore'
 import WipeSessionModal from "./WipeSessionModal.vue";
 import StatsSettingsModal from "./StatsSettingsModal.vue";
 

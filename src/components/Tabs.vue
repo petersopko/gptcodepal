@@ -8,7 +8,7 @@
 <script setup>
 import { NTabs, NTabPane } from "naive-ui";
 import { computed } from "vue";
-import { useTabsStore } from "../../store/tabsStore.js";
+import { useTabsStore } from "../store/tabsStore.js";
 
 const tabsStore = useTabsStore();
 

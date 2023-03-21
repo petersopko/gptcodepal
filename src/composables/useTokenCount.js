@@ -1,6 +1,6 @@
 import { watch } from "vue";
 import GPT3Tokenizer from "gpt3-tokenizer";
-import { useTokenEstimateStore } from "../../store/tokenEstimateStore.js";
+import { useTokenEstimateStore } from "../store/tokenEstimateStore.js";
 
 const tokenizer = new GPT3Tokenizer({ type: "gpt3" });
 

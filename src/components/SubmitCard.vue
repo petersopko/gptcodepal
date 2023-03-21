@@ -17,9 +17,9 @@
 <script setup>
 import { NCard, NButton, NRadioGroup, NRadio } from "naive-ui";
 import { computed } from "vue";
-import { useTabsStore } from "../../store/tabsStore";
+import { useTabsStore } from "../store/tabsStore";
 import { countTokens } from "../composables/useTokenCount";
-import { promptSelection, updatePromptSelection, contextForGpt, noContext } from "../../store/promptStore";
+import { promptSelection, updatePromptSelection, contextForGpt, noContext } from "../store/promptStore";
 
 const emit = defineEmits(["submit"]);
 

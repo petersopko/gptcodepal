@@ -11,8 +11,8 @@
 import { NButton, NModal } from "naive-ui";
 import { ref } from "vue";
 import { useMessage } from "naive-ui";
-import { useStatsStore } from "../../store/statsStore";
-import { useTabsStore } from "../../store/tabsStore";
+import { useStatsStore } from "../store/statsStore";
+import { useTabsStore } from "../store/tabsStore";
 
 const message = useMessage();
 const statsStore = useStatsStore()// Access the store

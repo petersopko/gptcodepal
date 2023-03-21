@@ -1,14 +1,18 @@
 import { ref } from "vue";
-import { useStatsStore } from "../../store/statsStore";
+import { useStatsStore } from "../store/statsStore";
+import { useSettingsStore } from "../store/settingsStore";
+import { useTabsStore } from "../store/tabsStore";
 import axios from "axios";
 import {
   promptSelection,
   contextForGpt,
   noContext,
-} from "../../store/promptStore";
+} from "../store/promptStore";
 
-export default function useSubmit(apiKeyStore, tabsStore) {
+export default function useSubmit() {
   const statsStore = useStatsStore();
+  const settingsStore = useSettingsStore();
+  const tabsStore = useTabsStore();
   const loading = ref(false);
   const response = ref("");
   const promptTokens = ref(0);
@@ -43,14 +47,16 @@ export default function useSubmit(apiKeyStore, tabsStore) {
             },
           ],
           temperature: 0.7,
+          max_tokens: settingsStore.maxTokens,
         },
         {
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${apiKeyStore.apiKey}`,
+            Authorization: `Bearer ${settingsStore.apiKey}`,
           },
         }
       );
+
       console.log("Result:", result);
       handleResponse(result);
     } catch (error) {
@@ -80,5 +86,11 @@ export default function useSubmit(apiKeyStore, tabsStore) {
     console.error("Error:", error);
     response.value = "An error occurred while fetching the response.";
   }
-  return { submitPrompt, response, loading, promptTokens, responseTokens };
+  return {
+    submitPrompt,
+    response,
+    loading,
+    promptTokens,
+    responseTokens,
+  };
 }

@@ -7,7 +7,7 @@
 <script setup>
 import { NCard, NInput } from "naive-ui";
 import { computed } from "vue";
-import { useTabsStore } from "../../store/tabsStore";
+import { useTabsStore } from "../store/tabsStore";
 const props = defineProps({
     placeholder: String,
 });

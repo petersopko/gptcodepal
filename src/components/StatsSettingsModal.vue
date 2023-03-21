@@ -20,18 +20,34 @@
                 </n-gi>
             </n-grid>
             <ApiKeyInput />
+            <n-gi class="flex justify-center items-center">
+                <div>
+                    <span>Max Tokens: </span>
+                    <n-input-number v-model:value="maxTokens" clearable min="0" @update:value="updateMaxTokens" />
+                </div>
+            </n-gi>
+
         </n-card>
     </n-modal>
 </template>
 
 <script setup>
-import { NButton, NModal, NCard, NGrid, NGi, NStatistic } from "naive-ui";
+import { NButton, NModal, NCard, NGrid, NGi, NStatistic, NInputNumber } from "naive-ui";
 import { ref, computed } from "vue";
 import ApiKeyInput from "./ApiKeyInput.vue";
-import { useStatsStore } from "../../store/statsStore";
+import { useStatsStore } from "../store/statsStore";
+import { useSettingsStore } from "../store/settingsStore.js";
+
+const settingsStore = useSettingsStore();
+
+function updateMaxTokens(value) {
+    settingsStore.saveMaxTokens(value);
+}
 
 const store = useStatsStore();
 const showModal = ref(false);
+const maxTokens = computed(() => settingsStore.maxTokens);
+
 
 const promptTokensTotal = computed(() => store.promptTokensTotal);
 const completionTokensTotal = computed(() => store.completionTokensTotal);

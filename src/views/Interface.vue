@@ -26,13 +26,16 @@ import Tabs from "../components/Tabs.vue";
 import useSubmit from "../composables/useSubmit.js";
 import PageHeader from "../components/PageHeader.vue";
 import SubmitCard from "../components/SubmitCard.vue";
-import { useTabsStore } from "../../store/tabsStore.js";
-import { useApiKeyStore } from "../../store/apiKeyStore.js";
+import { useTabsStore } from "../store/tabsStore.js";
+import { useSettingsStore } from "../store/settingsStore.js";
+
+const settingsStore = useSettingsStore();
+
+
 
 const tabsStore = useTabsStore();
-const apiKeyStore = useApiKeyStore();
 
-const { submitPrompt, loading, promptTokens, responseTokens } = useSubmit(apiKeyStore, tabsStore);
+const { submitPrompt, loading, promptTokens, responseTokens } = useSubmit();
 
 const activeTabIndex = computed(() => {
   return tabsStore.activeTabIndex;

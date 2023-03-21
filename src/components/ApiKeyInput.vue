@@ -14,12 +14,12 @@
 
 <script setup>
 import { NCard, NInput, NButton } from "naive-ui";
-import { useApiKeyStore } from "../../store/apiKeyStore.js";
+import { useSettingsStore } from "../store/settingsStore.js";
 import { useMessage } from "naive-ui";
 
 const message = useMessage();
 
-const apiKeyStore = useApiKeyStore();
+const apiKeyStore = useSettingsStore();
 
 const saveApiKey = () => {
     message.success("API Key saved!");
