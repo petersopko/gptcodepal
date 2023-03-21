@@ -24,29 +24,3 @@ const totalMoneySpent = computed(() => {
     return (promptCost + completionCost).toFixed(2);
 });
 </script>
-<style scoped>
-.price {
-    width: 90px;
-}
-
-.heading-title {
-    height: 100%;
-    align-items: center;
-}
-
-.light-green {
-    height: 108px;
-    background-color: rgba(0, 128, 0, 0.12);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.green {
-    height: 108px;
-    background-color: rgba(0, 128, 0, 0.24);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-</style>
