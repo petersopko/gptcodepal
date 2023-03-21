@@ -40,25 +40,46 @@ export default function useSubmit() {
     const url = "https://api.openai.com/v1/chat/completions";
 
     // Check if there are already saved messages in the message store
-    if (messagesStore.messages.length === 0) {
-      messagesStore.addMessage("user", formattedPrompt);
+    console.log(
+      "messagesStore.allMessages:",
+      messagesStore.allMessages[tabsStore.activeTabIndex]
+    );
+    if (
+      messagesStore.allMessages[tabsStore.activeTabIndex].messages.length === 0
+    ) {
+      messagesStore.addMessage(
+        "user",
+        formattedPrompt,
+        tabsStore.activeTabIndex
+      );
     } else {
       const lastMessage =
-        messagesStore.messages.value[messagesStore.messages.value.length - 1];
+        messagesStore.allMessages[tabsStore.activeTabIndex].messages[
+          messagesStore.allMessages[tabsStore.activeTabIndex].messages.length -
+            1
+        ];
       if (lastMessage.role !== "user") {
-        messagesStore.addMessage("user", formattedPrompt);
+        messagesStore.addMessage(
+          "user",
+          formattedPrompt,
+          tabsStore.activeTabIndex
+        );
       } else {
         lastMessage.content = formattedPrompt;
       }
     }
-    console.log("messages:", messagesStore.messages);
+    console.log(
+      "messages:",
+      messagesStore.allMessages[tabsStore.activeTabIndex]
+    );
 
     try {
       const result = await axios.post(
         url,
         {
           model: "gpt-4",
-          messages: messagesStore.messages,
+          messages:
+            messagesStore.allMessages[tabsStore.activeTabIndex].messages,
           temperature: 0.7,
           max_tokens: settingsStore.maxTokens,
         },
@@ -87,7 +108,11 @@ export default function useSubmit() {
     console.log(result);
     loading.value = false;
     response.value = result.data.choices[0].message.content.trim();
-    messagesStore.addMessage("assistant", response.value);
+    messagesStore.addMessage(
+      "assistant",
+      response.value,
+      tabsStore.activeTabIndex
+    );
     promptTokens.value = result.data.usage.prompt_tokens;
     responseTokens.value = result.data.usage.completion_tokens;
     statsStore.incrementPromptTokens(promptTokens.value);

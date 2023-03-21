@@ -1,6 +1,7 @@
 <template>
   <div class="container ">
     <Loader :loading="loading" />
+    {{ tabsStore.activeTabIndex }}
     {{ tabsStore.activeTab }}
     {{ messagesStore }}
     <div>
