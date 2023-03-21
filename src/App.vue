@@ -1,12 +1,14 @@
 <script setup>
 import Interface from './views/Interface.vue';
-import { NConfigProvider, NMessageProvider, darkTheme } from 'naive-ui'
+import { NConfigProvider, NMessageProvider, darkTheme, NSpace } from 'naive-ui'
 </script>
 
 <template>
   <n-config-provider :theme="darkTheme">
     <n-message-provider>
-      <Interface />
+      <n-space justify="center">
+        <Interface />
+      </n-space>
     </n-message-provider>
   </n-config-provider>
 </template>

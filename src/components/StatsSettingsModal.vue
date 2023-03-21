@@ -25,7 +25,7 @@
 </template>
 
 <script setup>
-import { NButton, NModal, NCard, NGrid, NGi, NStatistic, NInputNumber } from "naive-ui";
+import { NButton, NModal, NCard, NGrid, NGi, NStatistic } from "naive-ui";
 import { ref, computed } from "vue";
 import ApiKeyInput from "./ApiKeyInput.vue";
 import { useStatsStore } from "../store/statsStore";

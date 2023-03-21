@@ -1,32 +1,14 @@
 <template>
-    <n-grid cols="6">
-        <n-grid-item span="2">
-            <n-space vertical align="start">
-                <a href="https://www.buymeacoffee.com/petersopko" target=”_blank”>
-                    <n-button>☕</n-button>
-                </a>
-                <a href="https://github.com/petersopko/gptcodepal" target=”_blank”>
-                    <n-button>🤖</n-button>
-                </a>
-            </n-space>
-        </n-grid-item>
-        <n-grid-item span="2">
-            <n-space class="heading-title" justify="center">
-                <n-gradient-text :size="36">
-                    GptCodePal 🤖
-                </n-gradient-text>
-            </n-space>
-        </n-grid-item>
-        <n-grid-item span="2">
-        </n-grid-item>
-    </n-grid>
+    <n-space class="heading-title mt-5" justify="center">
+        <n-gradient-text :size="36">
+            GptCodePal 🤖
+        </n-gradient-text>
+    </n-space>
 </template>
 <script setup>
-import { NButton, NGridItem, NGrid, NSpace, NGradientText, NH3 } from "naive-ui";
+import { NSpace, NGradientText, NH3 } from "naive-ui";
 import { onMounted, computed } from "vue";
 import { useStatsStore } from '../store/statsStore'
-import WipeSessionModal from "./WipeSessionModal.vue";
-import StatsSettingsModal from "./StatsSettingsModal.vue";
 
 const store = useStatsStore();
 onMounted(() => {

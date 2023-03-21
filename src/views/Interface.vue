@@ -1,16 +1,14 @@
 <template>
   <div class="container">
+    <Loader :loading="loading" />
+    <PageHeader class="mb-6" />
     <n-card>
-      <Loader :loading="loading" />
-      <PageHeader class="mb-6" />
-      <n-card>
-        <Tabs />
-        <TextInput placeholder="Enter your description" :activeTab="activeTabIndex" />
-        <CodeInputList :codeInputs="tabsStore.activeTab.codeInputs" @remove="tabsStore.removeCodeInput"
-          @add="tabsStore.addCodeInput" />
-        <SubmitCard :responseTokens="responseTokens" :promptTokens="promptTokens" @submit="submitPrompt" />
-        <ResponseSection v-if="tabsStore.activeTab.response" :response="tabsStore.activeTab.response" />
-      </n-card>
+      <Tabs />
+      <TextInput placeholder="Enter your description" :activeTab="activeTabIndex" />
+      <CodeInputList :codeInputs="tabsStore.activeTab.codeInputs" @remove="tabsStore.removeCodeInput"
+        @add="tabsStore.addCodeInput" />
+      <SubmitCard :responseTokens="responseTokens" :promptTokens="promptTokens" @submit="submitPrompt" />
+      <ResponseSection v-if="tabsStore.activeTab.response" :response="tabsStore.activeTab.response" />
     </n-card>
   </div>
 </template>
