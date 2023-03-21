@@ -1,7 +1,11 @@
 <template>
-    <n-card v-for="message in activeTabMessages">
-        <ResponseContent :response="message.content" />
-    </n-card>
+    <div>
+        <div v-for="message in activeTabMessages">
+            <n-card :class="`${message.role}-message`">
+                <ResponseContent :response="message.content" />
+            </n-card>
+        </div>
+    </div>
 </template>
 
 <script setup>
@@ -9,16 +13,15 @@ import { computed } from "vue";
 import { NCard } from "naive-ui";
 import ResponseContent from './Chat.vue';
 import { useMessagesStore } from "../store/messagesStore";
+import { useTabsStore } from "../store/tabsStore";
 
 const messagesStore = useMessagesStore();
-const props = defineProps({
-    activeTabIndex: Number,
-});
-const activeTabMessages = messagesStore.allMessages[props.activeTabIndex];
+const tabsStore = useTabsStore();
 
-const response = computed(() => {
-    return activeTabMessages[activeTabMessages.length - 1].content || null;
+const activeTabMessages = computed(() => {
+    return messagesStore.allMessages[tabsStore.activeTabIndex];
 });
+
 
 
 </script>

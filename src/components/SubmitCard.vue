@@ -3,19 +3,19 @@
         <n-input-group>
             <TextInput placeholder="Enter your description" @submit="submitPrompt" />
         </n-input-group>
-        <div class="flex justify-center mt-2">
+        <!-- <div class="flex justify-center mt-2">
             <n-radio-group v-model:value="promptSelection">
                 <n-radio value="contextForGpt" @click="updatePromptSelection('contextForGpt')">Context for GPT</n-radio>
                 <n-radio value="noContext" @click="updatePromptSelection('noContext')">No Context</n-radio>
             </n-radio-group>
-        </div>
-        <div class="flex justify-center mt-2">
+        </div> -->
+        <!-- <div class="flex justify-center mt-2">
             <n-radio-group>
                 <n-radio>No Code Input</n-radio>
                 <n-radio>Include Code Input</n-radio>
             </n-radio-group>
-        </div>
-        <n-collapse accordion>
+        </div> -->
+        <!-- <n-collapse accordion>
             <n-collapse-item title="Stats & Settings">
                 <n-grid>
                     <n-gi class="flex justify-center">
@@ -35,11 +35,11 @@
                 <div class="flex justify-center">
                     <n-input-number placeholder="Max tokens for answer" v-model:value="maxTokens" clearable min="0"
                         @update:value="updateMaxTokens" />
-                </div>
-                <ApiKeyInput />
-                <WipeSessionModal />
+                </div> -->
+        <!-- <ApiKeyInput /> -->
+        <!-- <WipeSessionModal />
             </n-collapse-item>
-        </n-collapse>
+        </n-collapse> -->
     </n-card>
 </template>
 

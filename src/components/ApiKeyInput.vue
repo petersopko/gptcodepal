@@ -1,6 +1,6 @@
 <template>
     <n-card>
-        <div class="flex justify-between">
+        <div class="flex justify-center">
             <div class="relative w-full max-w-md">
                 <n-input id="api-key-input" v-model:value="apiKeyStore.apiKey" type="password" show-password-on="mousedown"
                     placeholder="API Key" />

@@ -1,17 +1,16 @@
 <template>
   <div class="container ">
     <Loader :loading="loading" />
-    <!-- {{ tabsStore.tabs.length }}
-    {{ tabsStore }} -->
-    {{ messagesStore }}
     <div>
-      <!-- <PageHeader class="heading-title w-full block my-5 text-center" /> -->
-
-      <ResponseSection :activeTabIndex="tabsStore.activeTabIndex" />
+      <ApiKeyInput />
       <Tabs />
-      <CodeInputList :codeInputs="tabsStore.activeTab.codeInputs" @remove="tabsStore.removeCodeInput"
-        @add="tabsStore.addCodeInput" />
-      <SubmitCard :responseTokens="responseTokens" :promptTokens="promptTokens" @submit="submitPrompt" />
+
+      <div class="h-[calc(100vh-200px)] overflow-y-auto">
+        <ResponseSection :activeTabIndex="tabsStore.activeTabIndex" />
+      </div>
+
+      <SubmitCard class="fixed bottom-0 left-0 w-full" :responseTokens="responseTokens" :promptTokens="promptTokens"
+        @submit="submitPrompt" />
     </div>
   </div>
 </template>
@@ -24,6 +23,7 @@ import ResponseSection from "../components/ResponseSection.vue";
 import Tabs from "../components/Tabs.vue";
 import useSubmit from "../composables/useSubmit.js";
 import PageHeader from "../components/PageHeader.vue";
+import ApiKeyInput from "../components/ApiKeyInput.vue";
 import SubmitCard from "../components/SubmitCard.vue";
 import { useTabsStore } from "../store/tabsStore.js";
 import { useSettingsStore } from "../store/settingsStore.js";
