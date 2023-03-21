@@ -1,8 +1,10 @@
 <template>
   <div class="container ">
     <Loader :loading="loading" />
+    {{ tabsStore.activeTab }}
+    {{ messagesStore }}
     <div>
-      <PageHeader class="heading-title w-full block my-5 text-center" />
+      <!-- <PageHeader class="heading-title w-full block my-5 text-center" /> -->
 
       <ResponseSection v-if="tabsStore.activeTab.response" :response="tabsStore.activeTab.response" />
       <Tabs />
@@ -26,12 +28,11 @@ import PageHeader from "../components/PageHeader.vue";
 import SubmitCard from "../components/SubmitCard.vue";
 import { useTabsStore } from "../store/tabsStore.js";
 import { useSettingsStore } from "../store/settingsStore.js";
+import { useMessagesStore } from "../store/messagesStore.js";
 
 const settingsStore = useSettingsStore();
-
-
-
 const tabsStore = useTabsStore();
+const messagesStore = useMessagesStore()
 
 const { submitPrompt, loading, promptTokens, responseTokens } = useSubmit();
 

@@ -2,6 +2,8 @@ import { ref } from "vue";
 import { useStatsStore } from "../store/statsStore";
 import { useSettingsStore } from "../store/settingsStore";
 import { useTabsStore } from "../store/tabsStore";
+import { useMessagesStore } from "../store/messagesStore";
+
 import axios from "axios";
 import {
   promptSelection,
@@ -17,6 +19,7 @@ export default function useSubmit() {
   const response = ref("");
   const promptTokens = ref(0);
   const responseTokens = ref(0);
+  const messagesStore = useMessagesStore();
 
   async function submitPrompt() {
     loading.value = true;
@@ -33,19 +36,29 @@ export default function useSubmit() {
     const formattedPrompt = `${
       promptSelection.value === "contextForGpt" ? contextForGpt : noContext
     }\n${tabsStore.activeTab.description}${formattedCodeInputs}\n`;
+
     const url = "https://api.openai.com/v1/chat/completions";
-    console.log("Prompt:", formattedPrompt);
+
+    // Check if there are already saved messages in the message store
+    if (messagesStore.messages.length === 0) {
+      messagesStore.addMessage("user", formattedPrompt);
+    } else {
+      const lastMessage =
+        messagesStore.messages.value[messagesStore.messages.value.length - 1];
+      if (lastMessage.role !== "user") {
+        messagesStore.addMessage("user", formattedPrompt);
+      } else {
+        lastMessage.content = formattedPrompt;
+      }
+    }
+    console.log("messages:", messagesStore.messages);
+
     try {
       const result = await axios.post(
         url,
         {
           model: "gpt-4",
-          messages: [
-            {
-              role: "user",
-              content: formattedPrompt,
-            },
-          ],
+          messages: messagesStore.messages,
           temperature: 0.7,
           max_tokens: settingsStore.maxTokens,
         },
@@ -63,6 +76,7 @@ export default function useSubmit() {
       handleError(error);
     }
   }
+
   function handleResponse(result) {
     console.log(
       "number of tokens used for completion:",
@@ -70,8 +84,10 @@ export default function useSubmit() {
       "number of tokens used for prompt:",
       result.data.usage.prompt_tokens
     );
+    console.log(result);
     loading.value = false;
     response.value = result.data.choices[0].message.content.trim();
+    messagesStore.addMessage("assistant", response.value);
     promptTokens.value = result.data.usage.prompt_tokens;
     responseTokens.value = result.data.usage.completion_tokens;
     statsStore.incrementPromptTokens(promptTokens.value);
