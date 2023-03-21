@@ -64,6 +64,12 @@ export default function useSubmit() {
     }
   }
   function handleResponse(result) {
+    console.log(
+      "number of tokens used for completion:",
+      result.data.usage.completion_tokens,
+      "number of tokens used for prompt:",
+      result.data.usage.prompt_tokens
+    );
     loading.value = false;
     response.value = result.data.choices[0].message.content.trim();
     promptTokens.value = result.data.usage.prompt_tokens;
@@ -83,6 +89,7 @@ export default function useSubmit() {
   }
 
   function handleError(error) {
+    loading.value = false;
     console.error("Error:", error);
     response.value = "An error occurred while fetching the response.";
   }

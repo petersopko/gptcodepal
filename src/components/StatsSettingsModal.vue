@@ -20,13 +20,6 @@
                 </n-gi>
             </n-grid>
             <ApiKeyInput />
-            <n-gi class="flex justify-center items-center">
-                <div>
-                    <span>Max Tokens: </span>
-                    <n-input-number v-model:value="maxTokens" clearable min="0" @update:value="updateMaxTokens" />
-                </div>
-            </n-gi>
-
         </n-card>
     </n-modal>
 </template>
@@ -40,13 +33,8 @@ import { useSettingsStore } from "../store/settingsStore.js";
 
 const settingsStore = useSettingsStore();
 
-function updateMaxTokens(value) {
-    settingsStore.saveMaxTokens(value);
-}
-
 const store = useStatsStore();
 const showModal = ref(false);
-const maxTokens = computed(() => settingsStore.maxTokens);
 
 
 const promptTokensTotal = computed(() => store.promptTokensTotal);

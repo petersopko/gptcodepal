@@ -15,7 +15,7 @@
             Add Code Section
         </n-button>
         <n-button @click="$refs.fileInput.click()">
-            Upload Files
+            Upload Code
         </n-button>
         <input type="file" ref="fileInput" @change="fileChangeHandler" style="display: none" multiple />
     </n-card>
