@@ -7,7 +7,7 @@
     <div>
       <!-- <PageHeader class="heading-title w-full block my-5 text-center" /> -->
 
-      <ResponseSection v-if="tabsStore.activeTab.response" :response="tabsStore.activeTab.response" />
+      <ResponseSection v-if="tabsStore.activeTab.response" :activeTabIndex="tabsStore.activeTabIndex" />
       <Tabs />
       <CodeInputList :codeInputs="tabsStore.activeTab.codeInputs" @remove="tabsStore.removeCodeInput"
         @add="tabsStore.addCodeInput" />
@@ -17,10 +17,8 @@
 </template>
 
 <script setup>
-import { NCard, NSpace } from "naive-ui";
 import { onMounted, ref, computed } from "vue";
 import Loader from "../components/Loader.vue";
-import TextInput from "../components/TextInput.vue";
 import CodeInputList from "../components/CodeInputList.vue";
 import ResponseSection from "../components/ResponseSection.vue";
 import Tabs from "../components/Tabs.vue";
