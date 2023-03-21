@@ -1,5 +1,6 @@
 import { defineStore } from "pinia";
 import { ref, computed } from "vue";
+import { useMessagesStore } from "../store/messagesStore";
 
 export const useTabsStore = defineStore("tabsStore", () => {
   const tabs = ref(
@@ -9,7 +10,7 @@ export const useTabsStore = defineStore("tabsStore", () => {
     )
   );
   const activeTabIndex = ref(0);
-
+  const messagesStore = useMessagesStore();
   const activeTab = computed(() => {
     return tabs.value[activeTabIndex.value];
   });
@@ -21,6 +22,7 @@ export const useTabsStore = defineStore("tabsStore", () => {
   function addTab() {
     tabs.value.push({ description: "", response: "", codeInputs: [] });
     updateActiveTab(tabs.value.length - 1);
+    messagesStore.addMessage(tabs.value.length - 1, null, null);
     localStorage.setItem("tabsStore", JSON.stringify(tabs.value));
   }
 

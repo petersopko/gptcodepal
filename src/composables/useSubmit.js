@@ -39,47 +39,13 @@ export default function useSubmit() {
 
     const url = "https://api.openai.com/v1/chat/completions";
 
-    // Check if there are already saved messages in the message store
-    console.log(
-      "messagesStore.allMessages:",
-      messagesStore.allMessages[tabsStore.activeTabIndex]
-    );
-    if (
-      messagesStore.allMessages[tabsStore.activeTabIndex].messages.length === 0
-    ) {
-      messagesStore.addMessage(
-        "user",
-        formattedPrompt,
-        tabsStore.activeTabIndex
-      );
-    } else {
-      const lastMessage =
-        messagesStore.allMessages[tabsStore.activeTabIndex].messages[
-          messagesStore.allMessages[tabsStore.activeTabIndex].messages.length -
-            1
-        ];
-      if (lastMessage.role !== "user") {
-        messagesStore.addMessage(
-          "user",
-          formattedPrompt,
-          tabsStore.activeTabIndex
-        );
-      } else {
-        lastMessage.content = formattedPrompt;
-      }
-    }
-    console.log(
-      "messages:",
-      messagesStore.allMessages[tabsStore.activeTabIndex]
-    );
-
+    messagesStore.addMessage(tabsStore.activeTabIndex, "user", formattedPrompt);
     try {
       const result = await axios.post(
         url,
         {
           model: "gpt-4",
-          messages:
-            messagesStore.allMessages[tabsStore.activeTabIndex].messages,
+          messages: messagesStore.allMessages[tabsStore.activeTabIndex],
           temperature: 0.7,
           max_tokens: settingsStore.maxTokens,
         },
@@ -109,9 +75,9 @@ export default function useSubmit() {
     loading.value = false;
     response.value = result.data.choices[0].message.content.trim();
     messagesStore.addMessage(
+      tabsStore.activeTabIndex,
       "assistant",
-      response.value,
-      tabsStore.activeTabIndex
+      response.value
     );
     promptTokens.value = result.data.usage.prompt_tokens;
     responseTokens.value = result.data.usage.completion_tokens;

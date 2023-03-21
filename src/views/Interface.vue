@@ -1,13 +1,13 @@
 <template>
   <div class="container ">
     <Loader :loading="loading" />
-    {{ tabsStore.activeTabIndex }}
-    {{ tabsStore.activeTab }}
+    <!-- {{ tabsStore.tabs.length }}
+    {{ tabsStore }} -->
     {{ messagesStore }}
     <div>
       <!-- <PageHeader class="heading-title w-full block my-5 text-center" /> -->
 
-      <ResponseSection v-if="tabsStore.activeTab.response" :activeTabIndex="tabsStore.activeTabIndex" />
+      <ResponseSection :activeTabIndex="tabsStore.activeTabIndex" />
       <Tabs />
       <CodeInputList :codeInputs="tabsStore.activeTab.codeInputs" @remove="tabsStore.removeCodeInput"
         @add="tabsStore.addCodeInput" />
