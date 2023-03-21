@@ -9,6 +9,12 @@
                 <n-radio value="noContext" @click="updatePromptSelection('noContext')">No Context</n-radio>
             </n-radio-group>
         </div>
+        <div class="flex justify-center mt-2">
+            <n-radio-group>
+                <n-radio>No Code Input</n-radio>
+                <n-radio>Include Code Input</n-radio>
+            </n-radio-group>
+        </div>
         <n-collapse accordion>
             <n-collapse-item title="Stats & Settings">
                 <n-grid>

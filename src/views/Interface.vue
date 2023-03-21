@@ -4,11 +4,11 @@
     <div>
       <PageHeader class="heading-title w-full block my-5 text-center" />
 
+      <ResponseSection v-if="tabsStore.activeTab.response" :response="tabsStore.activeTab.response" />
       <Tabs />
       <CodeInputList :codeInputs="tabsStore.activeTab.codeInputs" @remove="tabsStore.removeCodeInput"
         @add="tabsStore.addCodeInput" />
       <SubmitCard :responseTokens="responseTokens" :promptTokens="promptTokens" @submit="submitPrompt" />
-      <ResponseSection v-if="tabsStore.activeTab.response" :response="tabsStore.activeTab.response" />
     </div>
   </div>
 </template>

@@ -1,7 +1,7 @@
 <template>
     <div>
         <n-gradient-text :size="36">
-            GptCodePal 🤖
+            GPTCodePal 🤖
         </n-gradient-text>
     </div>
 </template>

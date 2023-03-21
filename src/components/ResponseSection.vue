@@ -1,5 +1,5 @@
 <template>
-    <n-card title="Response">
+    <n-card>
         <ResponseContent :response="response" />
     </n-card>
 </template>
