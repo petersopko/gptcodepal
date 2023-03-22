@@ -1,6 +1,6 @@
 <template>
-    <div>
-        <div v-for="message in activeTabMessages">
+    <div class="overlow-y-auto">
+        <div v-for="message in activeChatMessages">
             <n-card :class="`${message.role}-message`">
                 <ResponseContent :response="message.content" />
             </n-card>
@@ -12,14 +12,12 @@
 import { computed } from "vue";
 import { NCard } from "naive-ui";
 import ResponseContent from './ChatMessage.vue';
-import { useMessagesStore } from "../store/messagesStore";
-import { useTabsStore } from "../store/tabsStore";
+import { useChatStore } from "../store/chatStore";
 
-const messagesStore = useMessagesStore();
-const tabsStore = useTabsStore();
+const chatStore = useChatStore();
 
-const activeTabMessages = computed(() => {
-    return messagesStore.allMessages[tabsStore.activeTabIndex];
+const activeChatMessages = computed(() => {
+    return chatStore.allMessages[chatStore.activeChatIndex];
 });
 
 

@@ -1,16 +1,16 @@
 import { defineStore } from "pinia";
 import { ref, computed } from "vue";
-import { useMessagesStore } from "../store/messagesStore";
+import { useChatStore } from "../store/chatStore";
 
 export const useTabsStore = defineStore("tabsStore", () => {
   const tabs = ref(
     JSON.parse(
       localStorage.getItem("tabsStore") ||
-        '[{ "description": "", "response": "", "codeInputs": [] }]'
+        '[{ "inputText": "", "response": "", "codeInputs": [] }]'
     )
   );
   const activeTabIndex = ref(0);
-  const messagesStore = useMessagesStore();
+  const chatStore = useChatStore();
   const activeTab = computed(() => {
     return tabs.value[activeTabIndex.value];
   });
@@ -20,14 +20,14 @@ export const useTabsStore = defineStore("tabsStore", () => {
   }
 
   function addTab() {
-    tabs.value.push({ description: "", response: "", codeInputs: [] });
+    tabs.value.push({ inputText: "", response: "", codeInputs: [] });
     updateActiveTab(tabs.value.length - 1);
-    messagesStore.addMessage(tabs.value.length - 1, null, null);
+    chatStore.addMessage(tabs.value.length - 1, null, null);
     localStorage.setItem("tabsStore", JSON.stringify(tabs.value));
   }
 
   function deleteTab(index) {
-    messagesStore.deleteMessage(index);
+    chatStore.deleteMessage(index);
     tabs.value.splice(index, 1);
     activeTabIndex.value = Math.min(
       activeTabIndex.value,
@@ -51,14 +51,14 @@ export const useTabsStore = defineStore("tabsStore", () => {
     localStorage.setItem("tabsStore", JSON.stringify(tabs.value));
   }
 
-  function updateDescription(description) {
-    activeTab.value.description = description;
-    localStorage.setItem("tabsStore", JSON.stringify(tabs.value));
-  }
-  function updateResponse(newResponse) {
-    activeTab.value.response = newResponse;
-    localStorage.setItem("tabsStore", JSON.stringify(tabs.value));
-  }
+  // function updateDescription(inputText) {
+  //   activeTab.value.inputText = inputText;
+  //   localStorage.setItem("tabsStore", JSON.stringify(tabs.value));
+  // }
+  // function updateResponse(newResponse) {
+  //   activeTab.value.response = newResponse;
+  //   localStorage.setItem("tabsStore", JSON.stringify(tabs.value));
+  // }
   function addCodeInputFromFile(name, code) {
     activeTab.value.codeInputs.push({ name, code });
     localStorage.setItem("tabsStore", JSON.stringify(tabs.value));
@@ -66,7 +66,7 @@ export const useTabsStore = defineStore("tabsStore", () => {
 
   function $reset() {
     tabs.value = JSON.parse(
-      '[{ "description": "", "response": "", "codeInputs": [] }]'
+      '[{ "inputText": "", "response": "", "codeInputs": [] }]'
     );
     activeTabIndex.value = 0;
     localStorage.setItem("tabsStore", JSON.stringify(tabs.value));
@@ -82,8 +82,6 @@ export const useTabsStore = defineStore("tabsStore", () => {
     addCodeInput,
     removeCodeInput,
     updateCodeInput,
-    updateDescription,
-    updateResponse,
     addCodeInputFromFile,
 
     $reset,

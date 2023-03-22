@@ -1,10 +1,10 @@
 import { ref } from "vue";
 import { useStatsStore } from "../store/statsStore";
 import { useSettingsStore } from "../store/settingsStore";
-import { useTabsStore } from "../store/tabsStore";
-import { useMessagesStore } from "../store/messagesStore";
 import { useStatesStore } from "../store/statesStore";
 import { useNotification } from "naive-ui";
+import { useInputStore } from "../store/inputStore";
+import { useChatStore } from "../store/chatStore";
 
 import axios from "axios";
 import {
@@ -16,36 +16,36 @@ import {
 export default function useSubmit() {
   const statsStore = useStatsStore();
   const settingsStore = useSettingsStore();
-  const tabsStore = useTabsStore();
   const statesStore = useStatesStore();
+  const inputStore = useInputStore();
   const response = ref("");
   const promptTokens = ref(0);
   const responseTokens = ref(0);
-  const messagesStore = useMessagesStore();
+  const chatStore = useChatStore();
 
   async function submitPrompt() {
     statesStore.updateLoading(true);
-    response.value = "";
-    if (!tabsStore.activeTab.description) return;
+    if (!inputStore.inputStorage.inputText) return;
 
-    const formattedCodeInputs = tabsStore.activeTab.codeInputs
+    const formattedCodeInputs = inputStore.inputStorage.codeInputs
       .map((chunk) => `\n${chunk.name}\n\`\`\`${chunk.code}\`\`\``)
       .join("");
     promptSelection.value === "contextForGpt";
 
     const formattedPrompt = `${
       promptSelection.value === "contextForGpt" ? contextForGpt : noContext
-    }\n${tabsStore.activeTab.description}${formattedCodeInputs}\n`;
+    }${inputStore.inputStorage.inputText}${formattedCodeInputs}\n`;
 
     const url = "https://api.openai.com/v1/chat/completions";
 
-    messagesStore.addMessage(tabsStore.activeTabIndex, "user", formattedPrompt);
+    chatStore.addMessage(chatStore.activeChatIndex, "user", formattedPrompt);
+    console.log("chatStore.allMessages:", chatStore.allMessages);
     try {
       const result = await axios.post(
         url,
         {
           model: "gpt-4",
-          messages: messagesStore.allMessages[tabsStore.activeTabIndex],
+          messages: chatStore.allMessages[chatStore.activeChatIndex],
           temperature: 0.7,
           max_tokens: settingsStore.maxTokens,
         },
@@ -78,12 +78,12 @@ export default function useSubmit() {
     statesStore.updateLoading(false);
     response.value = error.response.data.error.message;
     showErrorNotification(response.value);
-    messagesStore.addMessage(
-      tabsStore.activeTabIndex,
+    chatStore.addMessage(
+      chatStore.activeChatIndex,
       "assistant",
       response.value
     );
-    tabsStore.activeTab.description = "";
+    inputStore.inputStorage.inputText = "";
   }
 
   function handleResponse(result) {
@@ -96,8 +96,8 @@ export default function useSubmit() {
     );
     console.log(result);
     response.value = result.data.choices[0].message.content.trim();
-    messagesStore.addMessage(
-      tabsStore.activeTabIndex,
+    chatStore.addMessage(
+      chatStore.activeChatIndex,
       "assistant",
       response.value
     );
@@ -114,7 +114,7 @@ export default function useSubmit() {
     };
 
     localStorage.setItem("statsStore", JSON.stringify(simplifiedStatsStore));
-    tabsStore.activeTab.description = "";
+    inputStore.inputStorage.inputText = "";
   }
 
   return {

@@ -9,11 +9,11 @@ export function countTokens(text) {
   return encoded.bpe.length;
 }
 
-export default function useTokenCount(description, codeInputs) {
+export default function useTokenCount(inputText, codeInputs) {
   const tokenEstimateStore = useTokenEstimateStore();
 
   const updateTokenCount = () => {
-    const text = `${description.value}${codeInputs.value
+    const text = `${inputText.value}${codeInputs.value
       .map((chunk) => `\n${chunk.name}\n\`\`\`${chunk.code}\`\`\``)
       .join("")}`;
 
@@ -24,7 +24,7 @@ export default function useTokenCount(description, codeInputs) {
     tokenEstimateStore.updateTokenEstimate(countTokens(text));
   };
 
-  watch([description, codeInputs], updateTokenCount, { immediate: true });
+  watch([inputText, codeInputs], updateTokenCount, { immediate: true });
 
   return {
     tokenEstimate: tokenEstimateStore.tokenEstimate,
