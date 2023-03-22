@@ -11,7 +11,7 @@
 <script setup>
 import { computed } from "vue";
 import { NCard } from "naive-ui";
-import ResponseContent from './Chat.vue';
+import ResponseContent from './ChatMessage.vue';
 import { useMessagesStore } from "../store/messagesStore";
 import { useTabsStore } from "../store/tabsStore";
 

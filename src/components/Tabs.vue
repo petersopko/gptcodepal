@@ -24,6 +24,8 @@ const deleteTab = (index) => {
     tabsStore.deleteTab(index);
 };
 
+
+
 const tabs = computed(() => {
     return tabsStore.tabs;
 });

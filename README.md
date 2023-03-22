@@ -43,8 +43,8 @@ gptcodepal
 │ │ ├─ CodeInputList.vue
 │ │ ├─ Loader.vue
 │ │ ├─ ResponseContent.vue
-│ │ ├─ ResponseSection.vue
-│ │ ├─ ResponseSectionHeadline.vue
+│ │ ├─ ChatContainer.vue
+│ │ ├─ ChatContainerHeadline.vue
 │ │ ├─ ResponseTokensInfo.vue
 │ │ ├─ Settings.vue
 │ │ ├─ SubmitButton.vue
