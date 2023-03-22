@@ -33,7 +33,6 @@ const updateInput = (value) => {
 
 const inputText = computed(() => {
     inputStore.inputStorage.inputText;
-    console.log(inputStore);
 });
 
 const tokenCount = computed(() => {

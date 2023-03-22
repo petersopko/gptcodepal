@@ -1,18 +1,19 @@
 <template>
   <Loader />
   <div class="flex flex-row min-h-screen max-h-screen">
-    <n-space vertical class="basis-1/4 overflow-y-auto border-2 border-sky-500">
+    <n-space vertical class="basis-1/4 overflow-y-auto border-2 ">
       <Tabs class="w-full" />
     </n-space>
     <div class="basis-3/4 flex flex-col relative">
       <n-space vertical class="overflow-y-scroll flex-grow">
-        <ChatContainer />
+        <ChatContainer class="chat-container" />
       </n-space>
       <SubmitCard class="absolute bottom-0 left-0 w-full" :responseTokens="responseTokens" :promptTokens="promptTokens"
         @submit="submitPrompt" />
     </div>
   </div>
 </template>
+
 
 <script setup>
 import { onMounted, onUnmounted, ref, computed, h } from "vue";
@@ -56,10 +57,7 @@ onUnmounted(() => {
 
 </script>
 <style>
-.n-layout-sider .n-layout-toggle-button {
-  top: 40px !important;
-  /* this right value needs to be dynamic
-  */
-  right: -20px !important;
+.chat-container {
+  margin-bottom: 76px;
 }
 </style>

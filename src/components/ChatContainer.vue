@@ -19,7 +19,4 @@ const chatStore = useChatStore();
 const activeChatMessages = computed(() => {
     return chatStore.allMessages[chatStore.activeChatIndex];
 });
-
-
-
 </script>

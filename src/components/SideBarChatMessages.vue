@@ -2,7 +2,7 @@
     <div class="tabs-container">
         <div class="my-4 text-center">
             <n-button size="large" @click="addChat">
-                <p class="mx-12">Add Tab</p>
+                <p class="mx-12">Add Chat</p>
             </n-button>
         </div>
         <n-card v-for="(tab, index) in allChats" @click="updateActiveChat(index)" :content-style="{
@@ -47,17 +47,10 @@ const addChat = () => {
     chatStore.addChat();
 };
 
-const deleteTab = (index) => {
-    tabsStore.deleteTab(index);
-};
 
 const deleteChat = (index) => {
     chatStore.deleteChat(index);
 };
-
-const tabs = computed(() => {
-    return tabsStore.tabs;
-});
 
 const allChats = computed(() => {
     return chatStore.allMessages;
@@ -66,7 +59,5 @@ const allChats = computed(() => {
 const activeChatIndex = computed(() => {
     return chatStore.activeChatIndex;
 });
-const activeTabIndex = computed(() => {
-    return tabsStore.activeTabIndex;
-});
+
 </script>
