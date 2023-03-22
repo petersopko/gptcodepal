@@ -1,17 +1,14 @@
 <template>
   <div class="container ">
-    {{ loadingStore }}
     <Loader />
     <div>
       <ApiKeyInput />
       <Tabs />
-
       <div class="h-[calc(100vh-200px)] overflow-y-auto">
         <ResponseSection :activeTabIndex="tabsStore.activeTabIndex" />
       </div>
-
       <SubmitCard class="fixed bottom-0 left-0 w-full" :responseTokens="responseTokens" :promptTokens="promptTokens"
-        @submit="submit" />
+        @submit="submitPrompt" />
     </div>
   </div>
 </template>
@@ -29,37 +26,16 @@ import SubmitCard from "../components/SubmitCard.vue";
 import { useTabsStore } from "../store/tabsStore.js";
 import { useSettingsStore } from "../store/settingsStore.js";
 import { useMessagesStore } from "../store/messagesStore.js";
-import { useNotification, NNotificationProvider } from "naive-ui";
 import { useStatesStore } from "../store/statesStore";
 
 
-const notification = useNotification();
-
-function showErrorNotification(error) {
-  notification.error({
-    title: "Error",
-    content: error.message || "An error occurred while fetching the response.",
-  });
-}
 
 const statesStore = useStatesStore();
-const loadingStore = computed(() => statesStore.isLoading);
-
-const settingsStore = useSettingsStore();
+// const loadingStore = computed(() => statesStore.isLoading);
+// const messagesStore = useMessagesStore()
+// const settingsStore = useSettingsStore();
 const tabsStore = useTabsStore();
-const messagesStore = useMessagesStore()
 const { submitPrompt, loading, error, promptTokens, responseTokens } = useSubmit();
-
-
-async function submit() {
-  try {
-    await submitPrompt();
-  } catch (error) {
-    statesStore.updateLoading(false);
-    showErrorNotification(error);
-  }
-}
-
 
 const activeTabIndex = computed(() => {
   return tabsStore.activeTabIndex;

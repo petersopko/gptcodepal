@@ -4,6 +4,7 @@ import { useSettingsStore } from "../store/settingsStore";
 import { useTabsStore } from "../store/tabsStore";
 import { useMessagesStore } from "../store/messagesStore";
 import { useStatesStore } from "../store/statesStore";
+import { useNotification } from "naive-ui";
 
 import axios from "axios";
 import {
@@ -62,6 +63,28 @@ export default function useSubmit() {
       handleError(error);
     }
   }
+  const notification = useNotification();
+
+  function showErrorNotification(error) {
+    console.log("error:", error);
+    notification.error({
+      title: "Error",
+      content: error || "An error occurred while fetching the response.",
+      duration: 5000,
+    });
+  }
+
+  function handleError(error) {
+    statesStore.updateLoading(false);
+    response.value = error.response.data.error.message;
+    showErrorNotification(response.value);
+    messagesStore.addMessage(
+      tabsStore.activeTabIndex,
+      "assistant",
+      response.value
+    );
+    tabsStore.activeTab.description = "";
+  }
 
   function handleResponse(result) {
     statesStore.updateLoading(false);
@@ -91,7 +114,7 @@ export default function useSubmit() {
     };
 
     localStorage.setItem("statsStore", JSON.stringify(simplifiedStatsStore));
-    tabsStore.updateResponse(response.value);
+    tabsStore.activeTab.description = "";
   }
 
   return {
