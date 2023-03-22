@@ -1,16 +1,17 @@
 <template>
-    <div class="loader fixed inset-0 flex items-center justify-center" v-show="loading">
+    <div class="loader fixed inset-0 flex items-center justify-center" v-if="loadingStore">
         <font-awesome-icon icon="cog" class="text-white cog-center" />
     </div>
 </template>
 
 <script setup lang="ts">
-const props = defineProps({
-    loading: {
-        type: Boolean,
-        required: true,
-    },
-});
+import { computed } from "vue";
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+import { useStatesStore } from "../store/statesStore";
+
+const statesStore = useStatesStore();
+const loadingStore = computed(() => statesStore.isLoading);
+
 </script>
 
 <style scoped>

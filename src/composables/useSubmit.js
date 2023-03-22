@@ -3,6 +3,7 @@ import { useStatsStore } from "../store/statsStore";
 import { useSettingsStore } from "../store/settingsStore";
 import { useTabsStore } from "../store/tabsStore";
 import { useMessagesStore } from "../store/messagesStore";
+import { useStatesStore } from "../store/statesStore";
 
 import axios from "axios";
 import {
@@ -15,18 +16,16 @@ export default function useSubmit() {
   const statsStore = useStatsStore();
   const settingsStore = useSettingsStore();
   const tabsStore = useTabsStore();
-  const loading = ref(false);
+  const statesStore = useStatesStore();
   const response = ref("");
   const promptTokens = ref(0);
   const responseTokens = ref(0);
   const messagesStore = useMessagesStore();
 
   async function submitPrompt() {
-    loading.value = true;
+    statesStore.updateLoading(true);
     response.value = "";
-
     if (!tabsStore.activeTab.description) return;
-    loading.value = true;
 
     const formattedCodeInputs = tabsStore.activeTab.codeInputs
       .map((chunk) => `\n${chunk.name}\n\`\`\`${chunk.code}\`\`\``)
@@ -65,6 +64,7 @@ export default function useSubmit() {
   }
 
   function handleResponse(result) {
+    statesStore.updateLoading(false);
     console.log(
       "number of tokens used for completion:",
       result.data.usage.completion_tokens,
@@ -72,7 +72,6 @@ export default function useSubmit() {
       result.data.usage.prompt_tokens
     );
     console.log(result);
-    loading.value = false;
     response.value = result.data.choices[0].message.content.trim();
     messagesStore.addMessage(
       tabsStore.activeTabIndex,
@@ -95,15 +94,9 @@ export default function useSubmit() {
     tabsStore.updateResponse(response.value);
   }
 
-  function handleError(error) {
-    loading.value = false;
-    console.error("Error:", error);
-    response.value = "An error occurred while fetching the response.";
-  }
   return {
     submitPrompt,
     response,
-    loading,
     promptTokens,
     responseTokens,
   };
