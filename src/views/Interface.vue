@@ -1,39 +1,21 @@
 <template>
-  <div class=" ">
-    <Loader />
-    <n-space vertical>
-      {{ activeKey }}
-      <n-layout has-sider>
-        <n-layout-sider bordered collapse-mode="width" :collapsed-width="0" :width="300" :collapsed="collapsed"
-          show-trigger @collapse="collapsed = true" @expand="collapsed = false">
-          <button @click="addTab">Add Tab</button>
-          <n-menu v-model:value="activeKey" :collapsed="collapsed" :collapsed-width="64" :collapsed-icon-size="22"
-            :options="menuOptions" :on-update:value="updateActiveTab" />
-          <n-collapse>
-            <n-collapse-item title="Settings">
-              <n-card>
-                <Tabs />
-                <ApiKeyInput />
-              </n-card>
-            </n-collapse-item>
-          </n-collapse>
-        </n-layout-sider>
-        <n-layout>
-          <div>
-            <div class="h-[calc(100vh-200px)] overflow-y-auto">
-              <ChatContainer :activeTabIndex="tabsStore.activeTabIndex" />
-            </div>
-            <SubmitCard class="fixed bottom-0 w-full" :responseTokens="responseTokens" :promptTokens="promptTokens"
-              @submit="submitPrompt" />
-          </div>
-        </n-layout>
-      </n-layout>
+  <Loader />
+  <div class="flex flex-row min-h-screen">
+    <n-space vertical class="basis-1/4 overflow-y-auto border-2 border-sky-500">
+      <Tabs class="w-full" />
     </n-space>
+    <div class="basis-3/4 flex flex-col relative">
+      <n-space vertical class="overflow-y-scroll flex-grow">
+        <ChatContainer :activeTabIndex="tabsStore.activeTabIndex" />
+      </n-space>
+      <SubmitCard class="absolute bottom-0 left-0 w-full" :responseTokens="responseTokens" :promptTokens="promptTokens"
+        @submit="submitPrompt" />
+    </div>
   </div>
 </template>
 
 <script setup>
-import { onMounted, ref, computed, h } from "vue";
+import { onMounted, onUnmounted, ref, computed, h } from "vue";
 import { NCollapse, NCollapseItem, NCard, NLayout, NSwitch, NSpace, NLayoutSider, NMenu } from "naive-ui";
 import Loader from "../components/Loader.vue";
 import CodeInputList from "../components/CodeInputList.vue";
@@ -54,7 +36,16 @@ import {
   WineOutline as WineIcon
 } from "@vicons/ionicons5";
 import { indexOf } from "lodash";
-
+// <!-- <n-layout has-sider>
+// <n-layout-sider class="custom-layout-sider" bordered collapse-mode="width" :collapsed-width="0"
+//   :width="siderWidth" :collapsed="collapsed" show-trigger @collapse="collapsed = true"
+//   @expand="collapsed = false">
+//   <n-menu class="overflow-y-scroll" v-model:value="activeKey" :collapsed="collapsed" :collapsed-width="0"
+//     :collapsed-icon-size="0" :options="menuOptions" :on-update:value="updateActiveTab" />
+//   <ApiKeyInput />
+//   <button @click="addTab">Add Tab</button>
+// </n-layout-sider>
+// <n-layout> -->
 
 function renderIcon(icon) {
   return () => h(NIcon, null, { default: () => h(icon) });
@@ -87,8 +78,12 @@ const menuOptions = computed(() => {
 
 const activeKey = ref(null);
 const collapsed = ref(true);
+const windowWidth = ref(window.innerWidth);
 
-
+const siderWidth = computed(() => (windowWidth.value <= 640 ? "100%" : 350));
+const layoutTogglePosition = computed(() => ({
+  right: windowWidth.value <= 640 ? '-20px' : '40px',
+}));
 
 const statesStore = useStatesStore();
 // const loadingStore = computed(() => statesStore.isLoading);
@@ -100,14 +95,22 @@ const { submitPrompt, loading, error, promptTokens, responseTokens } = useSubmit
 const activeTabIndex = computed(() => {
   return tabsStore.activeTabIndex;
 });
-
+const handleResize = () => {
+  windowWidth.value = window.innerWidth;
+};
 onMounted(() => {
+  window.addEventListener("resize", handleResize);
   tabsStore.updateActiveTab(activeTabIndex.value);
 });
-
+onUnmounted(() => {
+  window.removeEventListener("resize", handleResize);
+});
 </script>
-<style scoped>
-.n-collapse {
-  height: 100% !important;
+<style>
+.n-layout-sider .n-layout-toggle-button {
+  top: 40px !important;
+  /* this right value needs to be dynamic
+  */
+  right: -20px !important;
 }
 </style>

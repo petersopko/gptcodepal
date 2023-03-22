@@ -1,8 +1,7 @@
 <template>
     <n-card>
-        <n-input-group>
-            <TextInput placeholder="Enter your description" @submit="submitPrompt" />
-        </n-input-group>
+
+        <TextInput placeholder="Enter your description" @submit="submitPrompt" />
         <!-- <div class="flex justify-center mt-2">
             <n-radio-group v-model:value="promptSelection">
                 <n-radio value="contextForGpt" @click="updatePromptSelection('contextForGpt')">Context for GPT</n-radio>

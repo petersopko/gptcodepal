@@ -1,12 +1,14 @@
 <template>
-    <n-tabs :value="activeTabIndex" type="card" @update:value="updateActiveTab" :addable="addableRef" :closable="closable"
-        tab-style="min-width: 80px;" @close="deleteTab" @add="addTab">
-        <n-tab-pane v-for="(tab, index) in tabs" :key="index" :name="index"></n-tab-pane>
-    </n-tabs>
+    <div>
+        <n-button @click="addTab">Add Tab</n-button>
+        <div v-for="(tab, index) in tabsStore.tabs">
+            <n-card class="mx-4">Chat {{ index }}</n-card>
+        </div>
+    </div>
 </template>
 
 <script setup>
-import { NTabs, NTabPane } from "naive-ui";
+import { NTabs, NCard, NButton } from "naive-ui";
 import { computed } from "vue";
 import { useTabsStore } from "../store/tabsStore.js";
 

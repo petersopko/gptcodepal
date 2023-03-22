@@ -6,21 +6,20 @@
                     placeholder="API Key" />
             </div>
             <n-button class="mx-2" @click="saveApiKey">
-                Save API Key
+                <n-icon size="20"><save-outline /></n-icon>
             </n-button>
         </div>
     </n-card>
 </template>
 
 <script setup>
-import { NCard, NInput, NButton } from "naive-ui";
+import { NCard, NInput, NButton, NIcon } from "naive-ui";
 import { useSettingsStore } from "../store/settingsStore.js";
 import { useMessage } from "naive-ui";
+import { SaveOutline } from "@vicons/ionicons5";
 
 const message = useMessage();
-
 const apiKeyStore = useSettingsStore();
-
 const saveApiKey = () => {
     message.success("API Key saved!");
     apiKeyStore.saveApiKey(apiKeyStore.apiKey);

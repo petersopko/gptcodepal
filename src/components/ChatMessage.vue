@@ -1,5 +1,5 @@
 <template>
-    <div class="min-w-full whitespace-pre-wrap text-left">
+    <div class="px-8 text-left">
         <span v-for="(part, index) in parts" :key="index">
             <span v-if="part.isCode" class="bg-gray-800 p-1 rounded-none inline-block relative w-full">
                 <highlightjs :code="part.text" />
