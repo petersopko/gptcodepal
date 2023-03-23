@@ -41,10 +41,6 @@ const updateActiveChat = (index) => {
 };
 
 
-const addChat = () => {
-    chatStore.addChat();
-};
-
 const deleteChat = (index, event) => {
     event.stopPropagation(); // Stop event propagation
     chatStore.deleteChat(index);

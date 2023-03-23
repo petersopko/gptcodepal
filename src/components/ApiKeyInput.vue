@@ -1,15 +1,13 @@
 <template>
-    <n-card>
-        <div class="flex justify-center">
-            <div class="relative w-full max-w-md">
-                <n-input id="api-key-input" v-model:value="apiKeyStore.apiKey" type="password" show-password-on="mousedown"
-                    placeholder="API Key" />
-            </div>
-            <n-button class="mx-2" @click="saveApiKey">
-                <n-icon size="20"><save-outline /></n-icon>
-            </n-button>
+    <div class="flex justify-center">
+        <div class="relative w-full max-w-md">
+            <n-input id="api-key-input" v-model:value="apiKeyStore.apiKey" type="password" show-password-on="mousedown"
+                placeholder="API Key" />
         </div>
-    </n-card>
+        <n-button class="mx-2" @click="saveApiKey">
+            <n-icon size="20"><save-outline /></n-icon>
+        </n-button>
+    </div>
 </template>
 
 <script setup>
