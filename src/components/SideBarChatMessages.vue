@@ -1,10 +1,14 @@
 <template>
     <div class="tabs-container">
-        <div class="my-4 text-center">
-            <n-button size="large" @click="addChat">
-                <p class="mx-12">Add Chat</p>
+        <div class="grid grid-cols-9 my-4">
+            <n-button class="col-start-2 col-span-3" size="large" @click="addChat">
+                <p class="">Add Chat</p>
             </n-button>
-            {{ activeChatIndex }}
+            <n-button class="col-start-8" @click="addChat">
+                <n-icon>
+                    <trash-outline />
+                </n-icon>
+            </n-button>
         </div>
         <n-card v-for="(tab, index) in allChats" @click="updateActiveChat(index)" :content-style="{
             'justify-content': 'space-between',
@@ -13,7 +17,7 @@
         }" class="flex justify-between mx-4 my-4 w-auto" size="small"
             :style="{ 'border-color': `${activeChatIndex === index ? `${themeVar.primaryColor}` : 'black'}` }">
             <p class="ml-5">Chat {{ index }}</p>
-            <n-button icon="trash-alt" class="text-red" @click="deleteChat(index)">
+            <n-button @click="deleteChat(index)">
                 <n-icon>
                     <trash-outline />
                 </n-icon>
@@ -38,13 +42,6 @@ const updateActiveChat = (index) => {
     chatStore.updateActiveChat(index);
 };
 
-// const updateActiveTab = (index) => {
-//     tabsStore.updateActiveTab(index);
-// };
-
-// const addTab = () => {
-//     tabsStore.addTab();
-// };
 
 const addChat = () => {
     chatStore.addChat();

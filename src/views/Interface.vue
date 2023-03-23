@@ -1,25 +1,25 @@
 <template>
   <Loader />
   <div class="flex flex-row min-h-screen max-h-screen">
-    <n-space vertical class="basis-1/4 overflow-y-auto "
-      :style="`border-right-color: ${themeVar.primaryColor}; border-right-width: 2px; border-right-style: solid;`">
+    <n-scrollbar class="basis-1/5 min-h-screen max-h-screen"
+      :style="`border-right-color: ${themeVar.primaryColor}; border-right-width: 1px; border-right-style: solid;`">
       <Tabs class="" />
-    </n-space>
-    <div class="basis-3/4 flex flex-col relative">
-      <n-space vertical class="overflow-y-scroll flex-grow ">
-        <ChatContainer class="chat-container" />
+    </n-scrollbar>
+    <n-scrollbar class="basis-4/5 min-h-screen max-h-screen">
+      <n-space vertical>
+        <ChatContainer class=" chat-container" />
       </n-space>
       <SubmitCard class="absolute bottom-0 left-0 w-full" :responseTokens="responseTokens" :promptTokens="promptTokens"
-        :style="`border-top-color: ${themeVar.primaryColor}; border-top-width: 2px; border-top-style: solid;`"
+        :style="`border-top-color: ${themeVar.primaryColor}; border-top-width: 1px; border-top-style: solid;`"
         @submit="submitPrompt" />
-    </div>
+    </n-scrollbar>
   </div>
 </template>
 
 
 <script setup>
 import { onMounted, onUnmounted, ref, computed, h } from "vue";
-import { NCollapse, NCollapseItem, NCard, NLayout, NSwitch, NSpace, NLayoutSider, NMenu } from "naive-ui";
+import { NCollapse, NCollapseItem, NCard, NScrollbar, NSpace } from "naive-ui";
 import Loader from "../components/Loader.vue";
 import ChatContainer from "../components/ChatContainer.vue";
 import Tabs from "../components/SideBarChatMessages.vue";
@@ -31,15 +31,10 @@ import { useStatesStore } from "../store/statesStore";
 import { useThemeVars } from "naive-ui";
 
 const themeVar = useThemeVars()
-
-
-
 const chatStore = useChatStore();
-
-
 const windowWidth = ref(window.innerWidth);
 
-const siderWidth = computed(() => (windowWidth.value <= 640 ? "100%" : 350));
+const siderWidth = computed(() => (windowWidth.value <= 640 ? "100%" : 300));
 const layoutTogglePosition = computed(() => ({
   right: windowWidth.value <= 640 ? '-20px' : '40px',
 }));
