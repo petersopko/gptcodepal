@@ -21,11 +21,11 @@ export const useChatStore = defineStore("chatStore", () => {
     localStorage.setItem("chatStore", JSON.stringify(allMessages.value));
   }
 
-  function addMessage(activeTabIndex, role, content) {
+  function addMessage(activeChatIndex, role, content) {
     if (!role) {
-      allMessages.value.splice(activeTabIndex, 0, []);
+      allMessages.value.splice(activeChatIndex, 0, []);
     } else {
-      allMessages.value[activeTabIndex].push({
+      allMessages.value[activeChatIndex].push({
         role,
         content,
       });
