@@ -1,14 +1,16 @@
 <template>
   <Loader />
   <div class="flex flex-row min-h-screen max-h-screen">
-    <n-space vertical class="basis-1/4 overflow-y-auto border-2 ">
-      <Tabs class="w-full" />
+    <n-space vertical class="basis-1/4 overflow-y-auto "
+      :style="`border-right-color: ${themeVar.primaryColor}; border-right-width: 2px; border-right-style: solid;`">
+      <Tabs class="" />
     </n-space>
     <div class="basis-3/4 flex flex-col relative">
-      <n-space vertical class="overflow-y-scroll flex-grow">
+      <n-space vertical class="overflow-y-scroll flex-grow ">
         <ChatContainer class="chat-container" />
       </n-space>
       <SubmitCard class="absolute bottom-0 left-0 w-full" :responseTokens="responseTokens" :promptTokens="promptTokens"
+        :style="`border-top-color: ${themeVar.primaryColor}; border-top-width: 2px; border-top-style: solid;`"
         @submit="submitPrompt" />
     </div>
   </div>
@@ -26,6 +28,9 @@ import SubmitCard from "../components/SubmitCard.vue";
 
 import { useChatStore } from "../store/chatStore.js";
 import { useStatesStore } from "../store/statesStore";
+import { useThemeVars } from "naive-ui";
+
+const themeVar = useThemeVars()
 
 
 
