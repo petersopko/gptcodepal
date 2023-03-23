@@ -1,40 +1,58 @@
+
 <template>
-  <Loader />
-  <div class="flex flex-row min-h-screen max-h-screen">
-    <n-scrollbar class="basis-1/5 min-h-screen max-h-screen"
-      :style="`border-right-color: ${themeVar.primaryColor}; border-right-width: 1px; border-right-style: solid;`">
-      <Tabs class="" />
-    </n-scrollbar>
-    <n-scrollbar class="basis-4/5 min-h-screen max-h-screen">
-      <n-space vertical>
-        <ChatContainer class=" chat-container" />
-      </n-space>
-      <SubmitCard class="absolute bottom-0 left-0 w-full" :responseTokens="responseTokens" :promptTokens="promptTokens"
-        :style="`border-top-color: ${themeVar.primaryColor}; border-top-width: 1px; border-top-style: solid;`"
-        @submit="submitPrompt" />
-    </n-scrollbar>
+  <!-- <Loader /> -->
+  <div class="whole-screen min-h-screen max-h-screen flex flex-row">
+    <div class="side-bar flex flex-col basis-1/5 border-r border-gray-200"
+      :style="`width: ${sideBarWidth}px; border-right-color: ${themeVar.primaryColor};`">
+      <div class="side-bar-add-chat flex-shrink-0">
+        <n-button class="w-full" size="large" @click="addChat">
+          <p class="">Add Chat</p>
+        </n-button>
+      </div>
+      <div class="side-bar-chat-messages flex-grow overflow-y-auto"
+        :style="`border-right-color: ${themeVar.primaryColor};`">
+        <SideBarChatMessages />
+      </div>
+      <div class="side-bar-settings flex-shrink-0">
+        <n-card class="w-full">
+          <div>Hello? How is it going? Yada yada aa</div>
+        </n-card>
+      </div>
+    </div>
+    <div class="chat-container flex flex-col basis-4/5">
+      <div class="chat-messages-container overflow-y-auto">
+        <ChatContainer />
+      </div>
+      <div class="chat-submit-card border-t border-gray-200" :style="`border-top-color: ${themeVar.primaryColor};`">
+        <SubmitCard :responseTokens="responseTokens" :promptTokens="promptTokens"
+          :style="`border-top-color: ${themeVar.primaryColor};`" @submit="submitPrompt" />
+      </div>
+    </div>
   </div>
 </template>
 
 
+
 <script setup>
 import { onMounted, onUnmounted, ref, computed, h } from "vue";
-import { NCollapse, NCollapseItem, NCard, NScrollbar, NSpace } from "naive-ui";
+import { NCollapse, NCollapseItem, NCard, NScrollbar, NSpace, NDivider, NButton, NIcon } from "naive-ui";
 import Loader from "../components/Loader.vue";
 import ChatContainer from "../components/ChatContainer.vue";
-import Tabs from "../components/SideBarChatMessages.vue";
+import SideBarChatMessages from "../components/SideBarChatMessages.vue";
 import useSubmit from "../composables/useSubmit.js";
 import SubmitCard from "../components/SubmitCard.vue";
 
 import { useChatStore } from "../store/chatStore.js";
 import { useStatesStore } from "../store/statesStore";
 import { useThemeVars } from "naive-ui";
+import { TrashOutline } from "@vicons/ionicons5";
+
 
 const themeVar = useThemeVars()
 const chatStore = useChatStore();
 const windowWidth = ref(window.innerWidth);
 
-const siderWidth = computed(() => (windowWidth.value <= 640 ? "100%" : 300));
+const sideBarWidth = computed(() => (windowWidth.value <= 640 ? "100%" : 300));
 const layoutTogglePosition = computed(() => ({
   right: windowWidth.value <= 640 ? '-20px' : '40px',
 }));
@@ -57,7 +75,7 @@ onUnmounted(() => {
 
 </script>
 <style>
-.chat-container {
+/* .chat-container {
   margin-bottom: 76px;
-}
+} */
 </style>
