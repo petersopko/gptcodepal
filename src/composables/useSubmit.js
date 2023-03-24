@@ -87,13 +87,6 @@ export default function useSubmit() {
 
   function handleResponse(result) {
     statesStore.updateLoading(false);
-    console.log(
-      "number of tokens used for completion:",
-      result.data.usage.completion_tokens,
-      "number of tokens used for prompt:",
-      result.data.usage.prompt_tokens
-    );
-    console.log(result);
     response.value = result.data.choices[0].message.content.trim();
     chatStore.addMessage(
       chatStore.activeChatIndex,
@@ -102,15 +95,7 @@ export default function useSubmit() {
     );
     promptTokens.value = result.data.usage.prompt_tokens;
     responseTokens.value = result.data.usage.completion_tokens;
-    statsStore.incrementPromptTokens(promptTokens.value);
-    statsStore.incrementCompletionTokens(responseTokens.value);
-    statsStore.incrementTotalPromptsSent();
-    const simplifiedStatsStore = {
-      promptTokensTotal: statsStore.promptTokensTotal,
-      completionTokensTotal: statsStore.completionTokensTotal,
-      totalPromptsSent: statsStore.totalPromptsSent,
-    };
-    localStorage.setItem("statsStore", JSON.stringify(simplifiedStatsStore));
+    statsStore.updateStats(promptTokens.value, responseTokens.value);
   }
 
   return {

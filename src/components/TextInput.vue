@@ -8,7 +8,7 @@
     @keydown.enter.prevent="submitPrompt"
   >
     <template #suffix>
-      {{ inputStorage }}
+      {{ statsStore }}
       <n-button
         :bordered="false"
         :disabled="!inputTextComputed"
@@ -27,11 +27,13 @@ import { computed } from "vue";
 import { useInputStore } from "../store/inputStore";
 import { useSettingsStore } from "../store/settingsStore";
 import { countTokens } from "../composables/useTokenCount";
+import { useStatsStore } from "../store/statsStore";
 
 const emit = defineEmits(["submit"]);
 
 const settingsStore = useSettingsStore();
 const maxTokens = computed(() => settingsStore.maxTokens);
+const statsStore = useStatsStore();
 
 const { inputStorage, updateInputText } = useInputStore();
 
