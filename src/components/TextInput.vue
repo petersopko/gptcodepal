@@ -1,11 +1,10 @@
 <template>
-  {{ inputTextComputed }}
   <n-input
     placeholder="Ask and you shall receive 🤖"
     type="textarea"
     :autosize="{ minRows: 1, maxRows: 10 }"
     :value="inputTextComputed"
-    @input="updateInput($event.target.value)"
+    @input="updateInput($event)"
     @keydown.enter.prevent="submitPrompt"
   >
     <template #suffix>
@@ -37,8 +36,9 @@ const emit = defineEmits(["submit"]);
 const settingsStore = useSettingsStore();
 const maxTokens = computed(() => settingsStore.maxTokens);
 
-const { inputText, updateInput } = useInputStore();
-// const inputTextComputed = computed(() => return inputText);
+const { inputStorage, updateInput } = useInputStore();
+
+const inputTextComputed = computed(() => inputStorage.inputText);
 
 // const tokenCount = computed(() => {
 //     const context = promptSelection.value === 'contextForGpt' ? contextForGpt : noContext;
