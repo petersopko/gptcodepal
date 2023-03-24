@@ -38,6 +38,7 @@ export default function useSubmit() {
 
     chatStore.addMessage(chatStore.activeChatIndex, "user", formattedPrompt);
     console.log("chatStore.allMessages:", chatStore.allMessages);
+    inputStore.updateInputText("");
     try {
       const result = await axios.post(
         url,
@@ -109,9 +110,7 @@ export default function useSubmit() {
       completionTokensTotal: statsStore.completionTokensTotal,
       totalPromptsSent: statsStore.totalPromptsSent,
     };
-
     localStorage.setItem("statsStore", JSON.stringify(simplifiedStatsStore));
-    inputStore.inputStorage.inputText = "";
   }
 
   return {

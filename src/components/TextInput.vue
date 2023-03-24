@@ -8,6 +8,7 @@
     @keydown.enter.prevent="submitPrompt"
   >
     <template #suffix>
+      {{ inputStorage }}
       <n-button
         :bordered="false"
         :disabled="!inputTextComputed"
@@ -27,10 +28,6 @@ import { useInputStore } from "../store/inputStore";
 import { useSettingsStore } from "../store/settingsStore";
 import { countTokens } from "../composables/useTokenCount";
 
-const props = defineProps({
-  placeholder: String,
-});
-
 const emit = defineEmits(["submit"]);
 
 const settingsStore = useSettingsStore();
@@ -40,17 +37,18 @@ const { inputStorage, updateInputText } = useInputStore();
 
 const inputTextComputed = computed(() => inputStorage.inputText);
 
-// const tokenCount = computed(() => {
-//     const context = promptSelection.value === 'contextForGpt' ? contextForGpt : noContext;
-//     const text = `${context}${inputText.value}${tabsStore.activeTab.codeInputs
-//         .map((chunk) => `\n${chunk.name}\n\`\`\`${chunk.code}\`\`\``)
-//         .join("")}`;
+const tokenCount = computed(() => {
+  const context =
+    promptSelection.value === "contextForGpt" ? contextForGpt : noContext;
+  const text = `${context}${inputText.value}${tabsStore.activeTab.codeInputs
+    .map((chunk) => `\n${chunk.name}\n\`\`\`${chunk.code}\`\`\``)
+    .join("")}`;
 
-//     if (!text) {
-//         return 0;
-//     }
-//     return countTokens(text);
-// });
+  if (!text) {
+    return 0;
+  }
+  return countTokens(text);
+});
 
 const submitPrompt = () => {
   emit("submit");
