@@ -1,13 +1,12 @@
-import { ref, computed } from "vue";
+import { ref } from "vue";
 import { useStatsStore } from "../store/statsStore";
 import { useSettingsStore } from "../store/settingsStore";
 import { useStatesStore } from "../store/statesStore";
 import { useNotification } from "naive-ui";
 import { useInputStore } from "../store/inputStore";
 import { useChatStore } from "../store/chatStore";
-
-import axios from "axios";
 import { usePromptStore } from "../store/promptStore";
+import { postCompletion } from "../utils/apiService";
 
 export default function useSubmit() {
   const statsStore = useStatsStore();
@@ -20,52 +19,42 @@ export default function useSubmit() {
   const chatStore = useChatStore();
   const promptStorage = usePromptStore();
 
+  function formatInputText() {
+    const formattedCodeInputs = inputStore.inputStorage.codeInputs
+      .map((chunk) => `\n${chunk.name}\n\`\`\`${chunk.code}\`\`\``)
+      .join("");
+
+    if (chatStore.allMessages[chatStore.activeChatIndex] !== 0) {
+      return `${inputStore.inputStorage.inputText}${formattedCodeInputs}`;
+    } else {
+      return `${promptStorage.promptSelection}${inputStore.inputStorage.inputText}${formattedCodeInputs}`;
+    }
+  }
+
   async function submitPrompt() {
     statesStore.updateLoading(true);
     if (!inputStore.inputStorage.inputText) return;
 
-    const formattedCodeInputs = inputStore.inputStorage.codeInputs
-      .map((chunk) => `\n${chunk.name}\n\`\`\`${chunk.code}\`\`\``)
-      .join("");
-    let formattedPrompt;
-    if (chatStore.allMessages[chatStore.activeChatIndex] !== 0) {
-      formattedPrompt = `${inputStore.inputStorage.inputText}${formattedCodeInputs}`;
-    } else {
-      formattedPrompt = `${promptStorage.promptSelection}${inputStore.inputStorage.inputText}${formattedCodeInputs}`;
-    }
-
-    const url = "https://api.openai.com/v1/chat/completions";
-
+    const formattedPrompt = formatInputText();
     chatStore.addMessage(chatStore.activeChatIndex, "user", formattedPrompt);
-    console.log("chatStore.allMessages:", chatStore.allMessages);
     inputStore.updateInputText("");
-    try {
-      const result = await axios.post(
-        url,
-        {
-          model: "gpt-4",
-          messages: chatStore.allMessages[chatStore.activeChatIndex],
-          temperature: 0.7,
-          max_tokens: settingsStore.maxTokens,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${settingsStore.apiKey}`,
-          },
-        }
-      );
 
-      console.log("Result:", result);
+    try {
+      const result = await postCompletion(
+        chatStore.allMessages[chatStore.activeChatIndex],
+        0.7,
+        settingsStore.maxTokens,
+        settingsStore.apiKey
+      );
       handleResponse(result);
     } catch (error) {
       handleError(error);
     }
   }
+
   const notification = useNotification();
 
   function showErrorNotification(error) {
-    console.log("error:", error);
     notification.error({
       title: "Error",
       content: error || "An error occurred while fetching the response.",
