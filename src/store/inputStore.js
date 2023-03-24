@@ -15,8 +15,12 @@ export const useInputStore = defineStore("inputStore", () => {
     console.log(inputStorage.value);
   };
 
+  const inputText = computed(() => inputStorage.value.inputText);
+
+  const codeInputs = computed(() => inputStorage.value.codeInputs);
   return {
-    inputStorage,
+    inputText,
+    codeInputs,
     updateInput,
   };
 });

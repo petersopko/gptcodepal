@@ -1,24 +1,43 @@
 <template>
-    <n-card title="Code Inputs" @dragenter.prevent="dragCounter++" @dragleave.prevent="dragCounter--" @dragover.prevent
-        @drop.prevent="fileDropHandler">
-        <div class="text-center text-gray-600">Drop your code here</div>
-        <n-collapse accordion default-expanded-names="0" class="mb-6">
-            <n-collapse-item v-for="(codeInput, index) in codeInputsComputed"
-                :title="!codeInput.name ? 'Code Input ' + (index + 1) : codeInput.name" :name="String(index)" :key="index">
-                <CodeInput :model-value="codeInput" :index="index" @update:modelValue="tabsStore.updateCodeInput($event)" />
-                <template #header-extra>
-                    <IconButton icon="trash-alt" class="text-red" @click="tabsStore.removeCodeInput(index)" />
-                </template>
-            </n-collapse-item>
-        </n-collapse>
-        <n-button class="mx-3" @click="addCodeInput">
-            Add Code Section
-        </n-button>
-        <n-button @click="$refs.fileInput.click()">
-            Upload Code
-        </n-button>
-        <input type="file" ref="fileInput" @change="fileChangeHandler" style="display: none" multiple />
-    </n-card>
+  <n-card
+    title="Code Inputs"
+    @dragenter.prevent="dragCounter++"
+    @dragleave.prevent="dragCounter--"
+    @dragover.prevent
+    @drop.prevent="fileDropHandler"
+  >
+    <div class="text-center text-gray-600">Drop your code here</div>
+    <n-collapse accordion default-expanded-names="0" class="mb-6">
+      <n-collapse-item
+        v-for="(codeInput, index) in codeInputsComputed"
+        :title="!codeInput.name ? 'Code Input ' + (index + 1) : codeInput.name"
+        :name="String(index)"
+        :key="index"
+      >
+        <CodeInput
+          :model-value="codeInput"
+          :index="index"
+          @update:modelValue="tabsStore.updateCodeInput($event)"
+        />
+        <template #header-extra>
+          <IconButton
+            icon="trash-alt"
+            class="text-red"
+            @click="tabsStore.removeCodeInput(index)"
+          />
+        </template>
+      </n-collapse-item>
+    </n-collapse>
+    <n-button class="mx-3" @click="addCodeInput"> Add Code Section </n-button>
+    <n-button @click="$refs.fileInput.click()"> Upload Code </n-button>
+    <input
+      type="file"
+      ref="fileInput"
+      @change="fileChangeHandler"
+      style="display: none"
+      multiple
+    />
+  </n-card>
 </template>
 
 <script setup>
@@ -34,38 +53,38 @@ const codeInputsComputed = computed(() => tabsStore.activeTab.codeInputs);
 const dragCounter = ref(0);
 
 const addCodeInput = () => {
-    tabsStore.addCodeInput();
+  tabsStore.addCodeInput();
 };
 
 async function fileChangeHandler(event) {
-    const files = event.target.files;
+  const files = event.target.files;
 
-    for (let i = 0; i < files.length; i++) {
-        const file = files[i];
-        const content = await readFileContent(file);
-        tabsStore.addCodeInputFromFile(file.name, content);
-    }
+  for (let i = 0; i < files.length; i++) {
+    const file = files[i];
+    const content = await readFileContent(file);
+    tabsStore.addCodeInputFromFile(file.name, content);
+  }
 
-    event.target.value = null;
+  event.target.value = null;
 }
 
 async function fileDropHandler(event) {
-    dragCounter.value = 0;
+  dragCounter.value = 0;
 
-    const files = event.dataTransfer.files;
-    for (let i = 0; i < files.length; i++) {
-        const file = files[i];
-        const content = await readFileContent(file);
-        tabsStore.addCodeInputFromFile(file.name, content);
-    }
+  const files = event.dataTransfer.files;
+  for (let i = 0; i < files.length; i++) {
+    const file = files[i];
+    const content = await readFileContent(file);
+    tabsStore.addCodeInputFromFile(file.name, content);
+  }
 }
 
 async function readFileContent(file) {
-    return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.onload = (event) => resolve(event.target.result);
-        reader.onerror = (error) => reject(error);
-        reader.readAsText(file);
-    });
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = (event) => resolve(event.target.result);
+    reader.onerror = (error) => reject(error);
+    reader.readAsText(file);
+  });
 }
 </script>

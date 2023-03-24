@@ -1,6 +1,11 @@
 <script setup>
-import Interface from './views/Interface.vue';
-import { NConfigProvider, NMessageProvider, NNotificationProvider, darkTheme } from 'naive-ui'
+import Interface from "./views/Interface.vue";
+import {
+  NConfigProvider,
+  NMessageProvider,
+  NNotificationProvider,
+  darkTheme,
+} from "naive-ui";
 </script>
 
 <template>
@@ -12,4 +17,3 @@ import { NConfigProvider, NMessageProvider, NNotificationProvider, darkTheme } f
     </n-notification-provider>
   </n-config-provider>
 </template>
-

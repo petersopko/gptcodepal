@@ -1,4 +1,4 @@
-import { ref } from "vue";
+import { ref, computed } from "vue";
 import { useStatsStore } from "../store/statsStore";
 import { useSettingsStore } from "../store/settingsStore";
 import { useStatesStore } from "../store/statesStore";
@@ -7,11 +7,7 @@ import { useInputStore } from "../store/inputStore";
 import { useChatStore } from "../store/chatStore";
 
 import axios from "axios";
-import {
-  promptSelection,
-  contextForGpt,
-  noContext,
-} from "../store/promptStore";
+import { usePromptStore } from "../store/promptStore";
 
 export default function useSubmit() {
   const statsStore = useStatsStore();
@@ -22,19 +18,20 @@ export default function useSubmit() {
   const promptTokens = ref(0);
   const responseTokens = ref(0);
   const chatStore = useChatStore();
+  const { promptSelection } = usePromptStore();
+  const promptComputed = computed(() => promptSelection.value);
 
   async function submitPrompt() {
+    console.log(promptComputed);
     statesStore.updateLoading(true);
     if (!inputStore.inputStorage.inputText) return;
 
     const formattedCodeInputs = inputStore.inputStorage.codeInputs
       .map((chunk) => `\n${chunk.name}\n\`\`\`${chunk.code}\`\`\``)
       .join("");
-    promptSelection.value === "contextForGpt";
 
-    const formattedPrompt = `${
-      promptSelection.value === "contextForGpt" ? contextForGpt : noContext
-    }${inputStore.inputStorage.inputText}${formattedCodeInputs}\n`;
+    // Use promptSelection.value instead of promptSelection
+    const formattedPrompt = `${promptComputed.value}${inputStore.inputStorage.inputText}${formattedCodeInputs}\n`;
 
     const url = "https://api.openai.com/v1/chat/completions";
 
@@ -106,7 +103,6 @@ export default function useSubmit() {
     statsStore.incrementPromptTokens(promptTokens.value);
     statsStore.incrementCompletionTokens(responseTokens.value);
     statsStore.incrementTotalPromptsSent();
-
     const simplifiedStatsStore = {
       promptTokensTotal: statsStore.promptTokensTotal,
       completionTokensTotal: statsStore.completionTokensTotal,
