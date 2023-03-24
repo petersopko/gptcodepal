@@ -9,7 +9,7 @@ export const useInputStore = defineStore("inputStore", () => {
     )
   );
 
-  const updateInput = (inputText) => {
+  const updateInputText = (inputText) => {
     inputStorage.value.inputText = inputText;
     localStorage.setItem("inputStore", JSON.stringify(inputStorage.value));
     console.log(inputStorage.value);
@@ -17,6 +17,6 @@ export const useInputStore = defineStore("inputStore", () => {
 
   return {
     inputStorage,
-    updateInput,
+    updateInputText,
   };
 });

@@ -4,7 +4,7 @@
     type="textarea"
     :autosize="{ minRows: 1, maxRows: 10 }"
     :value="inputTextComputed"
-    @input="updateInput($event)"
+    @input="updateInputText($event)"
     @keydown.enter.prevent="submitPrompt"
   >
     <template #suffix>
@@ -36,7 +36,7 @@ const emit = defineEmits(["submit"]);
 const settingsStore = useSettingsStore();
 const maxTokens = computed(() => settingsStore.maxTokens);
 
-const { inputStorage, updateInput } = useInputStore();
+const { inputStorage, updateInputText } = useInputStore();
 
 const inputTextComputed = computed(() => inputStorage.inputText);
 

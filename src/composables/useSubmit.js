@@ -18,20 +18,21 @@ export default function useSubmit() {
   const promptTokens = ref(0);
   const responseTokens = ref(0);
   const chatStore = useChatStore();
-  const { promptSelection } = usePromptStore();
-  const promptComputed = computed(() => promptSelection.value);
+  const promptStorage = usePromptStore();
 
   async function submitPrompt() {
-    console.log(promptComputed);
     statesStore.updateLoading(true);
     if (!inputStore.inputStorage.inputText) return;
 
     const formattedCodeInputs = inputStore.inputStorage.codeInputs
       .map((chunk) => `\n${chunk.name}\n\`\`\`${chunk.code}\`\`\``)
       .join("");
-
-    // Use promptSelection.value instead of promptSelection
-    const formattedPrompt = `${promptComputed.value}${inputStore.inputStorage.inputText}${formattedCodeInputs}\n`;
+    let formattedPrompt;
+    if (chatStore.allMessages[chatStore.activeChatIndex] !== 0) {
+      formattedPrompt = `${inputStore.inputStorage.inputText}${formattedCodeInputs}`;
+    } else {
+      formattedPrompt = `${promptStorage.promptSelection}${inputStore.inputStorage.inputText}${formattedCodeInputs}`;
+    }
 
     const url = "https://api.openai.com/v1/chat/completions";
 

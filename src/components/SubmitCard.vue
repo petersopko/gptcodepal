@@ -1,9 +1,12 @@
 <template>
   <n-card>
-    {{ promptSelectionHere }}
     <TextInput placeholder="Enter your prompt" @submit="submitPrompt" />
     <div class="flex justify-center mt-2">
-      <n-radio-group v-model:value="promptSelectionHere">
+      <n-radio-group
+        v-model:value="selectedRadio"
+        default-value=""
+        @update-value="updatePromptSelection($event)"
+      >
         <n-radio
           v-for="context in promptContexts"
           :key="context.value"
@@ -22,15 +25,11 @@ import { NCard, NRadioGroup, NRadio } from "naive-ui";
 import TextInput from "./TextInput.vue";
 import { usePromptStore } from "../store/promptStore";
 
-const emit = defineEmits(["submit"]);
-
 const { promptSelection, promptContexts, updatePromptSelection } =
   usePromptStore();
-const promptSelectionHere = ref(promptSelection.value);
-
-watchEffect(() => {
-  updatePromptSelection(promptSelectionHere.value);
-});
+const promptStorage = usePromptStore();
+const emit = defineEmits(["submit"]);
+const selectedRadio = ref(promptSelection.value);
 
 const submitPrompt = () => {
   emit("submit");
