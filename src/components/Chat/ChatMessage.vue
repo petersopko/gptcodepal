@@ -3,9 +3,9 @@
     <span v-for="(part, index) in parts" :key="index">
       <span
         v-if="part.isCode"
-        class="bg-gray-800 p-1 rounded-none inline-block relative w-full"
+        class="bg-gray-800 p-1 rounded-none inline-block relative w-full overflow-x-auto"
       >
-        <highlightjs :code="part.text" />
+        <highlightjs :code="part.text" style="white-space: pre-wrap" />
         <button
           class="absolute top-0 right-0 mt-1 mr-1 text-xs text-white bg-gray-700 rounded-none p-2 cursor-pointer hover:bg-gray-600"
           @click="copyToClipboard(part.text)"
@@ -20,6 +20,8 @@
 
 <script setup>
 import { computed } from "vue";
+import { NScrollbar } from "naive-ui";
+
 const props = defineProps({ response: String });
 const parts = computed(() => {
   const regex = /```(.*?)```/gs;
