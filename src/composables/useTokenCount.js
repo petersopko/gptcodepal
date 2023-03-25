@@ -2,6 +2,7 @@ import { ref, watch, computed } from "vue";
 import GPT3Tokenizer from "gpt3-tokenizer";
 import { useChatStore } from "../store/chatStore";
 import { useInputStore } from "../store/inputStore";
+import { usePromptStore } from "../store/promptStore";
 
 const tokenizer = new GPT3Tokenizer({ type: "gpt3" });
 
@@ -32,15 +33,14 @@ export default function useTokenCount() {
       .map((chunk) => `\n${chunk.name}\n\`\`\`${chunk.code}\`\`\``)
       .join("")}`;
 
-    if (!text) {
-      updateTokenEstimate(0);
-      return;
-    }
-    const activeChatTokens = activeChatTokenCount.value || 0;
-    updateTokenEstimate(countTokens(text) + activeChatTokens);
+    // TODO: we'll see if this ever works
+    // const activeChatTokens = activeChatTokenCount.value || 0;
+    const activeChatTokens = updateTokenEstimate(
+      countTokens(text) + countTokens(JSON.stringify(chatStore.activeChat))
+    );
   };
 
-  watch([inputText, codeInputs, activeChatTokenCount], updateTokenCount, {
+  watch([inputText, codeInputs, chatStore.activeChat], updateTokenCount, {
     immediate: true,
   });
 

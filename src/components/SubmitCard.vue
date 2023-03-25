@@ -1,8 +1,10 @@
 <template>
-  <n-card>
+  <n-card class="px-8" :bordered="false">
     <TextInput placeholder="Enter your prompt" @submit="submitPrompt" />
     <div class="flex justify-center mt-2">
-      <p class="mr-6">{{ tokenEstimate ?? 0 }}</p>
+      <n-gradient-text class="mr-6">
+        {{ `Required Tokens: ${tokenEstimate ?? 0}` }}</n-gradient-text
+      >
       <n-radio-group
         v-model:value="selectedRadio"
         default-value=""
@@ -22,7 +24,7 @@
 
 <script setup>
 import { ref, computed, watchEffect } from "vue";
-import { NCard, NRadioGroup, NRadio } from "naive-ui";
+import { NCard, NRadioGroup, NRadio, NGradientText } from "naive-ui";
 import TextInput from "./TextInput.vue";
 import { usePromptStore } from "../store/promptStore";
 import { useChatStore } from "../store/chatStore";
