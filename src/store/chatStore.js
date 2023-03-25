@@ -2,13 +2,15 @@ import { defineStore } from "pinia";
 import { ref, computed } from "vue";
 
 export const useChatStore = defineStore("chatStore", () => {
-  const allMessages = ref(
-    JSON.parse(localStorage.getItem("chatStore")) || [[]]
+  const allChats = ref(
+    JSON.parse(localStorage.getItem("chatStore")) || [
+      { messages: [], tokenCount: 0 },
+    ]
   );
-
   const activeChatIndex = ref(0);
   const activeChat = computed(() => {
-    return allMessages.value[activeChatIndex.value];
+    console.log("activeChatIndex.value", allChats.value[activeChatIndex.value]);
+    return allChats.value[activeChatIndex.value];
   });
 
   function updateActiveChat(index) {
@@ -16,39 +18,47 @@ export const useChatStore = defineStore("chatStore", () => {
   }
 
   function addChat() {
-    allMessages.value.push([]);
-    updateActiveChat(allMessages.value.length - 1);
-    localStorage.setItem("chatStore", JSON.stringify(allMessages.value));
+    allChats.value.push({ messages: [], tokenCount: 0 });
+    updateActiveChat(allChats.value.length - 1);
+    localStorage.setItem("chatStore", JSON.stringify(allChats.value));
   }
 
   function addMessage(activeChatIndex, role, content) {
     if (!role) {
-      allMessages.value.splice(activeChatIndex, 0, []);
+      allChats.value.splice(activeChatIndex, 0, {
+        messages: [],
+        tokenCount: 0,
+      });
     } else {
-      allMessages.value[activeChatIndex].push({
+      allChats.value[activeChatIndex].messages.push({
         role,
         content,
       });
     }
-    localStorage.setItem("chatStore", JSON.stringify(allMessages.value));
+    localStorage.setItem("chatStore", JSON.stringify(allChats.value));
+  }
+
+  function updateTokenCount(activeChatIndex, tokens) {
+    allChats.value[activeChatIndex].tokenCount += tokens;
+    localStorage.setItem("chatStore", JSON.stringify(allChats.value));
   }
 
   function deleteChat(index) {
-    allMessages.value.splice(index, 1);
+    allChats.value.splice(index, 1);
     activeChatIndex.value = Math.min(
       activeChatIndex.value,
-      allMessages.value.length - 1
+      allChats.value.length - 1
     );
-    localStorage.setItem("chatStore", JSON.stringify(allMessages.value));
+    localStorage.setItem("chatStore", JSON.stringify(allChats.value));
     updateActiveChat(activeChatIndex.value);
   }
 
   function resetMessages() {
-    allMessages.value = [];
+    allChats.value = [];
   }
 
   return {
-    allMessages,
+    allChats,
     activeChat,
     activeChatIndex,
     addMessage,
@@ -56,5 +66,6 @@ export const useChatStore = defineStore("chatStore", () => {
     deleteChat,
     resetMessages,
     updateActiveChat,
+    updateTokenCount,
   };
 });

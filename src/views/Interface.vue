@@ -48,7 +48,6 @@ import {
   NButton,
   NIcon,
 } from "naive-ui";
-import Loader from "../components/Loader.vue";
 import ChatContainer from "../components/ChatContainer.vue";
 import SideBarChatList from "../components/SideBarChatList.vue";
 import SideBarTop from "../components/SideBarTopControls.vue";

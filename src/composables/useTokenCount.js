@@ -1,6 +1,7 @@
-import { watch } from "vue";
+import { ref, watch, computed } from "vue";
 import GPT3Tokenizer from "gpt3-tokenizer";
-import { useTokenEstimateStore } from "../store/tokenEstimateStore.js";
+import { useChatStore } from "../store/chatStore";
+import { useInputStore } from "../store/inputStore";
 
 const tokenizer = new GPT3Tokenizer({ type: "gpt3" });
 
@@ -9,8 +10,22 @@ export function countTokens(text) {
   return encoded.bpe.length;
 }
 
-export default function useTokenCount(inputText, codeInputs) {
-  const tokenEstimateStore = useTokenEstimateStore();
+export default function useTokenCount() {
+  const chatStore = useChatStore();
+  const inputStore = useInputStore();
+  const activeChatTokenCount = computed(() => chatStore.activeChat?.tokenCount);
+  const tokenEstimate = ref(0);
+
+  const inputText = computed(() => inputStore.inputStorage.inputText);
+  const codeInputs = computed(() => inputStore.inputStorage.codeInputs);
+
+  const updateTokenEstimate = (newTokenEstimate) => {
+    tokenEstimate.value = newTokenEstimate;
+  };
+
+  const resetTokenEstimate = () => {
+    tokenEstimate.value = 0;
+  };
 
   const updateTokenCount = () => {
     const text = `${inputText.value}${codeInputs.value
@@ -18,15 +33,19 @@ export default function useTokenCount(inputText, codeInputs) {
       .join("")}`;
 
     if (!text) {
-      tokenEstimateStore.updateTokenEstimate(0);
+      updateTokenEstimate(0);
       return;
     }
-    tokenEstimateStore.updateTokenEstimate(countTokens(text));
+    const activeChatTokens = activeChatTokenCount.value || 0;
+    updateTokenEstimate(countTokens(text) + activeChatTokens);
   };
 
-  watch([inputText, codeInputs], updateTokenCount, { immediate: true });
+  watch([inputText, codeInputs, activeChatTokenCount], updateTokenCount, {
+    immediate: true,
+  });
 
   return {
-    tokenEstimate: tokenEstimateStore.tokenEstimate,
+    tokenEstimate,
+    resetTokenEstimate,
   };
 }

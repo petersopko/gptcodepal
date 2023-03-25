@@ -1,24 +1,30 @@
 <template>
-  <!-- todo: the loader should be in the response content component before the response is loaded -->
-  <Loader />
   <n-scrollbar>
-    <div v-for="message in activeChatMessages">
-      <n-card :class="`${message.role}-message`">
-        <ResponseContent :response="message.content" />
-      </n-card>
+    <div v-if="activeChatMessages">
+      <div v-for="message in activeChatMessages">
+        <n-card :class="`${message.role}-message`">
+          <ChatMessage :response="message.content" />
+        </n-card>
+      </div>
     </div>
   </n-scrollbar>
 </template>
 <script setup>
-import { computed } from "vue";
+import { ref, watch } from "vue";
 import { NCard, NScrollbar } from "naive-ui";
-import ResponseContent from "./ChatMessage.vue";
+import ChatMessage from "./ChatMessage.vue";
 import { useChatStore } from "../store/chatStore";
-import Loader from "./Loader.vue";
+import { useStatesStore } from "../store/statesStore";
 
 const chatStore = useChatStore();
 
-const activeChatMessages = computed(() => {
-  return chatStore.allMessages[chatStore.activeChatIndex];
-});
+const activeChatMessages = ref([]);
+
+watch(
+  () => chatStore.activeChat,
+  (newValue) => {
+    activeChatMessages.value = newValue?.messages;
+  },
+  { immediate: true }
+);
 </script>

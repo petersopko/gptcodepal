@@ -2,6 +2,7 @@
   <n-card>
     <TextInput placeholder="Enter your prompt" @submit="submitPrompt" />
     <div class="flex justify-center mt-2">
+      <p class="mr-6">{{ tokenEstimate ?? 0 }}</p>
       <n-radio-group
         v-model:value="selectedRadio"
         default-value=""
@@ -24,10 +25,14 @@ import { ref, computed, watchEffect } from "vue";
 import { NCard, NRadioGroup, NRadio } from "naive-ui";
 import TextInput from "./TextInput.vue";
 import { usePromptStore } from "../store/promptStore";
+import { useChatStore } from "../store/chatStore";
+import { useInputStore } from "../store/inputStore";
+import useTokenCount from "../composables/useTokenCount";
 
 const { promptSelection, promptContexts, updatePromptSelection } =
   usePromptStore();
-const promptStorage = usePromptStore();
+const { tokenEstimate } = useTokenCount();
+const { activeChat } = useChatStore();
 const emit = defineEmits(["submit"]);
 const selectedRadio = ref(promptSelection.value);
 

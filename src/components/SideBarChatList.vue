@@ -27,14 +27,7 @@
 </template>
 
 <script setup>
-import {
-  NCard,
-  NButton,
-  NIcon,
-  useThemeVars,
-  NDivider,
-  NScrollbar,
-} from "naive-ui";
+import { NCard, NButton, NIcon, useThemeVars, NScrollbar } from "naive-ui";
 import { computed } from "vue";
 import { TrashOutline } from "@vicons/ionicons5";
 import { useChatStore } from "../store/chatStore.js";
@@ -43,9 +36,12 @@ const themeVar = useThemeVars();
 const chatStore = useChatStore();
 
 const allChats = computed(() => {
-  return chatStore.allMessages;
+  return chatStore.allChats;
 });
 
+const activeChatMessages = computed(() => {
+  return chatStore.activeChat.messages;
+});
 const activeChatIndex = computed(() => {
   return chatStore.activeChatIndex;
 });

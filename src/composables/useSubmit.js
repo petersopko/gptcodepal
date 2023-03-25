@@ -23,14 +23,21 @@ export default function useSubmit() {
     const formattedCodeInputs = inputStore.inputStorage.codeInputs
       .map((chunk) => `\n${chunk.name}\n\`\`\`${chunk.code}\`\`\``)
       .join("");
-
-    if (chatStore.allMessages[chatStore.activeChatIndex] !== 0) {
+    if (chatStore.allChats.length === 0) {
+      chatStore.addChat();
+    }
+    if (chatStore.allChats[chatStore.activeChatIndex].messages !== 0) {
       return `${inputStore.inputStorage.inputText}${formattedCodeInputs}`;
     } else {
       return `${promptStorage.promptSelection}${inputStore.inputStorage.inputText}${formattedCodeInputs}`;
     }
   }
-
+  function countTokens(promptTokens, completionTokens) {
+    chatStore.updateTokenCount(
+      chatStore.activeChatIndex,
+      promptTokens + completionTokens
+    );
+  }
   async function submitPrompt() {
     statesStore.updateLoading(true);
     if (!inputStore.inputStorage.inputText) return;
@@ -41,9 +48,8 @@ export default function useSubmit() {
 
     try {
       const result = await postCompletion(
-        chatStore.allMessages[chatStore.activeChatIndex],
+        chatStore.allChats[chatStore.activeChatIndex].messages,
         0.7,
-        settingsStore.maxTokens,
         settingsStore.apiKey
       );
       handleResponse(result);
@@ -85,6 +91,8 @@ export default function useSubmit() {
     promptTokens.value = result.data.usage.prompt_tokens;
     responseTokens.value = result.data.usage.completion_tokens;
     statsStore.updateStats(promptTokens.value, responseTokens.value);
+
+    countTokens(promptTokens.value, responseTokens.value); // Update token count for the active chat
   }
 
   return {

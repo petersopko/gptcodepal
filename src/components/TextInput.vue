@@ -8,7 +8,7 @@
     @keydown.enter.prevent="submitPrompt"
   >
     <template #suffix>
-      {{ statsStore }}
+      <!-- {{ statsStore }} -->
       <n-button
         :bordered="false"
         :disabled="!inputTextComputed"
@@ -22,35 +22,15 @@
 </template>
 
 <script setup>
-import { NCard, NInput, NButton } from "naive-ui";
+import { NInput, NButton } from "naive-ui";
 import { computed } from "vue";
 import { useInputStore } from "../store/inputStore";
-import { useSettingsStore } from "../store/settingsStore";
-import { countTokens } from "../composables/useTokenCount";
-import { useStatsStore } from "../store/statsStore";
 
 const emit = defineEmits(["submit"]);
-
-const settingsStore = useSettingsStore();
-const maxTokens = computed(() => settingsStore.maxTokens);
-const statsStore = useStatsStore();
 
 const { inputStorage, updateInputText } = useInputStore();
 
 const inputTextComputed = computed(() => inputStorage.inputText);
-
-const tokenCount = computed(() => {
-  const context =
-    promptSelection.value === "contextForGpt" ? contextForGpt : noContext;
-  const text = `${context}${inputText.value}${tabsStore.activeTab.codeInputs
-    .map((chunk) => `\n${chunk.name}\n\`\`\`${chunk.code}\`\`\``)
-    .join("")}`;
-
-  if (!text) {
-    return 0;
-  }
-  return countTokens(text);
-});
 
 const submitPrompt = () => {
   emit("submit");

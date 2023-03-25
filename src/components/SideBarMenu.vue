@@ -1,6 +1,6 @@
 <template>
   <n-list bordered>
-    <n-list-item>
+    <!-- <n-list-item>
       <div class="flex justify-center mt-2">
         <p>Mode</p>
         <n-radio-group>
@@ -8,14 +8,14 @@
           <n-radio>Advanced</n-radio>
         </n-radio-group>
       </div>
-    </n-list-item>
+    </n-list-item> -->
     <n-list-item>
       <ApiKeyInput class="grow justify-center" />
     </n-list-item>
     <n-list-item>
       <SettingsAdvanced />
     </n-list-item>
-    <n-list-item>
+    <!-- <n-list-item>
       <div class="flex-1 flex justify-center space-x-4">
         <n-icon size="10">
           <InformationCircleIcon />
@@ -27,7 +27,7 @@
           <AccessibilityIcon />
         </n-icon>
       </div>
-    </n-list-item>
+    </n-list-item> -->
   </n-list>
 </template>
 

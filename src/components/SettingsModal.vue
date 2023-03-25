@@ -13,13 +13,13 @@
   >
     <!-- <template #header-extra> Oops! </template> -->
     <div class="flex justify-center items-center space-x-10">
-      <n-statistic label="Prompts🪙" :value="promptTokensTotal" />
-      <n-statistic label="Completions🪙" :value="completionTokensTotal" />
-      <n-statistic label="# of Prompts🤖" :value="totalPromptsSent" />
-      <n-statistic label="Money 💲" :value="totalMoneySpent" />
+      <n-statistic label="Prompt tokens" :value="promptTokensTotal" />
+      <n-statistic label="Completion tokens" :value="completionTokensTotal" />
+      <n-statistic label="# of Prompts 🤖" :value="totalPromptsSent" />
+      <n-statistic label="Approx. 💲" :value="`$${totalMoneySpent}`" />
     </div>
 
-    <template #footer>
+    <!-- <template #footer>
       <div class="flex justify-center">
         <n-gradient-text>Max tokens for answer (tooltip here)</n-gradient-text>
       </div>
@@ -32,7 +32,7 @@
           @update:value="updateMaxTokens"
         />
       </div>
-    </template>
+    </template> -->
   </n-modal>
 </template>
 
