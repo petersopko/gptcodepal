@@ -74,13 +74,13 @@ export default function useSubmit() {
       duration: 5000,
     });
   }
+
   function handlePartialResponse(responseText) {
     // Split the responseText by newline
     const lines = responseText.split("\n").map((line) => line.trim());
     const streamedResponse = [];
     // Process each line as a separate JSON object
     for (const line of lines) {
-      // console.log("Line:", line, "line.length", line.length);
       if (line === "data: [DONE]") {
         // Ignore the [DONE] string
         continue;
@@ -90,7 +90,6 @@ export default function useSubmit() {
         // Check if the line is a valid JSON object before parsing
         try {
           const partialResponse = JSON.parse(validJson);
-          // console.log("Partial response:", partialResponse);
 
           // Check if the partialResponse contains a delta with content
           if (
@@ -99,20 +98,37 @@ export default function useSubmit() {
             partialResponse.choices[0].delta &&
             partialResponse.choices[0].delta.content
           ) {
-            console.log(
-              "partialResponse.choices[0].delta.content.trim()",
-              partialResponse.choices[0].delta.content.trim()
-            );
-            streamedResponse.push(
-              partialResponse.choices[0].delta.content.trim()
-            );
+            const content = partialResponse.choices[0].delta.content;
+            const segments = content.split(/(`+)/g);
+            streamedResponse.push(...segments);
           }
         } catch (error) {
           console.error("Invalid JSON:", validJson);
         }
       }
     }
-    response.value = streamedResponse.join(" ");
+
+    // Combine backticks into a single string
+    const combinedResponse = [];
+    let backtickCount = 0;
+
+    for (let i = 0; i < streamedResponse.length; i++) {
+      if (streamedResponse[i].startsWith("`")) {
+        backtickCount += streamedResponse[i].length;
+      } else {
+        if (backtickCount > 0) {
+          combinedResponse.push("`".repeat(backtickCount));
+          backtickCount = 0;
+        }
+        combinedResponse.push(streamedResponse[i]);
+      }
+    }
+
+    if (backtickCount > 0) {
+      combinedResponse.push("`".repeat(backtickCount));
+    }
+
+    response.value = combinedResponse.join("");
     chatStore.updateStreamedMessage(chatStore.activeChatIndex, response.value);
   }
 
