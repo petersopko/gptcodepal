@@ -33,8 +33,8 @@
 
 <script setup>
 import { NDivider, NList, NListItem, NRadio, NRadioGroup } from "naive-ui";
-import ApiKeyInput from "./ApiKeyInput.vue";
-import SettingsAdvanced from "./SettingsModal.vue";
+import ApiKeyInput from "../ApiKeyInput.vue";
+import SettingsAdvanced from "../SettingsModal.vue";
 
 import { NIcon } from "naive-ui";
 import {

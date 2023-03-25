@@ -30,7 +30,6 @@ export const useStatsStore = defineStore("main", () => {
   // statsStore.js
 
   function updateStats(promptTokensCount, completionTokensCount) {
-    console.log("updateStats", promptTokensCount, completionTokensCount);
     incrementPromptTokens(promptTokensCount);
     incrementCompletionTokens(completionTokensCount);
     incrementTotalPromptsSent();

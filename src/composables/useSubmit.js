@@ -1,4 +1,5 @@
 import { ref } from "vue";
+import axios from "axios";
 import { useStatsStore } from "../store/statsStore";
 import { useSettingsStore } from "../store/settingsStore";
 import { useStatesStore } from "../store/statesStore";
@@ -6,7 +7,7 @@ import { useNotification } from "naive-ui";
 import { useInputStore } from "../store/inputStore";
 import { useChatStore } from "../store/chatStore";
 import { usePromptStore } from "../store/promptStore";
-import { postCompletion } from "../utils/apiService";
+import { postCompletionStream } from "../utils/apiService";
 
 export default function useSubmit() {
   const statsStore = useStatsStore();
@@ -18,6 +19,7 @@ export default function useSubmit() {
   const responseTokens = ref(0);
   const chatStore = useChatStore();
   const promptStorage = usePromptStore();
+  const cancelTokenSource = axios.CancelToken.source();
 
   function formatInputText() {
     const formattedCodeInputs = inputStore.inputStorage.codeInputs
@@ -45,14 +47,19 @@ export default function useSubmit() {
     const formattedPrompt = formatInputText();
     chatStore.addMessage(chatStore.activeChatIndex, "user", formattedPrompt);
     inputStore.updateInputText("");
-
+    const promptMessages =
+      chatStore.allChats[chatStore.activeChatIndex].messages;
+    chatStore.addMessage(chatStore.activeChatIndex, "assistant", "Thinking...");
     try {
-      const result = await postCompletion(
-        chatStore.allChats[chatStore.activeChatIndex].messages,
+      const result = await postCompletionStream(
+        promptMessages,
         0.7,
-        settingsStore.apiKey
+        settingsStore.apiKey,
+        handlePartialResponse,
+        cancelTokenSource
       );
-      handleResponse(result);
+      console.log("RESULT", result);
+      handleFinalResponse(result);
     } catch (error) {
       handleError(error);
     }
@@ -67,36 +74,94 @@ export default function useSubmit() {
       duration: 5000,
     });
   }
+  function handlePartialResponse(responseText) {
+    // Split the responseText by newline
+    const lines = responseText.split("\n").map((line) => line.trim());
+    const streamedResponse = [];
+    // Process each line as a separate JSON object
+    for (const line of lines) {
+      // console.log("Line:", line, "line.length", line.length);
+      if (line === "data: [DONE]") {
+        // Ignore the [DONE] string
+        continue;
+      } else if (line.startsWith("data: ")) {
+        const validJson = line.replace("data: ", "");
+
+        // Check if the line is a valid JSON object before parsing
+        try {
+          const partialResponse = JSON.parse(validJson);
+          // console.log("Partial response:", partialResponse);
+
+          // Check if the partialResponse contains a delta with content
+          if (
+            partialResponse.choices &&
+            partialResponse.choices[0] &&
+            partialResponse.choices[0].delta &&
+            partialResponse.choices[0].delta.content
+          ) {
+            console.log(
+              "partialResponse.choices[0].delta.content.trim()",
+              partialResponse.choices[0].delta.content.trim()
+            );
+            streamedResponse.push(
+              partialResponse.choices[0].delta.content.trim()
+            );
+          }
+        } catch (error) {
+          console.error("Invalid JSON:", validJson);
+        }
+      }
+    }
+    response.value = streamedResponse.join(" ");
+    chatStore.updateStreamedMessage(chatStore.activeChatIndex, response.value);
+  }
+
+  function handleFinalResponse(result) {
+    console.log("Final response:", response.value);
+    statesStore.updateLoading(false);
+    console.log("RESULT", result);
+
+    // if (response.value) {
+    //   chatStore.updateStreamedMessage(
+    //     chatStore.activeChatIndex,
+    //     result.choices[0].delta.content
+    //   );
+    // } else {
+    //   response.value = "An error occurred while fetching the final response.";
+    //   showErrorNotification(response.value);
+    //   chatStore.updateStreamedMessage(
+    //     chatStore.activeChatIndex,
+    //     response.value
+    //   );
+    // }
+  }
 
   function handleError(error) {
     statesStore.updateLoading(false);
-    response.value = error.response.data.error.message;
-    showErrorNotification(response.value);
-    chatStore.addMessage(
-      chatStore.activeChatIndex,
-      "assistant",
-      response.value
-    );
-    inputStore.inputStorage.inputText = "";
+    console.log("test");
+
+    let errorMessage = "An error occurred while fetching the response.";
+
+    if (axios.isCancel(error)) {
+      errorMessage = "Request canceled by user.";
+    } else if (error.response) {
+      errorMessage = `Error ${error.response.status}: ${error.response.statusText}`;
+    } else if (error.request) {
+      errorMessage = "No response received from the server.";
+    } else {
+      errorMessage = `Error: ${error.response.data.error.message}`;
+    }
+    chatStore.handleErrorRequest();
+    showErrorNotification(errorMessage);
   }
 
-  function handleResponse(result) {
-    statesStore.updateLoading(false);
-    response.value = result.data.choices[0].message.content.trim();
-    chatStore.addMessage(
-      chatStore.activeChatIndex,
-      "assistant",
-      response.value
-    );
-    promptTokens.value = result.data.usage.prompt_tokens;
-    responseTokens.value = result.data.usage.completion_tokens;
-    statsStore.updateStats(promptTokens.value, responseTokens.value);
-
-    countTokens(promptTokens.value, responseTokens.value); // Update token count for the active chat
+  function cancelOngoingRequest() {
+    cancelTokenSource.cancel("Request canceled by user.");
   }
 
   return {
     submitPrompt,
+    cancelOngoingRequest,
     response,
     promptTokens,
     responseTokens,

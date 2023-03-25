@@ -48,12 +48,12 @@ import {
   NButton,
   NIcon,
 } from "naive-ui";
-import ChatContainer from "../components/ChatContainer.vue";
-import SideBarChatList from "../components/SideBarChatList.vue";
-import SideBarTop from "../components/SideBarTopControls.vue";
+import ChatContainer from "../components/Chat/ChatContainer.vue";
+import SideBarChatList from "../components/Sidebar/SideBarChatList.vue";
+import SideBarTop from "../components/Sidebar/SideBarTopControls.vue";
 import useSubmit from "../composables/useSubmit.js";
 import SubmitCard from "../components/SubmitCard.vue";
-import SideBarSettings from "../components/SideBarMenu.vue";
+import SideBarSettings from "../components/Sidebar/SideBarMenu.vue";
 
 import { useChatStore } from "../store/chatStore.js";
 import { useStatesStore } from "../store/statesStore";

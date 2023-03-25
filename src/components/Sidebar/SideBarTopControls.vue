@@ -5,7 +5,7 @@
 </template>
 <script setup>
 import { NButton } from "naive-ui";
-import { useChatStore } from "../store/chatStore.js";
+import { useChatStore } from "../../store/chatStore.js";
 
 const chatStore = useChatStore();
 

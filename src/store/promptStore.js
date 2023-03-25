@@ -16,10 +16,9 @@ export const usePromptStore = defineStore("promptStore", () => {
     },
   ]);
   const promptSelection = ref(promptContexts.value[0]);
-  console.log("promptSelection.value:", promptSelection.value);
+
   const updatePromptSelection = (newPromptSelection) => {
     promptSelection.value = newPromptSelection;
-    console.log("promptSelection.value:", promptSelection);
   };
 
   return {

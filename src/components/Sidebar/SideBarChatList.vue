@@ -30,7 +30,7 @@
 import { NCard, NButton, NIcon, useThemeVars, NScrollbar } from "naive-ui";
 import { computed } from "vue";
 import { TrashOutline } from "@vicons/ionicons5";
-import { useChatStore } from "../store/chatStore.js";
+import { useChatStore } from "../../store/chatStore.js";
 
 const themeVar = useThemeVars();
 const chatStore = useChatStore();

@@ -9,7 +9,6 @@ export const useChatStore = defineStore("chatStore", () => {
   );
   const activeChatIndex = ref(0);
   const activeChat = computed(() => {
-    console.log("activeChatIndex.value", allChats.value[activeChatIndex.value]);
     return allChats.value[activeChatIndex.value];
   });
 
@@ -53,6 +52,20 @@ export const useChatStore = defineStore("chatStore", () => {
     updateActiveChat(activeChatIndex.value);
   }
 
+  function updateStreamedMessage(activeChatIndex, content) {
+    const lastElementIndex =
+      allChats.value[activeChatIndex].messages.length - 1;
+    allChats.value[activeChatIndex].messages[lastElementIndex].content =
+      content;
+    localStorage.setItem("chatStore", JSON.stringify(allChats.value));
+  }
+
+  function handleErrorRequest() {
+    // delete last two messages
+    allChats.value[activeChatIndex.value].messages.splice(-2, 2);
+    localStorage.setItem("chatStore", JSON.stringify(allChats.value));
+  }
+
   function resetMessages() {
     allChats.value = [];
   }
@@ -67,5 +80,7 @@ export const useChatStore = defineStore("chatStore", () => {
     resetMessages,
     updateActiveChat,
     updateTokenCount,
+    updateStreamedMessage,
+    handleErrorRequest,
   };
 });

@@ -13,8 +13,8 @@
 import { ref, watch } from "vue";
 import { NCard, NScrollbar } from "naive-ui";
 import ChatMessage from "./ChatMessage.vue";
-import { useChatStore } from "../store/chatStore";
-import { useStatesStore } from "../store/statesStore";
+import { useChatStore } from "../../store/chatStore";
+import { useStatesStore } from "../../store/statesStore";
 
 const chatStore = useChatStore();
 
