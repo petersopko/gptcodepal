@@ -1,6 +1,6 @@
 <template>
   <div
-    class="whole-screen min-h-screen flex flex-row justify-center xl:container xl:mx-auto"
+    class="whole-screen min-h-screen max-h-screen flex flex-row justify-center xl:container xl:mx-auto"
   >
     <div
       class="side-bar flex flex-col w-full xl:w-1/5 border-2 border-gray-200"
@@ -57,6 +57,7 @@ import { useChatStore } from "../store/chatStore.js";
 import { useStatesStore } from "../store/statesStore";
 import { useThemeVars } from "naive-ui";
 import { TrashOutline } from "@vicons/ionicons5";
+import PageHeader from "../components/PageHeader.vue";
 
 const themeVar = useThemeVars();
 const chatStore = useChatStore();
