@@ -1,10 +1,13 @@
 <template>
   <div
-    class="whole-screen min-h-screen max-h-screen flex flex-row justify-center xl:container xl:mx-auto"
+    class="whole-screen min-h-screen max-h-screen flex flex-row justify-center xl:min-w-screen xl:mx-auto"
   >
     <div
-      class="side-bar flex flex-col w-full xl:w-1/5 border-2 border-gray-200"
-      :style="`width: ${sideBarWidth}px; border-color: ${themeVar.primaryColor};`"
+      v-show="isSidebarVisible"
+      class="side-bar flex flex-col w-full xl:w-1/5 sm:w-full border-2 border-gray-200"
+      :style="`width: ${sideBarWidth}px; border-color: ${
+        themeVar.primaryColor
+      };${windowWidth >= 640 ? 'border-right: none !important;' : ''}`"
     >
       <div class="side-bar-add-chat flex-shrink-0">
         <SideBarTop />
@@ -17,8 +20,11 @@
       </div>
     </div>
     <div
+      v-show="(!isSidebarVisible && windowWidth <= 640) || windowWidth > 640"
       class="chat-container flex flex-col justify-between w-full xl:w-4/5 border-2"
-      :style="`border-color: ${themeVar.primaryColor}; border-left: none !important;`"
+      :style="`border-color: ${themeVar.primaryColor}; ${
+        !isSidebarVisible && windowWidth > 640 ? 'width: 100%;' : ''
+      }`"
     >
       <div class="chat-messages-container overflow-y-auto relative">
         <div
@@ -36,12 +42,33 @@
         />
       </div>
     </div>
+    <div
+      class="layout-toggle"
+      :style="{
+        left: isSidebarVisible
+          ? windowWidth <= 640
+            ? `calc(${windowWidth} + 40px)`
+            : `calc(${sideBarWidth}px + 20px)`
+          : '20px',
+      }"
+    >
+      <n-button quaternary circle @click="toggleSidebar">
+        <template #icon>
+          <n-icon v-if="isSidebarVisible">
+            <arrow-back-sharp />
+          </n-icon>
+          <n-icon v-else>
+            <arrow-forward-sharp />
+          </n-icon>
+        </template>
+      </n-button>
+    </div>
   </div>
 </template>
 
 <script setup>
 import { onMounted, onUnmounted, ref, computed, h } from "vue";
-import { NGradientText } from "naive-ui";
+import { NGradientText, NButton, NIcon } from "naive-ui";
 import ChatContainer from "../components/Chat/ChatContainer.vue";
 import SideBarChatList from "../components/Sidebar/SideBarChatList.vue";
 import SideBarTop from "../components/Sidebar/SideBarTopControls.vue";
@@ -51,17 +78,21 @@ import SideBarSettings from "../components/Sidebar/SideBarMenu.vue";
 import { useChatStore } from "../store/chatStore.js";
 import { useStatesStore } from "../store/statesStore";
 import { useThemeVars } from "naive-ui";
-import { TrashOutline } from "@vicons/ionicons5";
+import { ArrowBackSharp, ArrowForwardSharp } from "@vicons/ionicons5";
 import PageHeader from "../components/PageHeader.vue";
 
 const themeVar = useThemeVars();
 const chatStore = useChatStore();
 const windowWidth = ref(window.innerWidth);
 
-const sideBarWidth = computed(() => (windowWidth.value <= 640 ? "100%" : 300));
-const layoutTogglePosition = computed(() => ({
-  right: windowWidth.value <= 640 ? "-20px" : "40px",
-}));
+const sideBarWidth = computed(() =>
+  windowWidth.value <= 640 && isSidebarVisible.value ? "100%" : 300
+);
+const isSidebarVisible = ref(true);
+
+const toggleSidebar = () => {
+  isSidebarVisible.value = !isSidebarVisible.value;
+};
 
 const statesStore = useStatesStore();
 
@@ -97,5 +128,10 @@ onUnmounted(() => {
       #63e2b7 75%
     ),
     linear-gradient(-45deg, #4bc9aa 25%, #63e2b7 50%, #4bc9aa 75%);
+}
+.layout-toggle {
+  position: fixed;
+  top: 10px;
+  z-index: 100;
 }
 </style>
