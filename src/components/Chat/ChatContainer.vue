@@ -1,10 +1,7 @@
 <template>
   <n-scrollbar>
     <div class="relative min-h-screen">
-      <div class="flex justify-center items-center z-0 absolute inset-0">
-        <PageHeader />
-      </div>
-      <div v-if="activeChatMessages" class="z-10 absolute inset-0">
+      <div v-if="activeChatMessages">
         <div v-for="message in activeChatMessages">
           <n-card :class="`${message.role}-message`">
             <ChatMessage :response="message.content" />

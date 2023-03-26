@@ -20,9 +20,14 @@
       class="chat-container flex flex-col justify-between w-full xl:w-4/5 border-2"
       :style="`border-color: ${themeVar.primaryColor}; border-left: none !important;`"
     >
-      <div class="chat-messages-container overflow-y-auto">
+      <div class="chat-messages-container overflow-y-auto relative">
+        <div
+          v-if="chatStore.activeChat.messages.length === 0"
+          class="robot-face"
+        ></div>
         <ChatContainer />
       </div>
+
       <div class="chat-submit-card flex-shrink-0 bg-transparent">
         <SubmitCard
           :responseTokens="responseTokens"
@@ -36,23 +41,13 @@
 
 <script setup>
 import { onMounted, onUnmounted, ref, computed, h } from "vue";
-import {
-  NCollapse,
-  NCollapseItem,
-  NCard,
-  NScrollbar,
-  NSpace,
-  NDivider,
-  NButton,
-  NIcon,
-} from "naive-ui";
+import { NGradientText } from "naive-ui";
 import ChatContainer from "../components/Chat/ChatContainer.vue";
 import SideBarChatList from "../components/Sidebar/SideBarChatList.vue";
 import SideBarTop from "../components/Sidebar/SideBarTopControls.vue";
 import useSubmit from "../composables/useSubmit.js";
 import SubmitCard from "../components/SubmitCard.vue";
 import SideBarSettings from "../components/Sidebar/SideBarMenu.vue";
-
 import { useChatStore } from "../store/chatStore.js";
 import { useStatesStore } from "../store/statesStore";
 import { useThemeVars } from "naive-ui";
@@ -83,3 +78,24 @@ onUnmounted(() => {
   window.removeEventListener("resize", handleResize);
 });
 </script>
+<style scoped>
+.robot-face {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 300px;
+  height: 300px;
+  -webkit-mask-image: url("../assets/robot-face.svg");
+  mask-image: url("../assets/robot-face.svg");
+  z-index: 1;
+  background-blend-mode: overlay;
+  background-image: linear-gradient(
+      45deg,
+      #63e2b7 25%,
+      #85e9c7 50%,
+      #63e2b7 75%
+    ),
+    linear-gradient(-45deg, #4bc9aa 25%, #63e2b7 50%, #4bc9aa 75%);
+}
+</style>

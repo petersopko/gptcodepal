@@ -1,7 +1,5 @@
 <template>
-  <div>
-    <n-gradient-text :size="120"> 🤖 </n-gradient-text>
-  </div>
+  <div></div>
 </template>
 <script setup>
 import { NSpace, NGradientText, NCard } from "naive-ui";
