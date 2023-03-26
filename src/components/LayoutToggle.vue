@@ -1,6 +1,5 @@
 <template>
   <div class="layout-toggle" :style="toggleStyle">
-    {{ sideBarWidth }}
     <n-button quaternary circle @click="toggle">
       <template #icon>
         <n-icon v-if="isSideBarVisible">
@@ -30,7 +29,7 @@ const props = defineProps({
     required: true,
   },
   sideBarWidth: {
-    type: [Number, String],
+    type: [Number, String, null],
     required: true,
   },
 });
@@ -42,7 +41,7 @@ const toggleStyle = computed(() => {
     left: props.isSideBarVisible
       ? props.windowWidth >= 640
         ? `calc(${props.sideBarWidth}px + 20px)`
-        : `calc(${props.sideBarWidth}px + 20px)`
+        : ``
       : "20px",
   };
 });

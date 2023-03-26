@@ -4,10 +4,10 @@
   >
     <div
       v-show="isSideBarVisible"
-      class="side-bar flex flex-col w-full xl:w-1/5 sm:w-full border-2 border-gray-200"
-      :style="`width: ${sideBarWidth}px; border-color: ${
-        themeVar.primaryColor
-      };${windowWidth >= 640 ? 'border-right: none !important;' : ''}`"
+      class="side-bar flex flex-col w-full sm:w-2/5 md-1/5 sm:w-full border-2 border-gray-200"
+      :style="`border-color: ${themeVar.primaryColor};${
+        windowWidth >= 640 ? 'border-right: none !important;' : ''
+      }`"
     >
       <div class="side-bar-add-chat flex-shrink-0">
         <SideBarTop />
@@ -28,7 +28,7 @@
     </div>
     <div
       v-show="(!isSideBarVisible && windowWidth <= 640) || windowWidth > 640"
-      class="chat-container flex flex-col justify-between w-full xl:w-4/5 border-2"
+      class="chat-container flex flex-col justify-between w-full sm:w-3/5 md:w-4/5 border-2"
       :style="`border-color: ${themeVar.primaryColor}; ${
         !isSideBarVisible && windowWidth > 640 ? 'width: 100%;' : ''
       }`"
@@ -49,7 +49,6 @@
         />
       </div>
     </div>
-    {{ !isSideBarVisible }}
     <LayoutToggle
       v-if="!(windowWidth <= 640 && isSideBarVisible) || windowWidth >= 640"
       :is-side-bar-visible="isSideBarVisible"
@@ -61,7 +60,7 @@
 </template>
 
 <script setup>
-import { onMounted, onUnmounted, ref, computed, h } from "vue";
+import { onMounted, onUnmounted, ref, computed, h, watch } from "vue";
 import { NGradientText, NButton, NIcon } from "naive-ui";
 import ChatContainer from "../components/Chat/ChatContainer.vue";
 import SideBarChatList from "../components/Sidebar/SideBarChatList.vue";
@@ -80,13 +79,24 @@ const themeVar = useThemeVars();
 const chatStore = useChatStore();
 const windowWidth = ref(window.innerWidth);
 
-const sideBarWidth = computed(() =>
-  windowWidth.value <= 640 && isSideBarVisible.value ? "100%" : 300
-);
+const sideBarWidth = ref(null);
 const isSideBarVisible = ref(false);
 
 const toggleSidebar = () => {
   isSideBarVisible.value = !isSideBarVisible.value;
+  updateSideBarWidth();
+};
+
+const updateSideBarWidth = () => {
+  if (isSideBarVisible.value) {
+    if (windowWidth.value >= 640) {
+      sideBarWidth.value = window.innerWidth / 5;
+    } else {
+      sideBarWidth.value = window.innerWidth;
+    }
+  } else {
+    sideBarWidth.value = 0;
+  }
 };
 
 const statesStore = useStatesStore();
@@ -97,9 +107,13 @@ const handleResize = () => {
   windowWidth.value = window.innerWidth;
 };
 onMounted(() => {
+  // Existing code
   window.addEventListener("resize", handleResize);
   chatStore.updateActiveChat(chatStore.activeChatIndex);
+
+  updateSideBarWidth();
 });
+
 onUnmounted(() => {
   window.removeEventListener("resize", handleResize);
 });
