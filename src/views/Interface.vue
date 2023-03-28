@@ -4,18 +4,19 @@
   >
     <div
       v-show="isSideBarVisible"
-      class="side-bar flex flex-col w-full sm:w-2/5 md-1/5 sm:w-full border-2 border-gray-200"
+      class="side-bar flex flex-col w-full sm:w-2/5 lg:w-1/5 border-2 border-gray-200"
       :style="`border-color: ${themeVar.primaryColor};${
         windowWidth >= 640 ? 'border-right: none !important;' : ''
       }`"
     >
-      <div class="side-bar-add-chat flex-shrink-0">
-        <SideBarTop />
+      <div class="side-bar-add-chat flex flex-row justify-around mt-4">
+        <SideBarTop :class="{ 'w-4/5': mobileMode }" />
         <LayoutToggle
-          v-if="windowWidth <= 640"
+          v-if="mobileMode"
           :is-side-bar-visible="isSideBarVisible"
           :window-width="windowWidth"
           :side-bar-width="sideBarWidth"
+          :mobile-mode="mobileMode"
           @toggle-sidebar="toggleSidebar"
         />
       </div>
@@ -28,11 +29,22 @@
     </div>
     <div
       v-show="(!isSideBarVisible && windowWidth <= 640) || windowWidth > 640"
-      class="chat-container flex flex-col justify-between w-full sm:w-3/5 md:w-4/5 border-2"
+      class="chat-container flex flex-col justify-between w-full sm:w-3/5 lg:w-4/5 border-2"
       :style="`border-color: ${themeVar.primaryColor}; ${
-        !isSideBarVisible && windowWidth > 640 ? 'width: 100%;' : ''
+        !isSideBarVisible && windowWidth > 600 ? 'width: 100%;' : ''
       }`"
     >
+      <div>
+        <n-card class="w-full">
+          <LayoutToggle
+            v-if="!(mobileMode && isSideBarVisible)"
+            :is-side-bar-visible="isSideBarVisible"
+            :window-width="windowWidth"
+            :side-bar-width="sideBarWidth"
+            @toggle-sidebar="toggleSidebar"
+          />
+        </n-card>
+      </div>
       <div class="chat-messages-container overflow-y-auto relative">
         <div
           v-if="chatStore.activeChat.messages.length === 0"
@@ -49,19 +61,12 @@
         />
       </div>
     </div>
-    <LayoutToggle
-      v-if="!(windowWidth <= 640 && isSideBarVisible) || windowWidth >= 640"
-      :is-side-bar-visible="isSideBarVisible"
-      :window-width="windowWidth"
-      :side-bar-width="sideBarWidth"
-      @toggle-sidebar="toggleSidebar"
-    />
   </div>
 </template>
 
 <script setup>
 import { onMounted, onUnmounted, ref, computed, h, watch } from "vue";
-import { NGradientText, NButton, NIcon } from "naive-ui";
+import { NGradientText, NButton, NIcon, NCard } from "naive-ui";
 import ChatContainer from "../components/Chat/ChatContainer.vue";
 import SideBarChatList from "../components/Sidebar/SideBarChatList.vue";
 import SideBarTop from "../components/Sidebar/SideBarTopControls.vue";
@@ -81,6 +86,7 @@ const windowWidth = ref(window.innerWidth);
 
 const sideBarWidth = ref(null);
 const isSideBarVisible = ref(false);
+const mobileMode = computed(() => windowWidth.value <= 640);
 
 const toggleSidebar = () => {
   isSideBarVisible.value = !isSideBarVisible.value;
@@ -90,15 +96,14 @@ const toggleSidebar = () => {
 const updateSideBarWidth = () => {
   if (isSideBarVisible.value) {
     if (windowWidth.value >= 640) {
-      sideBarWidth.value = window.innerWidth / 5;
-    } else {
-      sideBarWidth.value = window.innerWidth;
+      if (windowWidth.value > 1024) {
+        sideBarWidth.value = windowWidth.value * 0.2;
+      } else {
+        sideBarWidth.value = windowWidth.value * (2 / 5);
+      }
     }
-  } else {
-    sideBarWidth.value = 0;
   }
 };
-
 const statesStore = useStatesStore();
 
 const { submitPrompt, promptTokens, responseTokens } = useSubmit();
@@ -106,6 +111,11 @@ const { submitPrompt, promptTokens, responseTokens } = useSubmit();
 const handleResize = () => {
   windowWidth.value = window.innerWidth;
 };
+
+watch(windowWidth, () => {
+  updateSideBarWidth();
+});
+
 onMounted(() => {
   // Existing code
   window.addEventListener("resize", handleResize);

@@ -1,6 +1,6 @@
 <template>
-  <n-button class="w-full" size="large" @click="addChat">
-    <p class="">Add Chat</p>
+  <n-button size="large" @click="addChat">
+    <p>Add Chat</p>
   </n-button>
 </template>
 <script setup>

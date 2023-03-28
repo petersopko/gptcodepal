@@ -1,6 +1,6 @@
 <template>
-  <div class="layout-toggle" :style="toggleStyle">
-    <n-button quaternary circle @click="toggle">
+  <div :style="mobileMode ? {} : toggleStyle">
+    <n-button @click="toggle">
       <template #icon>
         <n-icon v-if="isSideBarVisible">
           <arrow-back-sharp />
@@ -32,22 +32,21 @@ const props = defineProps({
     type: [Number, String, null],
     required: true,
   },
+  mobileMode: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 const emit = defineEmits(["toggle-sidebar"]);
 
 const toggleStyle = computed(() => {
   return {
-    left: props.isSideBarVisible
-      ? props.windowWidth >= 640
-        ? `calc(${props.sideBarWidth}px + 20px)`
-        : ``
-      : "20px",
+    left: props.isSideBarVisible ? `${props.sideBarWidth + 20}px` : "20px",
   };
 });
 
 const toggle = () => {
-  console.log("toglge");
   emit("toggle-sidebar");
 };
 
@@ -58,11 +57,3 @@ watch(
   }
 );
 </script>
-
-<style scoped>
-.layout-toggle {
-  position: fixed;
-  top: 10px;
-  z-index: 100;
-}
-</style>
