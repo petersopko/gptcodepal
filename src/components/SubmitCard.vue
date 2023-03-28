@@ -1,10 +1,9 @@
 <template>
   <n-card class="px-8" :bordered="false">
-    <TextInput placeholder="Enter your prompt" @submit="submitPrompt" />
+    <div class="flex flex-row">
+      <TextInput placeholder="Enter your prompt" @submit="submitPrompt" />
+    </div>
     <div class="flex justify-center mt-2">
-      <n-gradient-text class="mr-6">
-        {{ `Required Tokens: ${tokenEstimate ?? 0}` }}</n-gradient-text
-      >
       <n-radio-group
         v-model:value="selectedRadio"
         default-value=""
@@ -33,7 +32,6 @@ import useTokenCount from "../composables/useTokenCount";
 
 const { promptSelection, promptContexts, updatePromptSelection } =
   usePromptStore();
-const { tokenEstimate } = useTokenCount();
 const { activeChat } = useChatStore();
 const emit = defineEmits(["submit"]);
 const selectedRadio = ref(promptSelection.value);

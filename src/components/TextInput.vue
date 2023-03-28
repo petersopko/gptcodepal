@@ -8,27 +8,37 @@
     @keydown.enter.prevent="submitPrompt"
   >
     <template #suffix>
-      <!-- {{ statsStore }} -->
+      <n-tooltip trigger="hover">
+        <template #trigger>
+          <n-gradient-text>
+            {{ `${tokenEstimate ?? 0}` }}
+          </n-gradient-text>
+        </template>
+        Estimated tokens needed to submit
+      </n-tooltip>
+
       <n-button
         :bordered="false"
         :disabled="!inputTextComputed"
+        class="pr-0 pl-2"
         @click="submitPrompt"
       >
         🚀
       </n-button>
-      <!-- {{ `(Estimated tokens ${tokenCount || 0})` }} -->
     </template>
   </n-input>
 </template>
 
 <script setup>
-import { NInput, NButton } from "naive-ui";
+import { NInput, NButton, NGradientText, NTooltip } from "naive-ui";
 import { computed } from "vue";
 import { useInputStore } from "../store/inputStore";
+import useTokenCount from "../composables/useTokenCount";
 
 const emit = defineEmits(["submit"]);
 
 const { inputStorage, updateInputText } = useInputStore();
+const { tokenEstimate } = useTokenCount();
 
 const inputTextComputed = computed(() => inputStorage.inputText);
 

@@ -8,11 +8,11 @@
         display: 'flex',
         'align-items': 'center',
       }"
-      class="flex justify-between mx-4 my-4 w-auto"
+      class="chat-card flex justify-between mx-4 my-4 w-auto"
       size="small"
       :style="{
         'border-color': `${
-          activeChatIndex === index ? `${themeVar.primaryColor}` : 'black'
+          activeChatIndex === index ? `${themeVar.primaryColor}` : 'gray'
         }`,
       }"
     >
@@ -55,3 +55,8 @@ const deleteChat = (index, event) => {
   chatStore.deleteChat(index);
 };
 </script>
+<style scoped>
+.chat-card {
+  cursor: pointer;
+}
+</style>

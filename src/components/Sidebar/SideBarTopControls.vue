@@ -1,10 +1,11 @@
 <template>
-  <n-button size="large" @click="addChat">
-    <p>Add Chat</p>
+  <n-button @click="addChat">
+    <n-icon size="20"><add-sharp /></n-icon>
   </n-button>
 </template>
 <script setup>
-import { NButton } from "naive-ui";
+import { NButton, NIcon } from "naive-ui";
+import { AddSharp } from "@vicons/ionicons5";
 import { useChatStore } from "../../store/chatStore.js";
 
 const chatStore = useChatStore();
