@@ -18,7 +18,6 @@ import {
 
 import "highlight.js/styles/default.css";
 import "../styles/style.css";
-import './registerServiceWorker'
 
 hljs.registerLanguage("javascript", javascript);
 library.add(faChevronDown, faChevronUp, faTrashAlt, faClipboard, faCog);
