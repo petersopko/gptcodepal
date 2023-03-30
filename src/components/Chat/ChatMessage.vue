@@ -18,42 +18,42 @@
   </div>
 </template>
 
-<script setup>
-import { computed } from "vue";
-import { NScrollbar } from "naive-ui";
+<script setup lang="ts">
+import { computed } from 'vue'
+import { NScrollbar } from 'naive-ui'
 
-const props = defineProps({ response: String });
+const props = defineProps({ response: String })
 const parts = computed(() => {
-  const regex = /```(.*?)```/gs;
-  const parts = [];
-  let match;
-  let lastIndex = 0;
+  const regex = /```(.*?)```/gs
+  const parts = []
+  let match
+  let lastIndex = 0
 
   while ((match = regex.exec(props.response)) !== null) {
     if (match.index > lastIndex) {
       parts.push({
         text: props.response.slice(lastIndex, match.index),
-        isCode: false,
-      });
+        isCode: false
+      })
     }
     // Remove the language name from the beginning of the code block
-    const code = match[1].replace(/^[a-zA-Z]+\n/, "");
-    parts.push({ text: code, isCode: true });
-    lastIndex = regex.lastIndex;
+    const code = match[1].replace(/^[a-zA-Z]+\n/, '')
+    parts.push({ text: code, isCode: true })
+    lastIndex = regex.lastIndex
   }
 
   if (lastIndex < props.response.length) {
-    parts.push({ text: props.response.slice(lastIndex), isCode: false });
+    parts.push({ text: props.response.slice(lastIndex), isCode: false })
   }
 
-  return parts;
-});
+  return parts
+})
 const copyToClipboard = (text) => {
-  const el = document.createElement("textarea");
-  el.value = text;
-  document.body.appendChild(el);
-  el.select();
-  document.execCommand("copy");
-  document.body.removeChild(el);
-};
+  const el = document.createElement('textarea')
+  el.value = text
+  document.body.appendChild(el)
+  el.select()
+  document.execCommand('copy')
+  document.body.removeChild(el)
+}
 </script>

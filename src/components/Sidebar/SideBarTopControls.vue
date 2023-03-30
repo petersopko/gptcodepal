@@ -6,7 +6,7 @@
 <script setup>
 import { NButton, NIcon } from 'naive-ui'
 import { AddSharp } from '@vicons/ionicons5'
-import { useChatStore } from '../../stores/chatStore.js'
+import { useChatStore } from '../../stores/chatStore.ts'
 
 const chatStore = useChatStore()
 

@@ -11,7 +11,7 @@
     </div>
   </n-scrollbar>
 </template>
-<script setup>
+<script setup lang="ts">
 import { ref, watch } from 'vue'
 import { NCard, NScrollbar } from 'naive-ui'
 import ChatMessage from './ChatMessage.vue'

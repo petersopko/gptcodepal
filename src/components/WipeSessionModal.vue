@@ -18,11 +18,9 @@ import { NButton, NModal } from 'naive-ui'
 import { ref } from 'vue'
 import { useMessage } from 'naive-ui'
 import { useStatsStore } from '../stores/statsStore'
-import { useTabsStore } from '../stores/tabsStore'
 
 const message = useMessage()
 const statsStore = useStatsStore() // Access the store
-const tabsStore = useTabsStore() // Access the store
 const showModal = ref(false)
 const warningMessage =
   'All of the data in this session, including API key will be wiped. Are you sure you want to continue?'

@@ -30,7 +30,7 @@
 
 <script setup>
 import { NModal, NInput, NButton, NIcon } from 'naive-ui'
-import { useSettingsStore } from '../stores/settingsStore.js'
+import { useSettingsStore } from '../stores/settingsStore.ts'
 import { useStatsStore } from '../stores/statsStore'
 import { useMessage } from 'naive-ui'
 import { SaveOutline, Close } from '@vicons/ionicons5'

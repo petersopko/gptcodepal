@@ -2,11 +2,16 @@ import { ref, watch, computed } from 'vue'
 import GPT3Tokenizer from 'gpt3-tokenizer'
 import { useChatStore } from '../stores/chatStore'
 import { useInputStore } from '../stores/inputStore'
-import { usePromptStore } from '../stores/promptStore'
+// import { usePromptStore } from '../stores/promptStore'
+
+// interface CodeInput {
+//   name: string
+//   code: string
+// }
 
 const tokenizer = new GPT3Tokenizer({ type: 'gpt3' })
 
-export function countTokens(text) {
+export function countTokens(text: string): number {
   const encoded = tokenizer.encode(text)
   return encoded.bpe.length
 }
@@ -20,23 +25,21 @@ export default function useTokenCount() {
   const inputText = computed(() => inputStore.inputStorage.inputText)
   const codeInputs = computed(() => inputStore.inputStorage.codeInputs)
 
-  const updateTokenEstimate = (newTokenEstimate) => {
+  const updateTokenEstimate = (newTokenEstimate: number): void => {
     tokenEstimate.value = newTokenEstimate
   }
 
-  const resetTokenEstimate = () => {
+  const resetTokenEstimate = (): void => {
     tokenEstimate.value = 0
   }
 
-  const updateTokenCount = () => {
-    const text = `${inputText.value}${codeInputs.value
-      .map((chunk) => `\n${chunk.name}\n\`\`\`${chunk.code}\`\`\``)
-      .join('')}`
+  const updateTokenCount = (): void => {
+    // const text = `${inputText.value}${codeInputs.value
+    //   .map((chunk: CodeInput) => `\n${chunk.name}\n\`\`\`${chunk.code}\`\`\``)
+    //   .join('')}`
 
-    // TODO: we'll see if this ever works
-    // const activeChatTokens = activeChatTokenCount.value || 0;
     const activeChatTokens = updateTokenEstimate(
-      countTokens(text) + countTokens(JSON.stringify(chatStore.activeChat))
+      countTokens(inputText.value) + countTokens(JSON.stringify(chatStore.activeChat))
     )
   }
 

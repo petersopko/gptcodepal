@@ -28,7 +28,7 @@
 import { NCard, NButton, NIcon, useThemeVars, NScrollbar } from 'naive-ui'
 import { computed } from 'vue'
 import { TrashOutline } from '@vicons/ionicons5'
-import { useChatStore } from '../../stores/chatStore.js'
+import { useChatStore } from '../../stores/chatStore.ts'
 
 const themeVar = useThemeVars()
 const chatStore = useChatStore()

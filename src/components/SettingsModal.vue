@@ -49,12 +49,10 @@ import {
   NGradientText
 } from 'naive-ui'
 import { useStatsStore } from '../stores/statsStore'
-import { useTabsStore } from '../stores/tabsStore'
 import { useSettingsStore } from '../stores/settingsStore'
 
 const settingsStore = useSettingsStore()
 
-const tabsStore = useTabsStore()
 const statsStore = useStatsStore()
 
 const promptTokensTotal = computed(() => statsStore.promptTokensTotal)

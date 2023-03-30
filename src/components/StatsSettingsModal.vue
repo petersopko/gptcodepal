@@ -35,7 +35,7 @@ import { NButton, NModal, NCard, NGrid, NGi, NStatistic } from 'naive-ui'
 import { ref, computed } from 'vue'
 import ApiKeyInput from './ApiKeyInput.vue'
 import { useStatsStore } from '../stores/statsStore'
-import { useSettingsStore } from '../stores/settingsStore.js'
+import { useSettingsStore } from '../stores/settingsStore.ts'
 
 const settingsStore = useSettingsStore()
 

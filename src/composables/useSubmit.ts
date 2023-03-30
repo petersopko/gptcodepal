@@ -1,6 +1,5 @@
 import { ref } from 'vue'
-import axios from 'axios'
-import { useStatsStore } from '../stores/statsStore'
+import axios, { AxiosError } from 'axios'
 import { useSettingsStore } from '../stores/settingsStore'
 import { useStatesStore } from '../stores/statesStore'
 import { useNotification } from 'naive-ui'
@@ -9,8 +8,12 @@ import { useChatStore } from '../stores/chatStore'
 import { usePromptStore } from '../stores/promptStore'
 import { postCompletionStream } from '../utils/apiService'
 
+interface Message {
+  role: string
+  content: string
+}
+
 export default function useSubmit() {
-  const statsStore = useStatsStore()
   const settingsStore = useSettingsStore()
   const statesStore = useStatesStore()
   const inputStore = useInputStore()
@@ -21,30 +24,14 @@ export default function useSubmit() {
   const promptStorage = usePromptStore()
   const cancelTokenSource = axios.CancelToken.source()
 
-  function formatInputText() {
-    const formattedCodeInputs = inputStore.inputStorage.codeInputs
-      .map((chunk) => `\n${chunk.name}\n\`\`\`${chunk.code}\`\`\``)
-      .join('')
-    if (chatStore.allChats.length === 0) {
-      chatStore.addChat()
-    }
-    if (chatStore.allChats[chatStore.activeChatIndex].messages !== 0) {
-      return `${inputStore.inputStorage.inputText}${formattedCodeInputs}`
-    } else {
-      return `${promptStorage.promptSelection}${inputStore.inputStorage.inputText}${formattedCodeInputs}`
-    }
-  }
-  function countTokens(promptTokens, completionTokens) {
-    chatStore.updateTokenCount(chatStore.activeChatIndex, promptTokens + completionTokens)
-  }
   async function submitPrompt() {
     statesStore.updateLoading(true)
     if (!inputStore.inputStorage.inputText) return
 
-    const formattedPrompt = formatInputText()
+    const formattedPrompt = `${promptStorage.promptSelection.value}${inputStore.inputStorage.inputText}`
     chatStore.addMessage(chatStore.activeChatIndex, 'user', formattedPrompt)
     inputStore.updateInputText('')
-    const promptMessages = chatStore.allChats[chatStore.activeChatIndex].messages
+    const promptMessages: Message[] = chatStore.allChats[chatStore.activeChatIndex].messages
     chatStore.addMessage(chatStore.activeChatIndex, 'assistant', 'Thinking...')
     try {
       const result = await postCompletionStream(
@@ -57,13 +44,13 @@ export default function useSubmit() {
       console.log('RESULT', result)
       handleFinalResponse(result)
     } catch (error) {
-      handleError(error)
+      handleError(error as AxiosError)
     }
   }
 
   const notification = useNotification()
 
-  function showErrorNotification(error) {
+  function showErrorNotification(error: string) {
     notification.error({
       title: 'Error',
       content: error || 'An error occurred while fetching the response.',
@@ -71,10 +58,10 @@ export default function useSubmit() {
     })
   }
 
-  function handlePartialResponse(responseText) {
+  function handlePartialResponse(responseText: string) {
     // Split the responseText by newline
     const lines = responseText.split('\n').map((line) => line.trim())
-    const streamedResponse = []
+    const streamedResponse: string[] = []
     // Process each line as a separate JSON object
     for (const line of lines) {
       if (line === 'data: [DONE]') {
@@ -105,7 +92,7 @@ export default function useSubmit() {
     }
 
     // Combine backticks into a single string
-    const combinedResponse = []
+    const combinedResponse: string[] = []
     let backtickCount = 0
 
     for (let i = 0; i < streamedResponse.length; i++) {
@@ -128,41 +115,26 @@ export default function useSubmit() {
     chatStore.updateStreamedMessage(chatStore.activeChatIndex, response.value)
   }
 
-  function handleFinalResponse(result) {
+  function handleFinalResponse(result: any) {
     console.log('Final response:', response.value)
     statesStore.updateLoading(false)
     console.log('RESULT', result)
-
-    // if (response.value) {
-    //   chatStore.updateStreamedMessage(
-    //     chatStore.activeChatIndex,
-    //     result.choices[0].delta.content
-    //   );
-    // } else {
-    //   response.value = "An error occurred while fetching the final response.";
-    //   showErrorNotification(response.value);
-    //   chatStore.updateStreamedMessage(
-    //     chatStore.activeChatIndex,
-    //     response.value
-    //   );
-    // }
   }
-
-  function handleError(error) {
+  function handleError(error: AxiosError<any>) {
     statesStore.updateLoading(false)
-    console.log('test')
 
-    let errorMessage = 'An error occurred while fetching the response.'
+    const errorMessage = 'An error occurred while fetching the response.'
 
-    if (axios.isCancel(error)) {
-      errorMessage = 'Request canceled by user.'
-    } else if (error.response) {
-      errorMessage = `Error ${error.response.status}: ${error.response.statusText}`
-    } else if (error.request) {
-      errorMessage = 'No response received from the server.'
-    } else {
-      errorMessage = `Error: ${error.response.data.error.message}`
-    }
+    // if (axios.isCancel(error)) {
+    //   errorMessage = 'Request canceled by user.'
+    // } else if (error.response) {
+    //   errorMessage = `Error ${error.response.status}: ${error.response.statusText}`
+    // } else if (error.request) {
+    //   errorMessage = 'No response received from the server.'
+    // } else {
+    //   errorMessage = `Error: ${error.message}`
+    // }
+    console.log('ERROR', error)
     chatStore.handleErrorRequest()
     showErrorNotification(errorMessage)
   }
