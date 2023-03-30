@@ -2,13 +2,21 @@ import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import type { Chat } from '@/types'
 
+function getInitialChats() {
+  const parsedChats = JSON.parse(localStorage.getItem('chatStore') || '[]')
+  const initialChat = [{ messages: [], tokenCount: 0 }]
+  return parsedChats.length > 0 ? parsedChats : initialChat
+}
+
 export const useChatStore = defineStore('chatStore', () => {
-  const allChats = ref<Chat[]>(
-    JSON.parse(localStorage.getItem('chatStore') || '[]') || [{ messages: [], tokenCount: 0 }]
-  )
+  const allChats = ref<Chat[]>(getInitialChats())
+
   const activeChatIndex = ref<number>(0)
   const activeChat = computed<Chat>(() => {
     return allChats.value[activeChatIndex.value]
+  })
+  const totalChats = computed(() => {
+    return allChats.value.length
   })
 
   function updateActiveChat(index: number): void {
@@ -68,6 +76,7 @@ export const useChatStore = defineStore('chatStore', () => {
     allChats,
     activeChat,
     activeChatIndex,
+    totalChats,
     addMessage,
     addChat,
     deleteChat,

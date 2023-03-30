@@ -77,6 +77,7 @@ import LayoutToggle from '../components/LayoutToggle.vue'
 
 const themeVar = useThemeVars()
 const chatStore = useChatStore()
+
 const windowWidth = ref(window.innerWidth)
 
 const sideBarWidth = ref(0)
