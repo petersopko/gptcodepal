@@ -11,7 +11,7 @@
       <n-tooltip trigger="hover">
         <template #trigger>
           <n-gradient-text>
-            {{ `${tokenEstimate ?? 0}` }}
+            {{ `${activeChatTokenCount ?? 0}` }}
           </n-gradient-text>
         </template>
         Estimated tokens needed to submit
@@ -38,7 +38,7 @@ import useTokenCount from '../composables/useTokenCount'
 const emit = defineEmits(['submit'])
 
 const { inputStorage, updateInputText } = useInputStore()
-const { tokenEstimate } = useTokenCount()
+const { activeChatTokenCount } = useTokenCount()
 
 const inputTextComputed = computed(() => inputStorage.inputText)
 
