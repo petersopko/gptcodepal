@@ -29,34 +29,34 @@
 </template>
 
 <script setup>
-import { NModal, NInput, NButton, NIcon } from "naive-ui";
-import { useSettingsStore } from "../store/settingsStore.js";
-import { useStatsStore } from "../store/statsStore";
-import { useMessage } from "naive-ui";
-import { SaveOutline, Close } from "@vicons/ionicons5";
-import WipeSessionModal from "./WipeSessionModal.vue";
-import { ref } from "vue";
+import { NModal, NInput, NButton, NIcon } from 'naive-ui'
+import { useSettingsStore } from '../stores/settingsStore.js'
+import { useStatsStore } from '../stores/statsStore'
+import { useMessage } from 'naive-ui'
+import { SaveOutline, Close } from '@vicons/ionicons5'
+import WipeSessionModal from './WipeSessionModal.vue'
+import { ref } from 'vue'
 
-const message = useMessage();
-const apiKeyStore = useSettingsStore();
+const message = useMessage()
+const apiKeyStore = useSettingsStore()
 const saveApiKey = () => {
-  message.success("API Key saved!");
-  apiKeyStore.saveApiKey(apiKeyStore.apiKey);
-};
-const statsStore = useStatsStore(); // Access the store
-const showModal = ref(false);
+  message.success('API Key saved!')
+  apiKeyStore.saveApiKey(apiKeyStore.apiKey)
+}
+const statsStore = useStatsStore() // Access the store
+const showModal = ref(false)
 const warningMessage =
-  "All of the data in this session, including API key will be wiped. Are you sure you want to continue?";
+  'All of the data in this session, including API key will be wiped. Are you sure you want to continue?'
 
 const cancelCallback = () => {
-  message.success("Cancel");
-};
+  message.success('Cancel')
+}
 
 const submitCallback = () => {
-  statsStore.$reset();
-  tabsStore.$reset();
-  localStorage.clear();
-  showModal.value = false;
-  message.success("Submit");
-};
+  statsStore.$reset()
+  tabsStore.$reset()
+  localStorage.clear()
+  showModal.value = false
+  message.success('Submit')
+}
 </script>

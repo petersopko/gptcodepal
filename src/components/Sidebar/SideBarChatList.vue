@@ -6,14 +6,12 @@
       :content-style="{
         'justify-content': 'space-between',
         display: 'flex',
-        'align-items': 'center',
+        'align-items': 'center'
       }"
       class="chat-card flex justify-between mx-4 my-4 w-auto"
       size="small"
       :style="{
-        'border-color': `${
-          activeChatIndex === index ? `${themeVar.primaryColor}` : 'gray'
-        }`,
+        'border-color': `${activeChatIndex === index ? `${themeVar.primaryColor}` : 'gray'}`
       }"
     >
       <p class="ml-5">Chat {{ index }}</p>
@@ -27,33 +25,33 @@
 </template>
 
 <script setup>
-import { NCard, NButton, NIcon, useThemeVars, NScrollbar } from "naive-ui";
-import { computed } from "vue";
-import { TrashOutline } from "@vicons/ionicons5";
-import { useChatStore } from "../../store/chatStore.js";
+import { NCard, NButton, NIcon, useThemeVars, NScrollbar } from 'naive-ui'
+import { computed } from 'vue'
+import { TrashOutline } from '@vicons/ionicons5'
+import { useChatStore } from '../../stores/chatStore.js'
 
-const themeVar = useThemeVars();
-const chatStore = useChatStore();
+const themeVar = useThemeVars()
+const chatStore = useChatStore()
 
 const allChats = computed(() => {
-  return chatStore.allChats;
-});
+  return chatStore.allChats
+})
 
 const activeChatMessages = computed(() => {
-  return chatStore.activeChat.messages;
-});
+  return chatStore.activeChat.messages
+})
 const activeChatIndex = computed(() => {
-  return chatStore.activeChatIndex;
-});
+  return chatStore.activeChatIndex
+})
 
 const updateActiveChat = (index) => {
-  chatStore.updateActiveChat(index);
-};
+  chatStore.updateActiveChat(index)
+}
 
 const deleteChat = (index, event) => {
-  event.stopPropagation(); // Stop event propagation
-  chatStore.deleteChat(index);
-};
+  event.stopPropagation() // Stop event propagation
+  chatStore.deleteChat(index)
+}
 </script>
 <style scoped>
 .chat-card {

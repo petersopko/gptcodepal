@@ -22,21 +22,20 @@
 </template>
 
 <script setup>
-import { ref, computed, watchEffect } from "vue";
-import { NCard, NRadioGroup, NRadio, NGradientText } from "naive-ui";
-import TextInput from "./TextInput.vue";
-import { usePromptStore } from "../store/promptStore";
-import { useChatStore } from "../store/chatStore";
-import { useInputStore } from "../store/inputStore";
-import useTokenCount from "../composables/useTokenCount";
+import { ref, computed, watchEffect } from 'vue'
+import { NCard, NRadioGroup, NRadio, NGradientText } from 'naive-ui'
+import TextInput from './TextInput.vue'
+import { usePromptStore } from '../stores/promptStore'
+import { useChatStore } from '../stores/chatStore'
+import { useInputStore } from '../stores/inputStore'
+import useTokenCount from '../composables/useTokenCount'
 
-const { promptSelection, promptContexts, updatePromptSelection } =
-  usePromptStore();
-const { activeChat } = useChatStore();
-const emit = defineEmits(["submit"]);
-const selectedRadio = ref(promptSelection.value);
+const { promptSelection, promptContexts, updatePromptSelection } = usePromptStore()
+const { activeChat } = useChatStore()
+const emit = defineEmits(['submit'])
+const selectedRadio = ref(promptSelection.value)
 
 const submitPrompt = () => {
-  emit("submit");
-};
+  emit('submit')
+}
 </script>

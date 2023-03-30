@@ -30,19 +30,19 @@
 </template>
 
 <script setup>
-import { NInput, NButton, NGradientText, NTooltip } from "naive-ui";
-import { computed } from "vue";
-import { useInputStore } from "../store/inputStore";
-import useTokenCount from "../composables/useTokenCount";
+import { NInput, NButton, NGradientText, NTooltip } from 'naive-ui'
+import { computed } from 'vue'
+import { useInputStore } from '../stores/inputStore'
+import useTokenCount from '../composables/useTokenCount'
 
-const emit = defineEmits(["submit"]);
+const emit = defineEmits(['submit'])
 
-const { inputStorage, updateInputText } = useInputStore();
-const { tokenEstimate } = useTokenCount();
+const { inputStorage, updateInputText } = useInputStore()
+const { tokenEstimate } = useTokenCount()
 
-const inputTextComputed = computed(() => inputStorage.inputText);
+const inputTextComputed = computed(() => inputStorage.inputText)
 
 const submitPrompt = () => {
-  emit("submit");
-};
+  emit('submit')
+}
 </script>

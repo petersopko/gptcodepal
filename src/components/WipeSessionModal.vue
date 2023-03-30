@@ -1,7 +1,5 @@
 <template>
-  <n-button hoverable ghost size="large" @click="showModal = true">
-    💥
-  </n-button>
+  <n-button hoverable ghost size="large" @click="showModal = true"> 💥 </n-button>
   <n-modal
     v-model:show="showModal"
     preset="dialog"
@@ -16,28 +14,28 @@
 </template>
 
 <script setup>
-import { NButton, NModal } from "naive-ui";
-import { ref } from "vue";
-import { useMessage } from "naive-ui";
-import { useStatsStore } from "../store/statsStore";
-import { useTabsStore } from "../store/tabsStore";
+import { NButton, NModal } from 'naive-ui'
+import { ref } from 'vue'
+import { useMessage } from 'naive-ui'
+import { useStatsStore } from '../stores/statsStore'
+import { useTabsStore } from '../stores/tabsStore'
 
-const message = useMessage();
-const statsStore = useStatsStore(); // Access the store
-const tabsStore = useTabsStore(); // Access the store
-const showModal = ref(false);
+const message = useMessage()
+const statsStore = useStatsStore() // Access the store
+const tabsStore = useTabsStore() // Access the store
+const showModal = ref(false)
 const warningMessage =
-  "All of the data in this session, including API key will be wiped. Are you sure you want to continue?";
+  'All of the data in this session, including API key will be wiped. Are you sure you want to continue?'
 
 const cancelCallback = () => {
-  message.success("Cancel");
-};
+  message.success('Cancel')
+}
 
 const submitCallback = () => {
-  statsStore.$reset();
-  tabsStore.$reset();
-  localStorage.clear();
-  showModal.value = false;
-  message.success("Submit");
-};
+  statsStore.$reset()
+  tabsStore.$reset()
+  localStorage.clear()
+  showModal.value = false
+  message.success('Submit')
+}
 </script>

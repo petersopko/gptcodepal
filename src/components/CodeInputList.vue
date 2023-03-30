@@ -20,71 +20,61 @@
           @update:modelValue="tabsStore.updateCodeInput($event)"
         />
         <template #header-extra>
-          <IconButton
-            icon="trash-alt"
-            class="text-red"
-            @click="tabsStore.removeCodeInput(index)"
-          />
+          <IconButton icon="trash-alt" class="text-red" @click="tabsStore.removeCodeInput(index)" />
         </template>
       </n-collapse-item>
     </n-collapse>
     <n-button class="mx-3" @click="addCodeInput"> Add Code Section </n-button>
     <n-button @click="$refs.fileInput.click()"> Upload Code </n-button>
-    <input
-      type="file"
-      ref="fileInput"
-      @change="fileChangeHandler"
-      style="display: none"
-      multiple
-    />
+    <input type="file" ref="fileInput" @change="fileChangeHandler" style="display: none" multiple />
   </n-card>
 </template>
 
 <script setup>
-import { NCard, NCollapse, NCollapseItem, NButton } from "naive-ui";
-import CodeInput from "./CodeInput.vue";
-import IconButton from "./IconButton.vue";
-import { useTabsStore } from "../store/tabsStore.js";
-import { computed, ref } from "vue";
+import { NCard, NCollapse, NCollapseItem, NButton } from 'naive-ui'
+import CodeInput from './CodeInput.vue'
+import IconButton from './IconButton.vue'
+import { useTabsStore } from '../stores/tabsStore.js'
+import { computed, ref } from 'vue'
 
-const tabsStore = useTabsStore();
-const fileInput = ref(null);
-const codeInputsComputed = computed(() => tabsStore.activeTab.codeInputs);
-const dragCounter = ref(0);
+const tabsStore = useTabsStore()
+const fileInput = ref(null)
+const codeInputsComputed = computed(() => tabsStore.activeTab.codeInputs)
+const dragCounter = ref(0)
 
 const addCodeInput = () => {
-  tabsStore.addCodeInput();
-};
+  tabsStore.addCodeInput()
+}
 
 async function fileChangeHandler(event) {
-  const files = event.target.files;
+  const files = event.target.files
 
   for (let i = 0; i < files.length; i++) {
-    const file = files[i];
-    const content = await readFileContent(file);
-    tabsStore.addCodeInputFromFile(file.name, content);
+    const file = files[i]
+    const content = await readFileContent(file)
+    tabsStore.addCodeInputFromFile(file.name, content)
   }
 
-  event.target.value = null;
+  event.target.value = null
 }
 
 async function fileDropHandler(event) {
-  dragCounter.value = 0;
+  dragCounter.value = 0
 
-  const files = event.dataTransfer.files;
+  const files = event.dataTransfer.files
   for (let i = 0; i < files.length; i++) {
-    const file = files[i];
-    const content = await readFileContent(file);
-    tabsStore.addCodeInputFromFile(file.name, content);
+    const file = files[i]
+    const content = await readFileContent(file)
+    tabsStore.addCodeInputFromFile(file.name, content)
   }
 }
 
 async function readFileContent(file) {
   return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = (event) => resolve(event.target.result);
-    reader.onerror = (error) => reject(error);
-    reader.readAsText(file);
-  });
+    const reader = new FileReader()
+    reader.onload = (event) => resolve(event.target.result)
+    reader.onerror = (error) => reject(error)
+    reader.readAsText(file)
+  })
 }
 </script>

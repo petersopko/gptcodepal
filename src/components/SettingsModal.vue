@@ -1,7 +1,5 @@
 <template>
-  <n-button class="min-w-full" :bordered="false" @click="openModal">
-    Settings
-  </n-button>
+  <n-button class="min-w-full" :bordered="false" @click="openModal"> Settings </n-button>
   <n-modal
     v-model:show="showModal"
     class="custom-card"
@@ -37,7 +35,7 @@
 </template>
 
 <script setup>
-import { ref, computed } from "vue";
+import { ref, computed } from 'vue'
 import {
   NButton,
   NModal,
@@ -48,43 +46,43 @@ import {
   NInputNumber,
   NCollapse,
   NCollapseItem,
-  NGradientText,
-} from "naive-ui";
-import { useStatsStore } from "../store/statsStore";
-import { useTabsStore } from "../store/tabsStore";
-import { useSettingsStore } from "../store/settingsStore";
+  NGradientText
+} from 'naive-ui'
+import { useStatsStore } from '../stores/statsStore'
+import { useTabsStore } from '../stores/tabsStore'
+import { useSettingsStore } from '../stores/settingsStore'
 
-const settingsStore = useSettingsStore();
+const settingsStore = useSettingsStore()
 
-const tabsStore = useTabsStore();
-const statsStore = useStatsStore();
+const tabsStore = useTabsStore()
+const statsStore = useStatsStore()
 
-const promptTokensTotal = computed(() => statsStore.promptTokensTotal);
-const completionTokensTotal = computed(() => statsStore.completionTokensTotal);
-const totalPromptsSent = computed(() => statsStore.totalPromptsSent);
+const promptTokensTotal = computed(() => statsStore.promptTokensTotal)
+const completionTokensTotal = computed(() => statsStore.completionTokensTotal)
+const totalPromptsSent = computed(() => statsStore.totalPromptsSent)
 const totalMoneySpent = computed(() => {
-  const promptCost = (statsStore.promptTokensTotal / 1000) * 0.03;
-  const completionCost = (statsStore.completionTokensTotal / 1000) * 0.06;
-  return (promptCost + completionCost).toFixed(2);
-});
+  const promptCost = (statsStore.promptTokensTotal / 1000) * 0.03
+  const completionCost = (statsStore.completionTokensTotal / 1000) * 0.06
+  return (promptCost + completionCost).toFixed(2)
+})
 
-const maxTokens = computed(() => settingsStore.maxTokens);
+const maxTokens = computed(() => settingsStore.maxTokens)
 function updateMaxTokens(value) {
-  settingsStore.saveMaxTokens(value);
+  settingsStore.saveMaxTokens(value)
 }
 
 const bodyStyle = {
-  width: "600px",
-};
+  width: '600px'
+}
 
 const segmented = {
-  content: "soft",
-  footer: "soft",
-};
+  content: 'soft',
+  footer: 'soft'
+}
 
-const showModal = ref(false);
+const showModal = ref(false)
 
 const openModal = () => {
-  showModal.value = true;
-};
+  showModal.value = true
+}
 </script>

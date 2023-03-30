@@ -46,10 +46,7 @@
         </n-card>
       </div>
       <div class="chat-messages-container overflow-y-auto relative">
-        <div
-          v-if="chatStore.activeChat.messages.length === 0"
-          class="robot-face"
-        ></div>
+        <div v-if="chatStore.activeChat.messages.length === 0" class="robot-face"></div>
         <ChatContainer />
       </div>
 
@@ -64,69 +61,69 @@
   </div>
 </template>
 
-<script setup>
-import { onMounted, onUnmounted, ref, computed, h, watch } from "vue";
-import { NGradientText, NButton, NIcon, NCard } from "naive-ui";
-import ChatContainer from "../components/Chat/ChatContainer.vue";
-import SideBarChatList from "../components/Sidebar/SideBarChatList.vue";
-import SideBarTop from "../components/Sidebar/SideBarTopControls.vue";
-import useSubmit from "../composables/useSubmit.js";
-import SubmitCard from "../components/SubmitCard.vue";
-import SideBarSettings from "../components/Sidebar/SideBarMenu.vue";
-import { useChatStore } from "../store/chatStore.js";
-import { useStatesStore } from "../store/statesStore";
-import { useThemeVars } from "naive-ui";
-import { ArrowBackSharp, ArrowForwardSharp } from "@vicons/ionicons5";
-import PageHeader from "../components/PageHeader.vue";
-import LayoutToggle from "../components/LayoutToggle.vue";
+<script setup lang="ts">
+import { onMounted, onUnmounted, ref, computed, h, watch } from 'vue'
+import { NGradientText, NButton, NIcon, NCard } from 'naive-ui'
+import ChatContainer from '../components/Chat/ChatContainer.vue'
+import SideBarChatList from '../components/Sidebar/SideBarChatList.vue'
+import SideBarTop from '../components/Sidebar/SideBarTopControls.vue'
+import useSubmit from '../composables/useSubmit.js'
+import SubmitCard from '../components/SubmitCard.vue'
+import SideBarSettings from '../components/Sidebar/SideBarMenu.vue'
+import { useChatStore } from '../stores/chatStore.js'
+import { useStatesStore } from '../stores/statesStore'
+import { useThemeVars } from 'naive-ui'
+import { ArrowBackSharp, ArrowForwardSharp } from '@vicons/ionicons5'
+import PageHeader from '../components/PageHeader.vue'
+import LayoutToggle from '../components/LayoutToggle.vue'
 
-const themeVar = useThemeVars();
-const chatStore = useChatStore();
-const windowWidth = ref(window.innerWidth);
+const themeVar = useThemeVars()
+const chatStore = useChatStore()
+const windowWidth = ref(window.innerWidth)
 
-const sideBarWidth = ref(null);
-const isSideBarVisible = ref(false);
-const mobileMode = computed(() => windowWidth.value <= 640);
+const sideBarWidth = ref(null)
+const isSideBarVisible = ref(false)
+const mobileMode = computed(() => windowWidth.value <= 640)
 
 const toggleSidebar = () => {
-  isSideBarVisible.value = !isSideBarVisible.value;
-  updateSideBarWidth();
-};
+  isSideBarVisible.value = !isSideBarVisible.value
+  updateSideBarWidth()
+}
 
 const updateSideBarWidth = () => {
   if (isSideBarVisible.value) {
     if (windowWidth.value >= 640) {
       if (windowWidth.value > 1024) {
-        sideBarWidth.value = windowWidth.value * 0.2;
+        sideBarWidth.value = windowWidth.value * 0.2
       } else {
-        sideBarWidth.value = windowWidth.value * (2 / 5);
+        sideBarWidth.value = windowWidth.value * (2 / 5)
       }
     }
   }
-};
-const statesStore = useStatesStore();
+}
+const statesStore = useStatesStore()
 
-const { submitPrompt, promptTokens, responseTokens } = useSubmit();
+const { submitPrompt, promptTokens, responseTokens } = useSubmit()
 
 const handleResize = () => {
-  windowWidth.value = window.innerWidth;
-};
+  windowWidth.value = window.innerWidth
+}
 
 watch(windowWidth, () => {
-  updateSideBarWidth();
-});
+  updateSideBarWidth()
+})
 
 onMounted(() => {
   // Existing code
-  window.addEventListener("resize", handleResize);
-  chatStore.updateActiveChat(chatStore.activeChatIndex);
+  window.addEventListener('resize', handleResize)
+  chatStore.updateActiveChat(chatStore.activeChatIndex)
 
-  updateSideBarWidth();
-});
+  updateSideBarWidth()
+})
 
 onUnmounted(() => {
-  window.removeEventListener("resize", handleResize);
-});
+  window.removeEventListener('resize', handleResize)
+})
 </script>
 <style scoped>
 .robot-face {
@@ -136,16 +133,11 @@ onUnmounted(() => {
   transform: translate(-50%, -50%);
   width: 300px;
   height: 300px;
-  -webkit-mask-image: url("../assets/robot-face.svg");
-  mask-image: url("../assets/robot-face.svg");
+  -webkit-mask-image: url('../assets/robot-face.svg');
+  mask-image: url('../assets/robot-face.svg');
   z-index: 1;
   background-blend-mode: overlay;
-  background-image: linear-gradient(
-      45deg,
-      #63e2b7 25%,
-      #85e9c7 50%,
-      #63e2b7 75%
-    ),
+  background-image: linear-gradient(45deg, #63e2b7 25%, #85e9c7 50%, #63e2b7 75%),
     linear-gradient(-45deg, #4bc9aa 25%, #63e2b7 50%, #4bc9aa 75%);
 }
 </style>

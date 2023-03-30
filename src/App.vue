@@ -1,11 +1,6 @@
-<script setup>
-import Interface from "./views/Interface.vue";
-import {
-  NConfigProvider,
-  NMessageProvider,
-  NNotificationProvider,
-  darkTheme,
-} from "naive-ui";
+<script setup lang="ts">
+import Interface from './views/Interface.vue'
+import { NConfigProvider, NMessageProvider, NNotificationProvider, darkTheme } from 'naive-ui'
 </script>
 
 <template>

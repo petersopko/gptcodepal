@@ -12,22 +12,22 @@
   </n-scrollbar>
 </template>
 <script setup>
-import { ref, watch } from "vue";
-import { NCard, NScrollbar } from "naive-ui";
-import ChatMessage from "./ChatMessage.vue";
-import { useChatStore } from "../../store/chatStore";
-import { useStatesStore } from "../../store/statesStore";
-import PageHeader from "../PageHeader.vue";
+import { ref, watch } from 'vue'
+import { NCard, NScrollbar } from 'naive-ui'
+import ChatMessage from './ChatMessage.vue'
+import { useChatStore } from '../../stores/chatStore'
+import { useStatesStore } from '../../stores/statesStore'
+import PageHeader from '../PageHeader.vue'
 
-const chatStore = useChatStore();
+const chatStore = useChatStore()
 
-const activeChatMessages = ref([]);
+const activeChatMessages = ref([])
 
 watch(
   () => chatStore.activeChat,
   (newValue) => {
-    activeChatMessages.value = newValue?.messages;
+    activeChatMessages.value = newValue?.messages
   },
   { immediate: true }
-);
+)
 </script>

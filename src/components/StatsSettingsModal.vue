@@ -1,11 +1,5 @@
 <template>
-  <n-button
-    class="header-button-right"
-    ghost
-    type="info"
-    size="large"
-    @click="showModal = true"
-  >
+  <n-button class="header-button-right" ghost type="info" size="large" @click="showModal = true">
     📈⚙️
   </n-button>
   <n-modal v-model:show="showModal">
@@ -37,23 +31,23 @@
 </template>
 
 <script setup>
-import { NButton, NModal, NCard, NGrid, NGi, NStatistic } from "naive-ui";
-import { ref, computed } from "vue";
-import ApiKeyInput from "./ApiKeyInput.vue";
-import { useStatsStore } from "../store/statsStore";
-import { useSettingsStore } from "../store/settingsStore.js";
+import { NButton, NModal, NCard, NGrid, NGi, NStatistic } from 'naive-ui'
+import { ref, computed } from 'vue'
+import ApiKeyInput from './ApiKeyInput.vue'
+import { useStatsStore } from '../stores/statsStore'
+import { useSettingsStore } from '../stores/settingsStore.js'
 
-const settingsStore = useSettingsStore();
+const settingsStore = useSettingsStore()
 
-const store = useStatsStore();
-const showModal = ref(false);
+const store = useStatsStore()
+const showModal = ref(false)
 
-const promptTokensTotal = computed(() => store.promptTokensTotal);
-const completionTokensTotal = computed(() => store.completionTokensTotal);
-const totalPromptsSent = computed(() => store.totalPromptsSent);
+const promptTokensTotal = computed(() => store.promptTokensTotal)
+const completionTokensTotal = computed(() => store.completionTokensTotal)
+const totalPromptsSent = computed(() => store.totalPromptsSent)
 const totalMoneySpent = computed(() => {
-  const promptCost = (store.promptTokensTotal / 1000) * 0.03;
-  const completionCost = (store.completionTokensTotal / 1000) * 0.06;
-  return (promptCost + completionCost).toFixed(2);
-});
+  const promptCost = (store.promptTokensTotal / 1000) * 0.03
+  const completionCost = (store.completionTokensTotal / 1000) * 0.06
+  return (promptCost + completionCost).toFixed(2)
+})
 </script>
