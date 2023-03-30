@@ -3,7 +3,7 @@
     <div class="relative min-h-screen">
       <div v-if="activeChatMessages">
         <div v-for="message in activeChatMessages" v-bind:key="activeChatMessages.indexOf(message)">
-          <n-card :class="`${message.role}-message`">
+          <n-card v-if="message.role !== 'system'" :class="`${message.role}-message`">
             <ChatMessage :response="message.content" />
           </n-card>
         </div>

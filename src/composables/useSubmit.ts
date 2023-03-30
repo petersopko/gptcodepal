@@ -5,8 +5,9 @@ import { useStatesStore } from '../stores/statesStore'
 import { useNotification } from 'naive-ui'
 import { useInputStore } from '../stores/inputStore'
 import { useChatStore } from '../stores/chatStore'
-import { usePromptStore } from '../stores/promptStore'
+import { useSystemMessages } from '@/stores/systemMessages'
 import { postCompletionStream } from '../utils/apiService'
+import { storeToRefs } from 'pinia'
 
 interface Message {
   role: string
@@ -21,15 +22,17 @@ export default function useSubmit() {
   const promptTokens = ref(0)
   const responseTokens = ref(0)
   const chatStore = useChatStore()
-  const promptStorage = usePromptStore()
+  const systemMessages = useSystemMessages()
+  const { selectedSystemMessage } = storeToRefs(systemMessages)
   const cancelTokenSource = axios.CancelToken.source()
 
   async function submitPrompt() {
     statesStore.updateLoading(true)
     if (!inputStore.inputStorage.inputText) return
-
-    const formattedPrompt = `${promptStorage.promptSelection.value}${inputStore.inputStorage.inputText}`
-    chatStore.addMessage(chatStore.activeChatIndex, 'user', formattedPrompt)
+    if (chatStore.activeChat.messages.length === 0) {
+      chatStore.addMessage(chatStore.activeChatIndex, 'system', selectedSystemMessage.value)
+    }
+    chatStore.addMessage(chatStore.activeChatIndex, 'user', inputStore.inputStorage.inputText)
     inputStore.updateInputText('')
     const promptMessages: Message[] = chatStore.allChats[chatStore.activeChatIndex].messages
     chatStore.addMessage(chatStore.activeChatIndex, 'assistant', 'Thinking...')

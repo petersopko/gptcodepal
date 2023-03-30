@@ -10,7 +10,7 @@
           class="absolute top-0 right-0 mt-1 mr-1 text-xs text-white bg-gray-700 rounded-none p-2 cursor-pointer hover:bg-gray-600"
           @click="copyToClipboard(part.text)"
         >
-          <font-awesome-icon icon="clipboard" size="2x" />
+          <n-icon><ClipboardOutline /></n-icon>
         </button>
       </span>
       <span v-else>{{ part.text }}</span>
@@ -20,6 +20,8 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
+import { NIcon } from 'naive-ui'
+import { ClipboardOutline } from '@vicons/ionicons5'
 
 interface Part {
   text: string
