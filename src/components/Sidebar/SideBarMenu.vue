@@ -31,16 +31,7 @@
   </n-list>
 </template>
 
-<script setup>
-import { NDivider, NList, NListItem, NRadio, NRadioGroup } from "naive-ui";
-import ApiKeyInput from "../ApiKeyInput.vue";
-import SettingsAdvanced from "../SettingsModal.vue";
-
-import { NIcon } from "naive-ui";
-import {
-  LogoGithub as GithubIcon,
-  InformationCircleOutline as InformationCircleIcon,
-  // placeholder for coffee cup
-  AccessibilityOutline as AccessibilityIcon,
-} from "@vicons/ionicons5";
+<script setup lang="ts">
+import { NList, NListItem } from 'naive-ui'
+import ApiKeyInput from '../ApiKeyInput.vue'
 </script>

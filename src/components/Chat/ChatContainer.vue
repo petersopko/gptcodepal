@@ -2,7 +2,7 @@
   <n-scrollbar>
     <div class="relative min-h-screen">
       <div v-if="activeChatMessages">
-        <div v-for="message in activeChatMessages">
+        <div v-for="message in activeChatMessages" v-bind:key="activeChatMessages.indexOf(message)">
           <n-card :class="`${message.role}-message`">
             <ChatMessage :response="message.content" />
           </n-card>
@@ -11,17 +11,16 @@
     </div>
   </n-scrollbar>
 </template>
-<script setup lang="ts">
+<script lang="ts" setup>
 import { ref, watch } from 'vue'
 import { NCard, NScrollbar } from 'naive-ui'
 import ChatMessage from './ChatMessage.vue'
 import { useChatStore } from '../../stores/chatStore'
-import { useStatesStore } from '../../stores/statesStore'
-import PageHeader from '../PageHeader.vue'
+import type { Message } from '@/types'
 
 const chatStore = useChatStore()
 
-const activeChatMessages = ref([])
+const activeChatMessages = ref<Message[]>([])
 
 watch(
   () => chatStore.activeChat,

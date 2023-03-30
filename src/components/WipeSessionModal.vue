@@ -13,7 +13,7 @@
   />
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { NButton, NModal } from 'naive-ui'
 import { ref } from 'vue'
 import { useMessage } from 'naive-ui'
@@ -31,7 +31,6 @@ const cancelCallback = () => {
 
 const submitCallback = () => {
   statsStore.$reset()
-  tabsStore.$reset()
   localStorage.clear()
   showModal.value = false
   message.success('Submit')

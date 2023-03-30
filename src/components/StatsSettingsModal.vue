@@ -30,14 +30,11 @@
   </n-modal>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { NButton, NModal, NCard, NGrid, NGi, NStatistic } from 'naive-ui'
 import { ref, computed } from 'vue'
 import ApiKeyInput from './ApiKeyInput.vue'
 import { useStatsStore } from '../stores/statsStore'
-import { useSettingsStore } from '../stores/settingsStore.ts'
-
-const settingsStore = useSettingsStore()
 
 const store = useStatsStore()
 const showModal = ref(false)

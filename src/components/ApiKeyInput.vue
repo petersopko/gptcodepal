@@ -28,13 +28,12 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { NModal, NInput, NButton, NIcon } from 'naive-ui'
-import { useSettingsStore } from '../stores/settingsStore.ts'
+import { useSettingsStore } from '../stores/settingsStore'
 import { useStatsStore } from '../stores/statsStore'
 import { useMessage } from 'naive-ui'
 import { SaveOutline, Close } from '@vicons/ionicons5'
-import WipeSessionModal from './WipeSessionModal.vue'
 import { ref } from 'vue'
 
 const message = useMessage()
@@ -54,7 +53,6 @@ const cancelCallback = () => {
 
 const submitCallback = () => {
   statsStore.$reset()
-  tabsStore.$reset()
   localStorage.clear()
   showModal.value = false
   message.success('Submit')

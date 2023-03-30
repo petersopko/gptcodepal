@@ -1,15 +1,6 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
-
-interface Message {
-  role: string
-  content: string
-}
-
-interface Chat {
-  messages: Message[]
-  tokenCount: number
-}
+import type { Chat } from '@/types'
 
 export const useChatStore = defineStore('chatStore', () => {
   const allChats = ref<Chat[]>(

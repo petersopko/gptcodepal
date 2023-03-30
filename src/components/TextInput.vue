@@ -29,7 +29,7 @@
   </n-input>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { NInput, NButton, NGradientText, NTooltip } from 'naive-ui'
 import { computed } from 'vue'
 import { useInputStore } from '../stores/inputStore'

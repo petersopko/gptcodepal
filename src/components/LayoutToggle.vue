@@ -13,47 +13,35 @@
   </div>
 </template>
 
-<script setup>
-import { NButton, NIcon } from "naive-ui";
-import { ArrowBackSharp, ArrowForwardSharp } from "@vicons/ionicons5";
-import { computed } from "vue";
-import { watch } from "vue";
+<script setup lang="ts">
+import { NButton, NIcon } from 'naive-ui'
+import { ArrowBackSharp, ArrowForwardSharp } from '@vicons/ionicons5'
+import { computed } from 'vue'
+import { watch } from 'vue'
 
-const props = defineProps({
-  isSideBarVisible: {
-    type: Boolean,
-    required: true,
-  },
-  windowWidth: {
-    type: Number,
-    required: true,
-  },
-  sideBarWidth: {
-    type: [Number, String, null],
-    required: true,
-  },
-  mobileMode: {
-    type: Boolean,
-    default: false,
-  },
-});
+const props = defineProps<{
+  isSideBarVisible: boolean
+  windowWidth: number
+  sideBarWidth: number
+  mobileMode: boolean
+}>()
 
-const emit = defineEmits(["toggle-sidebar"]);
+const emit = defineEmits(['toggle-sidebar'])
 
 const toggleStyle = computed(() => {
   return {
-    left: props.isSideBarVisible ? `${props.sideBarWidth + 20}px` : "20px",
-  };
-});
+    left: props.isSideBarVisible ? `${props.sideBarWidth + 20}px` : '20px'
+  }
+})
 
 const toggle = () => {
-  emit("toggle-sidebar");
-};
+  emit('toggle-sidebar')
+}
 
 watch(
   () => props.isSideBarVisible,
   (newValue) => {
-    console.log("LayoutToggle: isSideBarVisible changed:", newValue);
+    console.log('LayoutToggle: isSideBarVisible changed:', newValue)
   }
-);
+)
 </script>

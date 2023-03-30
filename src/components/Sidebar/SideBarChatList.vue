@@ -2,6 +2,7 @@
   <n-scrollbar>
     <n-card
       v-for="(chat, index) in allChats"
+      :key="index"
       @click="updateActiveChat(index)"
       :content-style="{
         'justify-content': 'space-between',
@@ -24,11 +25,11 @@
   </n-scrollbar>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { NCard, NButton, NIcon, useThemeVars, NScrollbar } from 'naive-ui'
 import { computed } from 'vue'
 import { TrashOutline } from '@vicons/ionicons5'
-import { useChatStore } from '../../stores/chatStore.ts'
+import { useChatStore } from '../../stores/chatStore'
 
 const themeVar = useThemeVars()
 const chatStore = useChatStore()
@@ -37,18 +38,15 @@ const allChats = computed(() => {
   return chatStore.allChats
 })
 
-const activeChatMessages = computed(() => {
-  return chatStore.activeChat.messages
-})
 const activeChatIndex = computed(() => {
   return chatStore.activeChatIndex
 })
 
-const updateActiveChat = (index) => {
+const updateActiveChat = (index: number) => {
   chatStore.updateActiveChat(index)
 }
 
-const deleteChat = (index, event) => {
+const deleteChat = (index: number, event: MouseEvent) => {
   event.stopPropagation() // Stop event propagation
   chatStore.deleteChat(index)
 }

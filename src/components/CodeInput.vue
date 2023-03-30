@@ -1,55 +1,44 @@
 <template>
   <div class="mb-2">
-    <n-input
-      v-model:value="name"
-      placeholder="Name your code input"
-      @input="updateValue"
-      class="mb-4"
-    />
-    <n-input
-      v-model:value="value"
-      placeholder="Enter your code"
-      type="textarea"
-      @input="updateValue"
-    />
+    <n-input v-model:value="name" placeholder="Name your code input" class="mb-4" />
+    <n-input v-model:value="value" placeholder="Enter your code" type="textarea" />
   </div>
 </template>
-<script setup>
-import { NInput } from "naive-ui";
-import { ref, computed, watch } from "vue";
+<script setup lang="ts">
+import { NInput } from 'naive-ui'
+import { ref, computed, watch } from 'vue'
 
-const props = defineProps({
-  modelValue: Object,
-  index: Number,
-});
+const props = defineProps<{
+  modelValue: {
+    name: string
+    code: string
+  }
+  index: number
+}>()
 
-const emit = defineEmits(["update:modelValue", "remove"]);
+const emit = defineEmits(['update:modelValue', 'remove'])
 
 const name = computed({
   get: () => props.modelValue.name,
   set: (value) => {
-    props.modelValue.name = value;
-  },
-});
-const value = ref(props.modelValue.code);
+    emit('update:modelValue', {
+      index: props.index,
+      name: value,
+      code: props.modelValue.code
+    })
+  }
+})
+const value = ref(props.modelValue.code)
 
 watch(
-  () => value.value,
+  () => ({ name: name.value, code: value.value }),
   (newValue) => {
-    emit("update:modelValue", {
+    emit('update:modelValue', {
       index: props.index,
-      name: name.value,
-      code: newValue,
-    });
+      name: newValue.name,
+      code: newValue.code
+    })
   },
   { deep: true }
-);
-
-function updateValue(event) {
-  emit("update:modelValue", {
-    index: props.index,
-    name: name.value,
-    code: event,
-  });
-}
+)
 </script>

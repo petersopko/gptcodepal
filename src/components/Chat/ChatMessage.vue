@@ -20,10 +20,14 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import { NScrollbar } from 'naive-ui'
 
-const props = defineProps({ response: String })
-const parts = computed(() => {
+interface Part {
+  text: string
+  isCode: boolean
+}
+
+const props = defineProps<{ response: string }>()
+const parts = computed<Part[]>(() => {
   const regex = /```(.*?)```/gs
   const parts = []
   let match
@@ -48,7 +52,7 @@ const parts = computed(() => {
 
   return parts
 })
-const copyToClipboard = (text) => {
+const copyToClipboard = (text: string) => {
   const el = document.createElement('textarea')
   el.value = text
   document.body.appendChild(el)

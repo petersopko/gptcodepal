@@ -1,5 +1,6 @@
 <template>
-  <n-card
+  <div>placeholder</div>
+  <!-- <n-card
     title="Code Inputs"
     @dragenter.prevent="dragCounter++"
     @dragleave.prevent="dragCounter--"
@@ -27,52 +28,52 @@
     <n-button class="mx-3" @click="addCodeInput"> Add Code Section </n-button>
     <n-button @click="$refs.fileInput.click()"> Upload Code </n-button>
     <input type="file" ref="fileInput" @change="fileChangeHandler" style="display: none" multiple />
-  </n-card>
+  </n-card> -->
 </template>
 
-<script setup>
-import { NCard, NCollapse, NCollapseItem, NButton } from 'naive-ui'
-import CodeInput from './CodeInput.vue'
-import IconButton from './IconButton.vue'
-import { computed, ref } from 'vue'
+<script setup lang="ts">
+// import { NCard, NCollapse, NCollapseItem, NButton } from 'naive-ui'
+// import CodeInput from './CodeInput.vue'
+// import IconButton from './IconButton.vue'
+// import { computed, ref } from 'vue'
 
-const fileInput = ref(null)
-const codeInputsComputed = computed(() => tabsStore.activeTab.codeInputs)
-const dragCounter = ref(0)
+// const fileInput = ref(null)
+// const codeInputsComputed = computed(() => tabsStore.activeTab.codeInputs)
+// const dragCounter = ref(0)
 
-const addCodeInput = () => {
-  tabsStore.addCodeInput()
-}
+// const addCodeInput = () => {
+//   tabsStore.addCodeInput()
+// }
 
-async function fileChangeHandler(event) {
-  const files = event.target.files
+// async function fileChangeHandler(event) {
+//   const files = event.target.files
 
-  for (let i = 0; i < files.length; i++) {
-    const file = files[i]
-    const content = await readFileContent(file)
-    tabsStore.addCodeInputFromFile(file.name, content)
-  }
+//   for (let i = 0; i < files.length; i++) {
+//     const file = files[i]
+//     const content = await readFileContent(file)
+//     tabsStore.addCodeInputFromFile(file.name, content)
+//   }
 
-  event.target.value = null
-}
+//   event.target.value = null
+// }
 
-async function fileDropHandler(event) {
-  dragCounter.value = 0
+// async function fileDropHandler(event) {
+//   dragCounter.value = 0
 
-  const files = event.dataTransfer.files
-  for (let i = 0; i < files.length; i++) {
-    const file = files[i]
-    const content = await readFileContent(file)
-    tabsStore.addCodeInputFromFile(file.name, content)
-  }
-}
+//   const files = event.dataTransfer.files
+//   for (let i = 0; i < files.length; i++) {
+//     const file = files[i]
+//     const content = await readFileContent(file)
+//     tabsStore.addCodeInputFromFile(file.name, content)
+//   }
+// }
 
-async function readFileContent(file) {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader()
-    reader.onload = (event) => resolve(event.target.result)
-    reader.onerror = (error) => reject(error)
-    reader.readAsText(file)
-  })
-}
+// async function readFileContent(file) {
+//   return new Promise((resolve, reject) => {
+//     const reader = new FileReader()
+//     reader.onload = (event) => resolve(event.target.result)
+//     reader.onerror = (error) => reject(error)
+//     reader.readAsText(file)
+//   })
+// }
 </script>

@@ -41,6 +41,7 @@
             :is-side-bar-visible="isSideBarVisible"
             :window-width="windowWidth"
             :side-bar-width="sideBarWidth"
+            :mobile-mode="mobileMode"
             @toggle-sidebar="toggleSidebar"
           />
         </n-card>
@@ -62,26 +63,23 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, onUnmounted, ref, computed, h, watch } from 'vue'
-import { NGradientText, NButton, NIcon, NCard } from 'naive-ui'
+import { onMounted, onUnmounted, ref, computed, watch } from 'vue'
+import { NCard } from 'naive-ui'
 import ChatContainer from '../components/Chat/ChatContainer.vue'
 import SideBarChatList from '../components/Sidebar/SideBarChatList.vue'
 import SideBarTop from '../components/Sidebar/SideBarTopControls.vue'
 import useSubmit from '../composables/useSubmit.js'
 import SubmitCard from '../components/SubmitCard.vue'
 import SideBarSettings from '../components/Sidebar/SideBarMenu.vue'
-import { useChatStore } from '../stores/chatStore.ts'
-import { useStatesStore } from '../stores/statesStore'
+import { useChatStore } from '../stores/chatStore'
 import { useThemeVars } from 'naive-ui'
-import { ArrowBackSharp, ArrowForwardSharp } from '@vicons/ionicons5'
-import PageHeader from '../components/PageHeader.vue'
 import LayoutToggle from '../components/LayoutToggle.vue'
 
 const themeVar = useThemeVars()
 const chatStore = useChatStore()
 const windowWidth = ref(window.innerWidth)
 
-const sideBarWidth = ref(null)
+const sideBarWidth = ref(0)
 const isSideBarVisible = ref(false)
 const mobileMode = computed(() => windowWidth.value <= 640)
 
@@ -101,7 +99,6 @@ const updateSideBarWidth = () => {
     }
   }
 }
-const statesStore = useStatesStore()
 
 const { submitPrompt, promptTokens, responseTokens } = useSubmit()
 
@@ -114,7 +111,6 @@ watch(windowWidth, () => {
 })
 
 onMounted(() => {
-  // Existing code
   window.addEventListener('resize', handleResize)
   chatStore.updateActiveChat(chatStore.activeChatIndex)
 
