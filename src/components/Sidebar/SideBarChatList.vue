@@ -9,40 +9,103 @@
         display: 'flex',
         'align-items': 'center'
       }"
-      class="chat-card flex justify-between mx-4 my-4 w-auto"
+      class="chat-card mx-4 my-4 w-auto"
       size="small"
       :style="{
         'border-color': `${activeChatIndex === index ? `${themeVar.primaryColor}` : 'gray'}`
       }"
     >
-      <n-input
-        class="mr-2"
-        :value="chat.label"
-        @input="(value) => updateChatLabel(index, value)"
-        :placeholder="`Chat ${index}`"
-      />
-      <n-button @click="($event) => deleteChat(index, $event)">
-        <n-icon>
-          <trash-outline />
-        </n-icon>
-      </n-button>
+      <div>
+        <p v-if="currentEditIndex !== index">{{ chat.label }}</p>
+        <input
+          :ref="setInputBarRef"
+          v-else
+          type="text"
+          v-model="tempChatLabel"
+          maxlength="20"
+          style="outline: none; background-color: transparent"
+          @blur="cancelEditMode()"
+        />
+      </div>
+      <div class="flex justify-around">
+        <n-button
+          text
+          style="font-size: 16px"
+          :focusable="false"
+          @click="
+            currentEditIndex === index
+              ? updateChatLabelFromTemp(index, tempChatLabel)
+              : toggleEditMode(index, chat.label)
+          "
+        >
+          <n-icon>
+            <component :is="currentEditIndex === index ? CheckmarkOutline : PencilOutline" />
+          </n-icon>
+        </n-button>
+        <n-button
+          text
+          style="font-size: 16px"
+          :focusable="false"
+          @click="
+            ($event) =>
+              currentEditIndex === index
+                ? toggleEditMode(index, chat.label)
+                : deleteChat(index, $event)
+          "
+        >
+          <n-icon>
+            <component :is="currentEditIndex === index ? CloseOutline : TrashOutline" />
+          </n-icon>
+        </n-button>
+      </div>
     </n-card>
   </n-scrollbar>
 </template>
 
 <script setup lang="ts">
-import { NCard, NButton, NIcon, NInput, useThemeVars, NScrollbar } from 'naive-ui'
-import { computed } from 'vue'
-import { TrashOutline } from '@vicons/ionicons5'
+import { ref, computed, nextTick } from 'vue'
+import { NCard, NButton, NIcon, NScrollbar, useThemeVars } from 'naive-ui'
+import { TrashOutline, PencilOutline, CheckmarkOutline, CloseOutline } from '@vicons/ionicons5'
 import { useChatStore } from '../../stores/chatStore'
 
-const themeVar = useThemeVars()
 const chatStore = useChatStore()
 const { updateChatLabel } = chatStore
+const themeVar = useThemeVars()
 
-const allChats = computed(() => {
-  return chatStore.allChats
-})
+const allChats = ref(chatStore.allChats)
+const tempChatLabel = ref('')
+const currentEditIndex = ref(-1)
+
+// any is for losers
+let inputBar: any
+const setInputBarRef = (el: any) => {
+  inputBar = el
+}
+
+const toggleEditMode = async (index: number, label: string) => {
+  console.log('toggle edit mode')
+  if (currentEditIndex.value === index) {
+    currentEditIndex.value = -1
+  } else {
+    currentEditIndex.value = index
+    tempChatLabel.value = label
+
+    await nextTick()
+    if (inputBar) {
+      inputBar.focus()
+    }
+  }
+}
+
+const updateChatLabelFromTemp = (index: number, label: string) => {
+  updateChatLabel(index, label)
+  cancelEditMode()
+}
+
+const cancelEditMode = () => {
+  console.log('cancel edit mode')
+  currentEditIndex.value = -1
+}
 
 const activeChatIndex = computed(() => {
   return chatStore.activeChatIndex
@@ -57,6 +120,7 @@ const deleteChat = (index: number, event: MouseEvent) => {
   chatStore.deleteChat(index)
 }
 </script>
+
 <style scoped>
 .chat-card {
   cursor: pointer;

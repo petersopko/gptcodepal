@@ -4,7 +4,7 @@
   >
     <div
       v-show="isSideBarVisible"
-      class="side-bar flex flex-col w-full sm:w-2/5 lg:w-1/5 border-2 border-gray-200"
+      class="side-bar flex flex-col w-full sm:w-2/5 lg:w-2/6 border-2 border-gray-200"
       :style="`border-color: ${themeVar.primaryColor};${
         windowWidth >= 640 ? 'border-right: none !important;' : ''
       }`"
@@ -29,7 +29,7 @@
     </div>
     <div
       v-show="(!isSideBarVisible && windowWidth <= 640) || windowWidth > 640"
-      class="chat-container flex flex-col justify-between w-full sm:w-3/5 lg:w-4/5 border-2"
+      class="chat-container flex flex-col justify-between w-full sm:w-3/5 lg:w-4/6 border-2"
       :style="`border-color: ${themeVar.primaryColor}; ${
         !isSideBarVisible && windowWidth > 600 ? 'width: 100%;' : ''
       }`"
