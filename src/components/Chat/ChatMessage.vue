@@ -5,7 +5,7 @@
         v-if="part.isCode"
         class="bg-gray-800 p-1 rounded-none inline-block relative w-full overflow-x-auto"
       >
-        <highlightjs :code="part.text" style="white-space: pre-wrap" />
+        <highlightjs autodetect :code="part.text" style="white-space: pre-wrap" />
         <button
           class="absolute top-0 right-0 mt-1 mr-1 text-xs text-white bg-gray-700 rounded-none p-2 cursor-pointer hover:bg-gray-600"
           @click="copyToClipboard(part.text)"
@@ -13,7 +13,7 @@
           <n-icon><ClipboardOutline /></n-icon>
         </button>
       </span>
-      <span v-else>{{ part.text }}</span>
+      <span v-else style="white-space: pre-wrap">{{ part.text }}</span>
     </span>
   </div>
 </template>
@@ -30,36 +30,39 @@ interface Part {
 
 const props = defineProps<{ response: string }>()
 const parts = computed<Part[]>(() => {
-  const regex = /```(.*?)```/gs
-  const parts = []
-  let match
+  const tripleBackticks = '```'
+  let isCode = false
   let lastIndex = 0
+  const parts = []
 
-  while ((match = regex.exec(props.response)) !== null) {
-    if (match.index > lastIndex) {
-      parts.push({
-        text: props.response.slice(lastIndex, match.index),
-        isCode: false
-      })
+  for (let i = 0; i < props.response.length; i++) {
+    if (props.response.substring(i, i + tripleBackticks.length) === tripleBackticks) {
+      if (i > lastIndex) {
+        const text = props.response.slice(lastIndex, i)
+        const trimmedText = isCode ? text.replace(/^[a-zA-Z]*\n/, '').trim() : text
+        parts.push({ text: trimmedText, isCode })
+      }
+      isCode = !isCode
+      lastIndex = i + tripleBackticks.length
     }
-    // Remove the language name from the beginning of the code block
-    const code = match[1].replace(/^[a-zA-Z]+\n/, '')
-    parts.push({ text: code, isCode: true })
-    lastIndex = regex.lastIndex
   }
 
-  if (lastIndex < props.response.length) {
+  // If the response ends with an open code block, add the remaining text as a code part
+  if (isCode) {
+    const text = props.response.slice(lastIndex)
+    parts.push({ text, isCode })
+  } else if (lastIndex < props.response.length) {
     parts.push({ text: props.response.slice(lastIndex), isCode: false })
   }
 
   return parts
 })
-const copyToClipboard = (text: string) => {
-  const el = document.createElement('textarea')
-  el.value = text
-  document.body.appendChild(el)
-  el.select()
-  document.execCommand('copy')
-  document.body.removeChild(el)
+
+const copyToClipboard = async (text: string) => {
+  try {
+    await navigator.clipboard.writeText(text)
+  } catch (err) {
+    console.error('Failed to copy text: ', err)
+  }
 }
 </script>
