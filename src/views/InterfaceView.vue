@@ -47,7 +47,15 @@
         </n-card>
       </div>
       <div class="chat-messages-container overflow-y-auto relative">
-        <div v-if="chatStore.activeChat.messages.length === 0" class="robot-face"></div>
+        <div
+          v-if="
+            chatStore.activeChat &&
+            chatStore.activeChat.messages &&
+            chatStore.activeChat.messages.length === 0
+          "
+          class="robot-face"
+        ></div>
+
         <ChatContainer />
       </div>
 

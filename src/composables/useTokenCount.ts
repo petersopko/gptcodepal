@@ -21,9 +21,12 @@ export default function useTokenCount() {
   const codeInputs = computed(() => inputStore.inputStorage.codeInputs)
 
   const updateTokenCount = (): void => {
+    // Check if chatStore.activeChat exists and has messages
+    const hasActiveChatMessages = chatStore.activeChat && chatStore.activeChat.messages.length > 0
+
     let messagesWithInput: any[] = []
 
-    if (chatStore.activeChat.messages.length === 0) {
+    if (!hasActiveChatMessages) {
       messagesWithInput = [
         {
           role: 'system',

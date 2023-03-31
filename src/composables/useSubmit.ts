@@ -29,6 +29,13 @@ export default function useSubmit() {
   async function submitPrompt() {
     statesStore.updateLoading(true)
     if (!inputStore.inputStorage.inputText) return
+
+    // If there is no active chat
+    if (!chatStore.activeChat) {
+      chatStore.addChat()
+      chatStore.updateActiveChat(chatStore.totalChats - 1)
+    }
+
     if (chatStore.activeChat.messages.length === 0) {
       chatStore.addMessage(chatStore.activeChatIndex, 'system', selectedSystemMessage.value)
     }
