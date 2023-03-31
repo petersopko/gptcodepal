@@ -4,7 +4,7 @@ import type { Chat } from '@/types'
 
 function getInitialChats() {
   const parsedChats = JSON.parse(localStorage.getItem('chatStore') || '[]')
-  const initialChat = [{ messages: [], tokenCount: 0, label: 'Chat 0' }]
+  const initialChat = [{ messages: [], tokenCount: 0, label: 'New Chat' }]
   return parsedChats.length > 0 ? parsedChats : initialChat
 }
 
@@ -24,7 +24,7 @@ export const useChatStore = defineStore('chatStore', () => {
   }
 
   function addChat(): void {
-    allChats.value.push({ messages: [], tokenCount: 0, label: `Chat ${allChats.value.length}` })
+    allChats.value.push({ messages: [], tokenCount: 0, label: `New Chat` })
     updateActiveChat(allChats.value.length - 1)
     localStorage.setItem('chatStore', JSON.stringify(allChats.value))
   }

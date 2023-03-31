@@ -15,7 +15,10 @@
         'border-color': `${activeChatIndex === index ? `${themeVar.primaryColor}` : 'gray'}`
       }"
     >
-      <div>
+      <div class="flex flex-row items-center">
+        <n-icon text style="font-size: 16px" class="mr-2">
+          <component :is="ChatboxEllipsesOutline" />
+        </n-icon>
         <p v-if="currentEditIndex !== index">{{ chat.label }}</p>
         <input
           :ref="setInputBarRef"
@@ -25,36 +28,84 @@
           maxlength="20"
           style="outline: none; background-color: transparent"
           @blur="cancelEditMode()"
+          @keypress.enter="updateChatLabelFromTemp(index, tempChatLabel)"
         />
       </div>
-      <div class="flex justify-around">
+      <div v-if="activeChatIndex === index" class="flex">
+        <!-- pencil outline -->
         <n-button
+          v-if="!isEditMode && !isDeleteMode"
           text
           style="font-size: 16px"
           :focusable="false"
-          @click="
-            currentEditIndex === index
-              ? updateChatLabelFromTemp(index, tempChatLabel)
-              : toggleEditMode(index, chat.label)
-          "
+          class="mr-2"
+          @click="toggleEditMode(index, chat.label)"
         >
           <n-icon>
-            <component :is="currentEditIndex === index ? CheckmarkOutline : PencilOutline" />
+            <PencilOutline />
           </n-icon>
         </n-button>
+        <!-- trash outline -->
         <n-button
+          v-if="!isEditMode && !isDeleteMode"
           text
           style="font-size: 16px"
           :focusable="false"
-          @click="
-            ($event) =>
-              currentEditIndex === index
-                ? toggleEditMode(index, chat.label)
-                : deleteChat(index, $event)
-          "
+          @click="toggleDeleteMode(index)"
         >
           <n-icon>
-            <component :is="currentEditIndex === index ? CloseOutline : TrashOutline" />
+            <TrashOutline />
+          </n-icon>
+        </n-button>
+        <!-- edit mode confirm -->
+        <n-button
+          v-if="isEditMode"
+          text
+          style="font-size: 16px"
+          :focusable="false"
+          class="mr-2"
+          @click="updateChatLabelFromTemp(index, tempChatLabel)"
+        >
+          <n-icon>
+            <CheckmarkOutline />
+          </n-icon>
+        </n-button>
+        <!-- edit mode cancel -->
+        <n-button
+          v-if="isEditMode"
+          text
+          style="font-size: 16px"
+          :focusable="false"
+          @click="cancelEditMode()"
+        >
+          <n-icon>
+            <CloseOutline />
+          </n-icon>
+        </n-button>
+
+        <!-- delete mode confirm -->
+        <n-button
+          v-if="!isEditMode && isDeleteMode && currentDeleteIndex === index"
+          text
+          style="font-size: 16px"
+          :focusable="false"
+          class="mr-2"
+          @click="deleteChat(index)"
+        >
+          <n-icon>
+            <CheckmarkOutline />
+          </n-icon>
+        </n-button>
+        <!-- delete mode cancel -->
+        <n-button
+          v-if="!isEditMode && isDeleteMode && currentDeleteIndex === index"
+          text
+          style="font-size: 16px"
+          :focusable="false"
+          @click="toggleDeleteMode(index)"
+        >
+          <n-icon>
+            <CloseOutline />
           </n-icon>
         </n-button>
       </div>
@@ -63,9 +114,15 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, nextTick } from 'vue'
+import { ref, computed, nextTick, watch } from 'vue'
 import { NCard, NButton, NIcon, NScrollbar, useThemeVars } from 'naive-ui'
-import { TrashOutline, PencilOutline, CheckmarkOutline, CloseOutline } from '@vicons/ionicons5'
+import {
+  TrashOutline,
+  PencilOutline,
+  CheckmarkOutline,
+  CloseOutline,
+  ChatboxEllipsesOutline
+} from '@vicons/ionicons5'
 import { useChatStore } from '../../stores/chatStore'
 
 const chatStore = useChatStore()
@@ -75,18 +132,23 @@ const themeVar = useThemeVars()
 const allChats = ref(chatStore.allChats)
 const tempChatLabel = ref('')
 const currentEditIndex = ref(-1)
+const currentDeleteIndex = ref(-1)
+const isEditMode = ref(false)
+const isDeleteMode = ref(false)
 
-// any is for losers
 let inputBar: any
 const setInputBarRef = (el: any) => {
   inputBar = el
 }
 
 const toggleEditMode = async (index: number, label: string) => {
-  console.log('toggle edit mode')
-  if (currentEditIndex.value === index) {
+  if (isEditMode.value && currentDeleteIndex.value === index) {
+    // Leaving edit mode
+    isEditMode.value = false
     currentEditIndex.value = -1
   } else {
+    // Entering edit mode
+    isEditMode.value = true
     currentEditIndex.value = index
     tempChatLabel.value = label
 
@@ -103,8 +165,22 @@ const updateChatLabelFromTemp = (index: number, label: string) => {
 }
 
 const cancelEditMode = () => {
-  console.log('cancel edit mode')
   currentEditIndex.value = -1
+  isEditMode.value = false
+}
+
+const toggleDeleteMode = (index: number) => {
+  if (!isEditMode.value) {
+    if (isDeleteMode.value && currentDeleteIndex.value === index) {
+      // Leaving delete mode
+      isDeleteMode.value = false
+      currentDeleteIndex.value = -1
+    } else {
+      // Entering delete mode
+      isDeleteMode.value = true
+      currentDeleteIndex.value = index
+    }
+  }
 }
 
 const activeChatIndex = computed(() => {
@@ -115,10 +191,20 @@ const updateActiveChat = (index: number) => {
   chatStore.updateActiveChat(index)
 }
 
-const deleteChat = (index: number, event: MouseEvent) => {
-  event.stopPropagation() // Stop event propagation
+const deleteChat = (index: number) => {
   chatStore.deleteChat(index)
+  isDeleteMode.value = false
 }
+
+watch(
+  () => activeChatIndex.value,
+  () => {
+    if (isDeleteMode.value) {
+      isDeleteMode.value = false
+      currentDeleteIndex.value = -1
+    }
+  }
+)
 </script>
 
 <style scoped>
