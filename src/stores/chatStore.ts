@@ -4,7 +4,7 @@ import type { Chat } from '@/types'
 
 function getInitialChats() {
   const parsedChats = JSON.parse(localStorage.getItem('chatStore') || '[]')
-  const initialChat = [{ messages: [], tokenCount: 0 }]
+  const initialChat = [{ messages: [], tokenCount: 0, label: 'Chat 0' }]
   return parsedChats.length > 0 ? parsedChats : initialChat
 }
 
@@ -24,23 +24,21 @@ export const useChatStore = defineStore('chatStore', () => {
   }
 
   function addChat(): void {
-    allChats.value.push({ messages: [], tokenCount: 0 })
+    allChats.value.push({ messages: [], tokenCount: 0, label: `Chat ${allChats.value.length}` })
     updateActiveChat(allChats.value.length - 1)
     localStorage.setItem('chatStore', JSON.stringify(allChats.value))
   }
 
+  function updateChatLabel(index: number, label: string): void {
+    allChats.value[index].label = label
+    localStorage.setItem('chatStore', JSON.stringify(allChats.value))
+  }
+
   function addMessage(activeChatIndex: number, role: string, content: string): void {
-    if (!role) {
-      allChats.value.splice(activeChatIndex, 0, {
-        messages: [],
-        tokenCount: 0
-      })
-    } else {
-      allChats.value[activeChatIndex].messages.push({
-        role,
-        content
-      })
-    }
+    allChats.value[activeChatIndex].messages.push({
+      role,
+      content
+    })
     localStorage.setItem('chatStore', JSON.stringify(allChats.value))
   }
 
@@ -84,6 +82,7 @@ export const useChatStore = defineStore('chatStore', () => {
     updateActiveChat,
     updateTokenCount,
     updateStreamedMessage,
-    handleErrorRequest
+    handleErrorRequest,
+    updateChatLabel
   }
 })

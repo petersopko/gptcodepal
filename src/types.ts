@@ -11,4 +11,5 @@ export interface Message {
 export interface Chat {
   messages: Message[]
   tokenCount: number
+  label: string
 }

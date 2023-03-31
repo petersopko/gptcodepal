@@ -15,7 +15,12 @@
         'border-color': `${activeChatIndex === index ? `${themeVar.primaryColor}` : 'gray'}`
       }"
     >
-      <p class="ml-5">Chat {{ index }}</p>
+      <n-input
+        class="mr-2"
+        :value="chat.label"
+        @input="(value) => updateChatLabel(index, value)"
+        :placeholder="`Chat ${index}`"
+      />
       <n-button @click="($event) => deleteChat(index, $event)">
         <n-icon>
           <trash-outline />
@@ -26,13 +31,14 @@
 </template>
 
 <script setup lang="ts">
-import { NCard, NButton, NIcon, useThemeVars, NScrollbar } from 'naive-ui'
+import { NCard, NButton, NIcon, NInput, useThemeVars, NScrollbar } from 'naive-ui'
 import { computed } from 'vue'
 import { TrashOutline } from '@vicons/ionicons5'
 import { useChatStore } from '../../stores/chatStore'
 
 const themeVar = useThemeVars()
 const chatStore = useChatStore()
+const { updateChatLabel } = chatStore
 
 const allChats = computed(() => {
   return chatStore.allChats
