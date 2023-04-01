@@ -24,10 +24,10 @@ export const useSystemMessages = defineStore('systemMessages', () => {
       label: 'Offensive Assistant'
     }
   ])
-  const selectedSystemMessage = ref(systemMessages.value[2].value)
+  const selectedSystemMessage = ref<SystemMessage>(systemMessages.value[0])
 
-  function setSelectedSystemMessage(value: string) {
-    selectedSystemMessage.value = value
+  function setSelectedSystemMessage(idx: number) {
+    selectedSystemMessage.value = systemMessages.value[idx]
   }
 
   return {

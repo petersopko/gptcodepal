@@ -30,7 +30,7 @@ export default function useTokenCount() {
       messagesWithInput = [
         {
           role: 'system',
-          content: selectedSystemMessage.value
+          content: selectedSystemMessage.value.value
         },
         {
           role: 'assistant',

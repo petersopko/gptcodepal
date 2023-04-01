@@ -10,7 +10,7 @@
       </div>
     </n-list-item> -->
     <n-list-item>
-      <div>test</div>
+      <SystemMessageDropdown />
     </n-list-item>
     <n-list-item>
       <ApiKeyInput />
@@ -38,4 +38,5 @@
 <script setup lang="ts">
 import { NList, NListItem } from 'naive-ui'
 import ApiKeyInput from '../ApiKeyInput.vue'
+import SystemMessageDropdown from '../SystemMessageDropdown.vue'
 </script>

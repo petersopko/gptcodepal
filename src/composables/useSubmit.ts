@@ -37,7 +37,7 @@ export default function useSubmit() {
     }
 
     if (chatStore.activeChat.messages.length === 0) {
-      chatStore.addMessage(chatStore.activeChatIndex, 'system', selectedSystemMessage.value)
+      chatStore.addMessage(chatStore.activeChatIndex, 'system', selectedSystemMessage.value.value)
     }
     chatStore.addMessage(chatStore.activeChatIndex, 'user', inputStore.inputStorage.inputText)
     inputStore.updateInputText('')
