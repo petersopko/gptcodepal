@@ -64,9 +64,10 @@
       <div class="chat-messages-container overflow-y-auto relative">
         <div
           v-if="
-            chatStore.activeChat &&
-            chatStore.activeChat.messages &&
-            chatStore.activeChat.messages.length === 0
+            (chatStore.activeChat &&
+              chatStore.activeChat.messages &&
+              chatStore.activeChat.messages.length === 0) ||
+            !chatStore.activeChat
           "
           class="robot-face"
         ></div>
