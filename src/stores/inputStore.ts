@@ -19,26 +19,26 @@ export const useInputStore = defineStore('inputStore', () => {
   const updateInputText = (inputText: string): void => {
     inputStorage.value.inputText = inputText
     localStorage.setItem('inputStore', JSON.stringify(inputStorage.value))
-    console.log('updateInputText', inputStorage.value)
   }
 
   const addCodeInput = (): void => {
     inputStorage.value.codeInputs.push({ label: 'New Code Input', value: '' })
     localStorage.setItem('inputStore', JSON.stringify(inputStorage.value))
-    console.log('addCodeInput', inputStorage.value)
   }
 
   const updateCodeInput = (codeInput: CodeInput, index: number): void => {
     inputStorage.value.codeInputs[index] = codeInput
     localStorage.setItem('inputStore', JSON.stringify(inputStorage.value))
-    console.log('updateCodeInput', inputStorage.value)
   }
-
-  const addCodeInputFromFile = (file: any, content: any): void => {
-    const codeInput: CodeInput = { label: file.name, value: content }
+  const addCodeInputFromFile = (label: any, value: any): void => {
+    const codeInput: CodeInput = { label, value }
     inputStorage.value.codeInputs.push(codeInput)
     localStorage.setItem('inputStore', JSON.stringify(inputStorage.value))
-    console.log('addCodeInputFromFile', inputStorage.value)
+  }
+
+  const deleteCodeInput = (index: number): void => {
+    inputStorage.value.codeInputs.splice(index, 1)
+    localStorage.setItem('inputStore', JSON.stringify(inputStorage.value))
   }
 
   return {
@@ -46,6 +46,7 @@ export const useInputStore = defineStore('inputStore', () => {
     updateInputText,
     updateCodeInput,
     addCodeInputFromFile,
-    addCodeInput
+    addCodeInput,
+    deleteCodeInput
   }
 })

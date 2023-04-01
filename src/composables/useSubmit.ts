@@ -51,7 +51,6 @@ export default function useSubmit() {
         handlePartialResponse,
         cancelTokenSource
       )
-      console.log('RESULT', result)
       handleFinalResponse(result)
     } catch (error) {
       handleError(error as AxiosError)
@@ -126,7 +125,6 @@ export default function useSubmit() {
   }
 
   function handleFinalResponse(result: any) {
-    console.log('Final response:', response.value)
     statesStore.updateLoading(false)
     console.log('RESULT', result)
   }

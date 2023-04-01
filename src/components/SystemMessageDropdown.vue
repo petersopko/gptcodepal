@@ -32,7 +32,6 @@ const options = computed(() => {
 })
 
 const handleSelect = (key: number) => {
-  console.log(key)
   sysMsgStore.setSelectedSystemMessage(key)
 }
 </script>

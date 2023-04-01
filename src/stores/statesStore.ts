@@ -7,7 +7,6 @@ export const useStatesStore = defineStore('statesStore', () => {
   const isLoading = computed<boolean>(() => loading.value)
 
   const updateLoading = (newLoading: boolean): void => {
-    console.log('newLoading:', newLoading)
     loading.value = newLoading
   }
 

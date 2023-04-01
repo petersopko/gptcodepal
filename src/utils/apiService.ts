@@ -40,7 +40,7 @@ export async function postCompletionStream(
     return result
   } catch (error) {
     if (axios.isCancel(error)) {
-      console.log('Request canceled:', error.message)
+      console.log(' canceled:', error.message)
     } else {
       throw error
     }
