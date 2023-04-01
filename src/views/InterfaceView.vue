@@ -101,6 +101,9 @@
           @toggle-sidebar="toggleRightSidebar"
         />
       </div>
+      <div>
+        <CodeInputList />
+      </div>
     </div>
   </div>
 </template>
@@ -117,6 +120,7 @@ import SideBarSettings from '../components/Sidebar/SideBarMenu.vue'
 import { useChatStore } from '../stores/chatStore'
 import { useThemeVars } from 'naive-ui'
 import LayoutToggle from '../components/LayoutToggle.vue'
+import CodeInputList from '@/components/CodeInputList.vue'
 
 const themeVar = useThemeVars()
 const chatStore = useChatStore()
