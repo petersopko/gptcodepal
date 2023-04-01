@@ -17,7 +17,6 @@
 import { NButton, NIcon } from 'naive-ui'
 import { ArrowBackSharp, ArrowForwardSharp } from '@vicons/ionicons5'
 import { computed } from 'vue'
-import { watch } from 'vue'
 
 const props = defineProps<{
   isSideBarVisible: boolean
@@ -37,11 +36,4 @@ const toggleStyle = computed(() => {
 const toggle = () => {
   emit('toggle-sidebar')
 }
-
-watch(
-  () => props.isSideBarVisible,
-  (newValue) => {
-    console.log('LayoutToggle: isSideBarVisible changed:', newValue)
-  }
-)
 </script>

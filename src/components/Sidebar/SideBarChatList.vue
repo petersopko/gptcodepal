@@ -85,7 +85,7 @@
 
         <!-- delete mode confirm -->
         <n-button
-          v-if="!isEditMode && isDeleteMode && currentDeleteIndex === index"
+          v-if="isDeleteMode && currentDeleteIndex === index"
           text
           style="font-size: 16px"
           :focusable="false"
@@ -98,7 +98,7 @@
         </n-button>
         <!-- delete mode cancel -->
         <n-button
-          v-if="!isEditMode && isDeleteMode && currentDeleteIndex === index"
+          v-if="isDeleteMode && currentDeleteIndex === index"
           text
           style="font-size: 16px"
           :focusable="false"

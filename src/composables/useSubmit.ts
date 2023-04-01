@@ -41,7 +41,7 @@ export default function useSubmit() {
     }
     chatStore.addMessage(chatStore.activeChatIndex, 'user', inputStore.inputStorage.inputText)
     inputStore.updateInputText('')
-    const promptMessages: Message[] = chatStore.allChats[chatStore.activeChatIndex].messages
+    const promptMessages: Message[] = [...chatStore.allChats[chatStore.activeChatIndex].messages]
     chatStore.addMessage(chatStore.activeChatIndex, 'assistant', 'Thinking...')
     try {
       const result = await postCompletionStream(
