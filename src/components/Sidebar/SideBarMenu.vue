@@ -10,8 +10,12 @@
       </div>
     </n-list-item> -->
     <n-list-item>
-      <ApiKeyInput class="grow justify-center" />
+      <div>test</div>
     </n-list-item>
+    <n-list-item>
+      <ApiKeyInput />
+    </n-list-item>
+
     <!-- <n-list-item>
       <SettingsAdvanced />
     </n-list-item> -->

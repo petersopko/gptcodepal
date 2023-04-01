@@ -15,7 +15,7 @@
         'border-color': `${activeChatIndex === index ? `${themeVar.primaryColor}` : 'gray'}`
       }"
     >
-      <div class="flex flex-row items-center">
+      <div class="flex items-center">
         <n-icon text style="font-size: 16px" class="mr-2">
           <component :is="ChatboxEllipsesOutline" />
         </n-icon>
