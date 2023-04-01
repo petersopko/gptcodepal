@@ -5,7 +5,14 @@ interface SystemMessage {
   value: string
   label: string
 }
+function storeSelectedSystemMessage(message: SystemMessage) {
+  localStorage.setItem('selectedSystemMessage', JSON.stringify(message))
+}
 
+function getStoredSelectedSystemMessage(): SystemMessage | null {
+  const storedMessage = localStorage.getItem('selectedSystemMessage')
+  return storedMessage ? JSON.parse(storedMessage) : null
+}
 export const useSystemMessages = defineStore('systemMessages', () => {
   const systemMessages = ref<SystemMessage[]>([
     {
@@ -24,10 +31,12 @@ export const useSystemMessages = defineStore('systemMessages', () => {
       label: 'Offensive Assistant'
     }
   ])
-  const selectedSystemMessage = ref<SystemMessage>(systemMessages.value[0])
+  const storedMessage = getStoredSelectedSystemMessage()
+  const selectedSystemMessage = ref<SystemMessage>(storedMessage || systemMessages.value[0])
 
   function setSelectedSystemMessage(idx: number) {
     selectedSystemMessage.value = systemMessages.value[idx]
+    storeSelectedSystemMessage(selectedSystemMessage.value)
   }
 
   return {
