@@ -1,12 +1,14 @@
 <template>
-  <div :style="mobileMode ? {} : toggleStyle">
+  <div>
     <n-button @click="toggle">
       <template #icon>
         <n-icon v-if="isSideBarVisible">
-          <arrow-back-sharp />
+          <arrow-back-sharp v-if="position === 'left'" />
+          <arrow-forward-sharp v-else />
         </n-icon>
         <n-icon v-else>
-          <arrow-forward-sharp />
+          <arrow-forward-sharp v-if="position === 'left'" />
+          <arrow-back-sharp v-else />
         </n-icon>
       </template>
     </n-button>
@@ -16,22 +18,16 @@
 <script setup lang="ts">
 import { NButton, NIcon } from 'naive-ui'
 import { ArrowBackSharp, ArrowForwardSharp } from '@vicons/ionicons5'
-import { computed } from 'vue'
 
-const props = defineProps<{
+defineProps<{
   isSideBarVisible: boolean
   windowWidth: number
   sideBarWidth: number
   mobileMode: boolean
+  position: 'left' | 'right'
 }>()
 
 const emit = defineEmits(['toggle-sidebar'])
-
-const toggleStyle = computed(() => {
-  return {
-    left: props.isSideBarVisible ? `${props.sideBarWidth + 20}px` : '20px'
-  }
-})
 
 const toggle = () => {
   emit('toggle-sidebar')

@@ -3,7 +3,7 @@
     class="whole-screen min-h-screen max-h-screen flex flex-row justify-center xl:min-w-screen xl:mx-auto"
   >
     <div
-      v-show="isSideBarVisible"
+      v-show="isLeftSideBarVisible"
       class="side-bar flex flex-col w-full sm:w-2/5 lg:w-2/6 border-2 border-gray-200"
       :style="`border-color: ${themeVar.primaryColor};${
         windowWidth >= 640 ? 'border-right: none !important;' : ''
@@ -13,11 +13,12 @@
         <SideBarTop :class="{ 'w-4/5': mobileMode }" />
         <LayoutToggle
           v-if="mobileMode"
-          :is-side-bar-visible="isSideBarVisible"
+          :is-side-bar-visible="isLeftSideBarVisible"
           :window-width="windowWidth"
           :side-bar-width="sideBarWidth"
           :mobile-mode="mobileMode"
-          @toggle-sidebar="toggleSidebar"
+          :position="'left'"
+          @toggle-sidebar="toggleLeftSidebar"
         />
       </div>
       <div class="side-bar-chat-messages flex-grow overflow-y-auto">
@@ -28,21 +29,35 @@
       </div>
     </div>
     <div
-      v-show="(!isSideBarVisible && windowWidth <= 640) || windowWidth > 640"
+      v-show="
+        (!isLeftSideBarVisible && !isRightSideBarVisible && windowWidth <= 640) || windowWidth > 640
+      "
       class="chat-container flex flex-col justify-between w-full sm:w-3/5 lg:w-4/6 border-2"
       :style="`border-color: ${themeVar.primaryColor}; ${
-        !isSideBarVisible && windowWidth > 600 ? 'width: 100%;' : ''
+        (!isLeftSideBarVisible || !isRightSideBarVisible) && windowWidth > 600 ? 'width: 100%;' : ''
       }`"
     >
       <div>
-        <n-card class="w-full">
+        <n-card class="w-full" content-style="display: flex; justify-content: space-between;">
+          <!-- Left LayoutToggle -->
           <LayoutToggle
-            v-if="!(mobileMode && isSideBarVisible)"
-            :is-side-bar-visible="isSideBarVisible"
+            v-if="!(mobileMode && isLeftSideBarVisible)"
+            :is-side-bar-visible="isLeftSideBarVisible"
             :window-width="windowWidth"
             :side-bar-width="sideBarWidth"
             :mobile-mode="mobileMode"
-            @toggle-sidebar="toggleSidebar"
+            :position="'left'"
+            @toggle-sidebar="toggleLeftSidebar"
+          />
+          <!-- Right LayoutToggle -->
+          <LayoutToggle
+            v-if="!(mobileMode && isRightSideBarVisible)"
+            :is-side-bar-visible="isRightSideBarVisible"
+            :window-width="windowWidth"
+            :side-bar-width="sideBarWidth"
+            :mobile-mode="mobileMode"
+            :position="'right'"
+            @toggle-sidebar="toggleRightSidebar"
           />
         </n-card>
       </div>
@@ -64,6 +79,25 @@
           :responseTokens="responseTokens"
           :promptTokens="promptTokens"
           @submit="submitPrompt"
+        />
+      </div>
+    </div>
+    <div
+      v-show="isRightSideBarVisible"
+      class="right-side-bar flex flex-col w-full sm:w-2/5 lg:w-2/6 border-2 border-gray-200"
+      :style="`border-color: ${themeVar.primaryColor};${
+        windowWidth >= 640 ? 'border-left: none !important;' : ''
+      }`"
+    >
+      <div class="right-side-bar-add-chat flex flex-row justify-between mt-4 mx-4">
+        <LayoutToggle
+          v-if="mobileMode"
+          :is-side-bar-visible="isRightSideBarVisible"
+          :window-width="windowWidth"
+          :side-bar-width="sideBarWidth"
+          :mobile-mode="mobileMode"
+          :position="'right'"
+          @toggle-sidebar="toggleRightSidebar"
         />
       </div>
     </div>
@@ -89,16 +123,23 @@ const chatStore = useChatStore()
 const windowWidth = ref(window.innerWidth)
 
 const sideBarWidth = ref(0)
-const isSideBarVisible = ref(false)
+const isLeftSideBarVisible = ref(false)
+const isRightSideBarVisible = ref(false)
+
 const mobileMode = computed(() => windowWidth.value <= 640)
 
-const toggleSidebar = () => {
-  isSideBarVisible.value = !isSideBarVisible.value
+const toggleLeftSidebar = () => {
+  isLeftSideBarVisible.value = !isLeftSideBarVisible.value
+  updateSideBarWidth()
+}
+
+const toggleRightSidebar = () => {
+  isRightSideBarVisible.value = !isRightSideBarVisible.value
   updateSideBarWidth()
 }
 
 const updateSideBarWidth = () => {
-  if (isSideBarVisible.value) {
+  if (isLeftSideBarVisible.value) {
     if (windowWidth.value >= 640) {
       if (windowWidth.value > 1024) {
         sideBarWidth.value = windowWidth.value * 0.2
