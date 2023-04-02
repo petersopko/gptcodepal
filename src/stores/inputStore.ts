@@ -9,6 +9,7 @@ interface InputStorage {
 interface CodeInput {
   label: string
   value: string
+  attachedToPrompt: boolean
 }
 
 export const useInputStore = defineStore('inputStore', () => {
@@ -22,7 +23,11 @@ export const useInputStore = defineStore('inputStore', () => {
   }
 
   const addCodeInput = (): void => {
-    inputStorage.value.codeInputs.push({ label: 'New Code Input', value: '' })
+    inputStorage.value.codeInputs.push({
+      label: 'New Code Input',
+      value: '',
+      attachedToPrompt: false
+    })
     localStorage.setItem('inputStore', JSON.stringify(inputStorage.value))
   }
 
@@ -31,8 +36,12 @@ export const useInputStore = defineStore('inputStore', () => {
     localStorage.setItem('inputStore', JSON.stringify(inputStorage.value))
   }
   const addCodeInputFromFile = (label: any, value: any): void => {
-    const codeInput: CodeInput = { label, value }
+    const codeInput: CodeInput = { label, value, attachedToPrompt: false }
     inputStorage.value.codeInputs.push(codeInput)
+    localStorage.setItem('inputStore', JSON.stringify(inputStorage.value))
+  }
+  const updateAttachedToPrompt = (index: number, attached: boolean): void => {
+    inputStorage.value.codeInputs[index].attachedToPrompt = attached
     localStorage.setItem('inputStore', JSON.stringify(inputStorage.value))
   }
 
@@ -47,6 +56,7 @@ export const useInputStore = defineStore('inputStore', () => {
     updateCodeInput,
     addCodeInputFromFile,
     addCodeInput,
+    updateAttachedToPrompt,
     deleteCodeInput
   }
 })

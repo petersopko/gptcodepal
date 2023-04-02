@@ -17,6 +17,11 @@ export default function useTokenCount() {
   const systemMessages = useSystemMessages()
   const selectedSystemMessage = computed(() => systemMessages.selectedSystemMessage)
   const activeChatTokenCount = ref(0)
+  const codeInputsAttachedToPrompt = computed(() => {
+    return inputStore.inputStorage.codeInputs.map((codeInput) => {
+      return codeInput.attachedToPrompt ? codeInput.value : ''
+    })
+  })
   const inputText = computed(() => inputStore.inputStorage.inputText)
   const codeInputs = computed(() => inputStore.inputStorage.codeInputs)
 
@@ -49,12 +54,16 @@ export default function useTokenCount() {
     const tokenCount = messagesWithInput.reduce((acc, msg) => {
       return acc + countTokens(msg.role) + countTokens(msg.content)
     }, 0)
-    activeChatTokenCount.value = tokenCount
+    activeChatTokenCount.value = tokenCount + countTokens(codeInputsAttachedToPrompt.value.join(''))
   }
 
-  watch([inputText, codeInputs, chatStore, selectedSystemMessage], updateTokenCount, {
-    immediate: true
-  })
+  watch(
+    [inputText, codeInputs, chatStore, selectedSystemMessage, codeInputsAttachedToPrompt],
+    updateTokenCount,
+    {
+      immediate: true
+    }
+  )
 
   return {
     activeChatTokenCount

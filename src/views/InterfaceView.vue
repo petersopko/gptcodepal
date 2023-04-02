@@ -85,7 +85,7 @@
     </div>
     <div
       v-show="isRightSideBarVisible"
-      class="right-side-bar flex flex-col w-full sm:w-2/5 lg:w-2/6 border-2 border-gray-200"
+      class="right-side-bar flex flex-col w-full sm:w-2/5 lg:w-2/6 border-2 border-gray-200 max-h-screen"
       :style="`border-color: ${themeVar.primaryColor};${
         windowWidth >= 640 ? 'border-left: none !important;' : ''
       }`"
@@ -104,7 +104,7 @@
           @toggle-sidebar="toggleRightSidebar"
         />
       </div>
-      <div>
+      <div class="overflow-y-auto relative">
         <CodeInputList />
       </div>
     </div>

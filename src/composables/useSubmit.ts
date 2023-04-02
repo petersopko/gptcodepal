@@ -39,7 +39,19 @@ export default function useSubmit() {
     if (chatStore.activeChat.messages.length === 0) {
       chatStore.addMessage(chatStore.activeChatIndex, 'system', selectedSystemMessage.value.value)
     }
-    chatStore.addMessage(chatStore.activeChatIndex, 'user', inputStore.inputStorage.inputText)
+
+    // Filter code inputs with attachedToPrompt === true, wrap them in triple backticks, and join with new lines
+    const attachedCodeInputs = inputStore.inputStorage.codeInputs
+      .filter((codeInput) => codeInput.attachedToPrompt)
+      .map((codeInput) => `\`\`\`${codeInput.value}\`\`\``)
+      .join('\n')
+
+    // Concatenate inputText with new line and attached code inputs only if there are attached code inputs
+    const formattedInput = attachedCodeInputs
+      ? `${inputStore.inputStorage.inputText}\n${attachedCodeInputs}`
+      : inputStore.inputStorage.inputText
+
+    chatStore.addMessage(chatStore.activeChatIndex, 'user', formattedInput)
     inputStore.updateInputText('')
     const promptMessages: Message[] = [...chatStore.allChats[chatStore.activeChatIndex].messages]
     chatStore.addMessage(chatStore.activeChatIndex, 'assistant', 'Thinking...')
