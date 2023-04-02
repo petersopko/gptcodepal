@@ -32,12 +32,12 @@
       v-show="
         (!isLeftSideBarVisible && !isRightSideBarVisible && windowWidth <= 640) || windowWidth > 640
       "
-      class="chat-container flex flex-col justify-between w-full sm:w-3/5 lg:w-4/6 border-2"
+      class="chat-container min-h-screen flex flex-col w-full sm:w-3/5 lg:w-4/6 border-2"
       :style="`border-color: ${themeVar.primaryColor}; ${
         (!isLeftSideBarVisible || !isRightSideBarVisible) && windowWidth > 600 ? 'width: 100%;' : ''
       }`"
     >
-      <div>
+      <div class="chat-container-menu flex-shrink-0">
         <n-card class="w-full" content-style="display: flex; justify-content: space-between;">
           <!-- Left LayoutToggle -->
           <LayoutToggle
@@ -61,7 +61,8 @@
           />
         </n-card>
       </div>
-      <div class="chat-messages-container overflow-y-auto relative">
+      <div class="chat-container-messages flex-grow overflow-y-auto relative">
+        <!-- here the scroll to bottom-->
         <div
           v-if="
             (chatStore.activeChat &&
@@ -75,7 +76,7 @@
         <ChatContainer />
       </div>
 
-      <div class="chat-submit-card flex-shrink-0 bg-transparent">
+      <div class="chat-container-submit flex-shrink-0">
         <SubmitCard
           :responseTokens="responseTokens"
           :promptTokens="promptTokens"

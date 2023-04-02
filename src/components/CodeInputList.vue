@@ -39,7 +39,7 @@
                       {{ `${getTokenCount(codeInput.label, codeInput.value)}` }}
                     </n-gradient-text>
                   </template>
-                  Estimated tokens needed to submit
+                  Estimated tokens needed for code input
                 </n-tooltip>
 
                 <n-button

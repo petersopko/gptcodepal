@@ -54,7 +54,7 @@ export const useInputStore = defineStore('inputStore', () => {
     inputStorage.value.codeInputs.push({
       label: 'New Code Input',
       value: '',
-      attachedToPrompt: false
+      attachedToPrompt: true
     })
     updateFormattedInput() // Call the function here
   }

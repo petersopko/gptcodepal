@@ -1,6 +1,6 @@
 <template>
   <n-scrollbar>
-    <div class="relative min-h-screen">
+    <div class="relative min-h-fit">
       <div v-if="activeChatMessages">
         <div v-for="message in activeChatMessages" v-bind:key="activeChatMessages.indexOf(message)">
           <n-card v-if="message.role !== 'system'" :class="`${message.role}-message`">
