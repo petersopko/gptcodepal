@@ -125,27 +125,30 @@ import { useThemeVars } from 'naive-ui'
 import LayoutToggle from '../components/LayoutToggle.vue'
 import CodeInputList from '@/components/CodeInputList.vue'
 
+import { useStatesStore } from '../stores/statesStore'
+
+const statesStore = useStatesStore()
+
 const themeVar = useThemeVars()
 const chatStore = useChatStore()
 
 const windowWidth = ref(window.innerWidth)
 
 const sideBarWidth = ref(0)
-const isLeftSideBarVisible = ref(false)
-const isRightSideBarVisible = ref(false)
+const isLeftSideBarVisible = statesStore.getLeftSideBarVisible()
+const isRightSideBarVisible = statesStore.getRightSideBarVisible()
 
 const mobileMode = computed(() => windowWidth.value <= 640)
 
 const toggleLeftSidebar = () => {
-  isLeftSideBarVisible.value = !isLeftSideBarVisible.value
+  statesStore.setLeftSideBarVisible(!isLeftSideBarVisible.value)
   updateSideBarWidth()
 }
 
 const toggleRightSidebar = () => {
-  isRightSideBarVisible.value = !isRightSideBarVisible.value
+  statesStore.setRightSideBarVisible(!isRightSideBarVisible.value)
   updateSideBarWidth()
 }
-
 const updateSideBarWidth = () => {
   if (isLeftSideBarVisible.value) {
     if (windowWidth.value >= 640) {
@@ -171,6 +174,27 @@ watch(windowWidth, () => {
 onMounted(() => {
   window.addEventListener('resize', handleResize)
   chatStore.updateActiveChat(chatStore.activeChatIndex)
+
+  const storedLeftSideBarVisible = localStorage.getItem('leftSideBarVisible')
+  const storedRightSideBarVisible = localStorage.getItem('rightSideBarVisible')
+
+  if (storedLeftSideBarVisible === null && storedRightSideBarVisible === null) {
+    if (windowWidth.value > 640) {
+      statesStore.setLeftSideBarVisible(true)
+      statesStore.setRightSideBarVisible(true)
+    }
+  } else {
+    statesStore.setLeftSideBarVisible(
+      storedLeftSideBarVisible !== null
+        ? JSON.parse(storedLeftSideBarVisible)
+        : statesStore.getLeftSideBarVisible
+    )
+    statesStore.setRightSideBarVisible(
+      storedRightSideBarVisible !== null
+        ? JSON.parse(storedRightSideBarVisible)
+        : statesStore.getRightSideBarVisible
+    )
+  }
 
   updateSideBarWidth()
 })
