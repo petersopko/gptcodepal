@@ -1,7 +1,6 @@
 <template>
   <n-scrollbar>
     <n-card
-      title="Code Inputs"
       @dragenter.prevent="dragCounter++"
       @dragleave.prevent="dragCounter--"
       @dragover.prevent
@@ -33,7 +32,16 @@
               />
             </div>
             <template #header-extra>
-              <div>
+              <div class="flex align-middle">
+                <n-tooltip trigger="hover">
+                  <template #trigger>
+                    <n-gradient-text class="mr-4">
+                      {{ `${getTokenCount(codeInput.label, codeInput.value)}` }}
+                    </n-gradient-text>
+                  </template>
+                  Estimated tokens needed to submit
+                </n-tooltip>
+
                 <n-button
                   v-if="currentDeleteIndex !== index"
                   text
@@ -75,18 +83,12 @@
           <div>
             <n-card class="mt-2" :content-style="{ padding: '8px' }">
               <div class="flex">
-                <n-tooltip trigger="hover">
-                  <template #trigger>
-                    <n-checkbox
-                      class="mr-2"
-                      :checked="codeInput.attachedToPrompt"
-                      @update:checked="
-                        (checked) => inputStore.updateAttachedToPrompt(index, checked)
-                      "
-                    ></n-checkbox>
-                  </template>
-                  Include in your prompt
-                </n-tooltip>
+                <n-checkbox
+                  class="mr-2"
+                  :checked="codeInput.attachedToPrompt"
+                  @update:checked="(checked) => inputStore.updateAttachedToPrompt(index, checked)"
+                ></n-checkbox>
+
                 <p class="mr-2">Attached to prompt</p>
               </div>
             </n-card>
@@ -118,7 +120,8 @@ import {
   NIcon,
   NCheckbox,
   NScrollbar,
-  NTooltip
+  NTooltip,
+  NGradientText
 } from 'naive-ui'
 import { computed, ref } from 'vue'
 import { useInputStore } from '@/stores/inputStore'
@@ -129,6 +132,7 @@ import {
   DocumentAttachOutline
   // AttachOutline
 } from '@vicons/ionicons5'
+import { countTokens } from '@/composables/useTokenCount' // Add this import
 
 const fileInput = ref<HTMLInputElement | null>(null)
 const dragCounter = ref(0)
@@ -161,6 +165,10 @@ async function fileDropHandler(event: any) {
     const content = await readFileContent(file)
     inputStore.addCodeInputFromFile(file.name, content)
   }
+}
+
+const getTokenCount = (label: string, value: string): number => {
+  return countTokens(label) + countTokens(value)
 }
 
 const toggleDeleteMode = (index: number) => {

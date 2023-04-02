@@ -4,6 +4,7 @@ import { ref } from 'vue'
 interface InputStorage {
   inputText: string
   codeInputs: CodeInput[]
+  formattedInput: string
 }
 
 interface CodeInput {
@@ -14,12 +15,39 @@ interface CodeInput {
 
 export const useInputStore = defineStore('inputStore', () => {
   const inputStorage = ref<InputStorage>(
-    JSON.parse(localStorage.getItem('inputStore') || '{ "inputText": "", "codeInputs": [] }')
+    JSON.parse(
+      localStorage.getItem('inputStore') ||
+        '{ "inputText": "", "codeInputs": [], "formattedInput": "" }'
+    )
   )
+
+  const updateFormattedInput = (): void => {
+    const attachedCodeInputs = inputStorage.value.codeInputs
+      .filter((codeInput) => codeInput.attachedToPrompt)
+      .map((codeInput) => `${codeInput.label}\n\`\`\`${codeInput.value}\`\`\``)
+      .join('\n')
+
+    inputStorage.value.formattedInput = attachedCodeInputs
+      ? `${inputStorage.value.inputText}\n\n${attachedCodeInputs}`
+      : inputStorage.value.inputText
+
+    localStorage.setItem('inputStore', JSON.stringify(inputStorage.value))
+  }
 
   const updateInputText = (inputText: string): void => {
     inputStorage.value.inputText = inputText
-    localStorage.setItem('inputStore', JSON.stringify(inputStorage.value))
+    updateFormattedInput() // Call the function here
+  }
+
+  const updateCodeInput = (codeInput: CodeInput, index: number): void => {
+    inputStorage.value.codeInputs[index] = codeInput
+    updateFormattedInput() // Call the function here
+  }
+
+  const addCodeInputFromFile = (label: any, value: any): void => {
+    const codeInput: CodeInput = { label, value, attachedToPrompt: false }
+    inputStorage.value.codeInputs.push(codeInput)
+    updateFormattedInput() // Call the function here
   }
 
   const addCodeInput = (): void => {
@@ -28,26 +56,23 @@ export const useInputStore = defineStore('inputStore', () => {
       value: '',
       attachedToPrompt: false
     })
-    localStorage.setItem('inputStore', JSON.stringify(inputStorage.value))
+    updateFormattedInput() // Call the function here
   }
 
-  const updateCodeInput = (codeInput: CodeInput, index: number): void => {
-    inputStorage.value.codeInputs[index] = codeInput
-    localStorage.setItem('inputStore', JSON.stringify(inputStorage.value))
-  }
-  const addCodeInputFromFile = (label: any, value: any): void => {
-    const codeInput: CodeInput = { label, value, attachedToPrompt: false }
-    inputStorage.value.codeInputs.push(codeInput)
-    localStorage.setItem('inputStore', JSON.stringify(inputStorage.value))
-  }
   const updateAttachedToPrompt = (index: number, attached: boolean): void => {
     inputStorage.value.codeInputs[index].attachedToPrompt = attached
-    localStorage.setItem('inputStore', JSON.stringify(inputStorage.value))
+    updateFormattedInput() // Call the function here
   }
 
   const deleteCodeInput = (index: number): void => {
     inputStorage.value.codeInputs.splice(index, 1)
-    localStorage.setItem('inputStore', JSON.stringify(inputStorage.value))
+    updateFormattedInput() // Call the function here
+  }
+  const resetAttachedToPrompt = (): void => {
+    inputStorage.value.codeInputs.forEach((codeInput) => {
+      codeInput.attachedToPrompt = false
+    })
+    updateFormattedInput()
   }
 
   return {
@@ -57,6 +82,7 @@ export const useInputStore = defineStore('inputStore', () => {
     addCodeInputFromFile,
     addCodeInput,
     updateAttachedToPrompt,
-    deleteCodeInput
+    deleteCodeInput,
+    resetAttachedToPrompt
   }
 })
