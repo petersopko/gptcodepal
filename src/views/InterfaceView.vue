@@ -61,7 +61,10 @@
           />
         </n-card>
       </div>
-      <div class="chat-container-messages flex-grow overflow-y-auto relative">
+      <div
+        ref="chatContainerMessages"
+        class="chat-container-messages flex-grow overflow-y-auto relative"
+      >
         <!-- here the scroll to bottom-->
         <div
           v-if="
@@ -113,7 +116,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, onUnmounted, ref, computed, watch } from 'vue'
+import { onMounted, onUnmounted, ref, computed, watch, nextTick } from 'vue'
 import { NCard } from 'naive-ui'
 import ChatContainer from '../components/Chat/ChatContainer.vue'
 import SideBarChatList from '../components/Sidebar/SideBarChatList.vue'
@@ -140,6 +143,17 @@ const isLeftSideBarVisible = statesStore.getLeftSideBarVisible()
 const isRightSideBarVisible = statesStore.getRightSideBarVisible()
 
 const mobileMode = computed(() => windowWidth.value <= 640)
+const chatContainerMessages = ref<HTMLElement | null>(null)
+
+const scrollToBottom = () => {
+  nextTick(() => {
+    if (chatContainerMessages.value) {
+      const scrollHeight = chatContainerMessages.value.scrollHeight
+      const clientHeight = chatContainerMessages.value.clientHeight
+      chatContainerMessages.value.scrollTop = scrollHeight - clientHeight
+    }
+  })
+}
 
 const toggleLeftSidebar = () => {
   statesStore.setLeftSideBarVisible(!isLeftSideBarVisible.value)
@@ -171,6 +185,20 @@ const handleResize = () => {
 watch(windowWidth, () => {
   updateSideBarWidth()
 })
+watch(
+  () => chatStore.activeChat?.messages,
+  () => {
+    scrollToBottom()
+  },
+  { immediate: true }
+)
+
+watch(
+  () => chatStore.activeChatIndex,
+  () => {
+    scrollToBottom()
+  }
+)
 
 onMounted(() => {
   window.addEventListener('resize', handleResize)

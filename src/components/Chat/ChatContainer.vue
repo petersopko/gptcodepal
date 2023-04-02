@@ -1,5 +1,5 @@
 <template>
-  <n-scrollbar>
+  <n-scrollbar ref="messagesContainer">
     <div class="relative min-h-fit">
       <div v-if="activeChatMessages">
         <div v-for="message in activeChatMessages" v-bind:key="activeChatMessages.indexOf(message)">
