@@ -90,7 +90,10 @@
         windowWidth >= 640 ? 'border-left: none !important;' : ''
       }`"
     >
-      <div class="right-side-bar-add-chat flex flex-row justify-between mt-4 mx-4">
+      <div
+        v-show="mobileMode"
+        class="right-side-bar-add-chat flex flex-row justify-between mt-4 mx-4"
+      >
         <LayoutToggle
           v-if="mobileMode"
           :is-side-bar-visible="isRightSideBarVisible"

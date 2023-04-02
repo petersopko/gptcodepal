@@ -1,6 +1,6 @@
 <template>
   <div>
-    <n-button @click="toggle">
+    <n-button :focusable="false" @click="toggle">
       <template #icon>
         <n-icon v-if="isSideBarVisible">
           <arrow-back-sharp v-if="position === 'left'" />

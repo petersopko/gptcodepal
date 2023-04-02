@@ -7,7 +7,7 @@
     @drop.prevent="fileDropHandler"
   >
     <div class="text-center text-gray-600 mb-6">
-      <p class="mb-4">Drag and drop your code files here</p>
+      <p class="mb-4">Drop your code files here</p>
       <n-icon size="50">
         <DocumentAttachOutline />
       </n-icon>
@@ -20,6 +20,13 @@
         :key="index"
       >
         <div class="mb-2">
+          <div class="flex flex-row align-middle mb-4">
+            <n-icon size="20">
+              <AttachOutline />
+            </n-icon>
+            <div class="mr-4">Attach to prompt</div>
+            <n-checkbox v-model:checked="value"></n-checkbox>
+          </div>
           <n-input
             v-model:value="codeInput.label"
             placeholder="Name your code input"
@@ -30,6 +37,7 @@
             v-model:value="codeInput.value"
             placeholder="Enter your code"
             type="textarea"
+            rows="10"
             @input="() => inputStore.updateCodeInput(codeInput, index)"
           />
         </div>
@@ -80,14 +88,15 @@
 </template>
 
 <script setup lang="ts">
-import { NCard, NCollapse, NCollapseItem, NButton, NInput, NIcon } from 'naive-ui'
+import { NCard, NCollapse, NCollapseItem, NButton, NInput, NIcon, NCheckbox } from 'naive-ui'
 import { computed, ref } from 'vue'
 import { useInputStore } from '@/stores/inputStore'
 import {
   TrashOutline,
   CheckmarkOutline,
   CloseOutline,
-  DocumentAttachOutline
+  DocumentAttachOutline,
+  AttachOutline
 } from '@vicons/ionicons5'
 
 const fileInput = ref<HTMLInputElement | null>(null)
