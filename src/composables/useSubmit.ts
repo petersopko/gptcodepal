@@ -1,12 +1,12 @@
 import { ref } from 'vue'
 import axios, { AxiosError } from 'axios'
-import { useSettingsStore } from '../stores/settingsStore'
-import { useStatesStore } from '../stores/statesStore'
+import { useSettingsStore } from '@/stores/settingsStore'
+import { useStatesStore } from '@/stores/statesStore'
 import { useNotification } from 'naive-ui'
-import { useInputStore } from '../stores/inputStore'
-import { useChatStore } from '../stores/chatStore'
+import { useInputStore } from '@/stores/inputStore'
+import { useChatStore } from '@/stores/chatStore'
 import { useSystemMessages } from '@/stores/systemMessages'
-import { postCompletionStream } from '../utils/apiService'
+import { postCompletionStream } from '@/utils/apiService'
 import { storeToRefs } from 'pinia'
 
 interface Message {
@@ -14,7 +14,7 @@ interface Message {
   content: string
 }
 
-export default function useSubmit() {
+export function useSubmit() {
   const settingsStore = useSettingsStore()
   const statesStore = useStatesStore()
   const inputStore = useInputStore()

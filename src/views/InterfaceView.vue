@@ -2,32 +2,7 @@
   <div
     class="whole-screen min-h-screen max-h-screen flex flex-row justify-center xl:min-w-screen xl:mx-auto"
   >
-    <div
-      v-show="isLeftSideBarVisible"
-      class="side-bar flex flex-col w-full sm:w-2/5 lg:w-2/6 border-2 border-gray-200"
-      :style="`border-color: ${themeVar.primaryColor};${
-        windowWidth >= 640 ? 'border-right: none !important;' : ''
-      }`"
-    >
-      <div class="side-bar-add-chat flex flex-row justify-between mt-4 mx-4">
-        <SideBarTop :class="{ 'w-4/5': mobileMode }" />
-        <LayoutToggle
-          v-if="mobileMode"
-          :is-side-bar-visible="isLeftSideBarVisible"
-          :window-width="windowWidth"
-          :side-bar-width="sideBarWidth"
-          :mobile-mode="mobileMode"
-          :position="'left'"
-          @toggle-sidebar="toggleLeftSidebar"
-        />
-      </div>
-      <div class="side-bar-chat-messages flex-grow overflow-y-auto">
-        <SideBarChatList />
-      </div>
-      <div class="side-bar-settings flex-shrink-0">
-        <SideBarSettings />
-      </div>
-    </div>
+    <LeftSideBar />
     <div
       v-show="
         (!isLeftSideBarVisible && !isRightSideBarVisible && windowWidth <= 640) || windowWidth > 640
@@ -65,7 +40,6 @@
         ref="chatContainerMessages"
         class="chat-container-messages flex-grow overflow-y-auto relative"
       >
-        <!-- here the scroll to bottom-->
         <div
           v-if="
             (chatStore.activeChat &&
@@ -87,56 +61,27 @@
         />
       </div>
     </div>
-    <div
-      v-show="isRightSideBarVisible"
-      class="right-side-bar flex flex-col w-full sm:w-2/5 lg:w-2/6 border-2 border-gray-200 max-h-screen"
-      :style="`border-color: ${themeVar.primaryColor};${
-        windowWidth >= 640 ? 'border-left: none !important;' : ''
-      }`"
-    >
-      <div
-        v-show="mobileMode"
-        class="right-side-bar-add-chat flex flex-row justify-between mt-4 mx-4"
-      >
-        <LayoutToggle
-          v-if="mobileMode"
-          :is-side-bar-visible="isRightSideBarVisible"
-          :window-width="windowWidth"
-          :side-bar-width="sideBarWidth"
-          :mobile-mode="mobileMode"
-          :position="'right'"
-          @toggle-sidebar="toggleRightSidebar"
-        />
-      </div>
-      <div class="overflow-y-auto relative">
-        <CodeInputList />
-      </div>
-    </div>
+    <RightSideBar />
   </div>
 </template>
 
 <script setup lang="ts">
-import { onMounted, onUnmounted, ref, computed, watch, nextTick } from 'vue'
-import { NCard } from 'naive-ui'
+import { onMounted, ref, computed, watch, nextTick } from 'vue'
+import { NCard, useThemeVars } from 'naive-ui'
 import ChatContainer from '../components/Chat/ChatContainer.vue'
-import SideBarChatList from '../components/Sidebar/SideBarChatList.vue'
-import SideBarTop from '../components/Sidebar/SideBarTopControls.vue'
-import useSubmit from '../composables/useSubmit.js'
 import SubmitCard from '../components/SubmitCard.vue'
-import SideBarSettings from '../components/Sidebar/SideBarMenu.vue'
-import { useChatStore } from '../stores/chatStore'
-import { useThemeVars } from 'naive-ui'
 import LayoutToggle from '../components/LayoutToggle.vue'
-import CodeInputList from '@/components/CodeInputList.vue'
-
+import LeftSideBar from '../components/LeftSideBar.vue'
+import RightSideBar from '../components/RightSideBar.vue'
+import { useSubmit } from '../composables/useSubmit'
+import { useWindowResize } from '../composables/useWindowResize'
+import { useChatStore } from '../stores/chatStore'
 import { useStatesStore } from '../stores/statesStore'
-
-const statesStore = useStatesStore()
 
 const themeVar = useThemeVars()
 const chatStore = useChatStore()
-
-const windowWidth = ref(window.innerWidth)
+const statesStore = useStatesStore()
+const windowWidth = useWindowResize()
 
 const sideBarWidth = ref(0)
 const isLeftSideBarVisible = statesStore.getLeftSideBarVisible()
@@ -157,34 +102,14 @@ const scrollToBottom = () => {
 
 const toggleLeftSidebar = () => {
   statesStore.setLeftSideBarVisible(!isLeftSideBarVisible.value)
-  updateSideBarWidth()
 }
 
 const toggleRightSidebar = () => {
   statesStore.setRightSideBarVisible(!isRightSideBarVisible.value)
-  updateSideBarWidth()
-}
-const updateSideBarWidth = () => {
-  if (isLeftSideBarVisible.value) {
-    if (windowWidth.value >= 640) {
-      if (windowWidth.value > 1024) {
-        sideBarWidth.value = windowWidth.value * 0.2
-      } else {
-        sideBarWidth.value = windowWidth.value * (2 / 5)
-      }
-    }
-  }
 }
 
 const { submitPrompt, promptTokens, responseTokens } = useSubmit()
 
-const handleResize = () => {
-  windowWidth.value = window.innerWidth
-}
-
-watch(windowWidth, () => {
-  updateSideBarWidth()
-})
 watch(
   () => chatStore.activeChat?.messages,
   () => {
@@ -201,35 +126,7 @@ watch(
 )
 
 onMounted(() => {
-  window.addEventListener('resize', handleResize)
   chatStore.updateActiveChat(chatStore.activeChatIndex)
-
-  const storedLeftSideBarVisible = localStorage.getItem('leftSideBarVisible')
-  const storedRightSideBarVisible = localStorage.getItem('rightSideBarVisible')
-
-  if (storedLeftSideBarVisible === null && storedRightSideBarVisible === null) {
-    if (windowWidth.value > 640) {
-      statesStore.setLeftSideBarVisible(true)
-      statesStore.setRightSideBarVisible(true)
-    }
-  } else {
-    statesStore.setLeftSideBarVisible(
-      storedLeftSideBarVisible !== null
-        ? JSON.parse(storedLeftSideBarVisible)
-        : statesStore.getLeftSideBarVisible
-    )
-    statesStore.setRightSideBarVisible(
-      storedRightSideBarVisible !== null
-        ? JSON.parse(storedRightSideBarVisible)
-        : statesStore.getRightSideBarVisible
-    )
-  }
-
-  updateSideBarWidth()
-})
-
-onUnmounted(() => {
-  window.removeEventListener('resize', handleResize)
 })
 </script>
 <style scoped>
