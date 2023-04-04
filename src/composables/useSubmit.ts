@@ -42,9 +42,6 @@ export function useSubmit() {
 
     const storedFormattedInput = inputStore.inputStorage.formattedInput
 
-    // Replace the following line
-    // chatStore.addMessage(chatStore.activeChatIndex, 'user', formattedInput)
-    // with this line
     chatStore.addMessage(chatStore.activeChatIndex, 'user', storedFormattedInput)
     inputStore.updateInputText('')
     inputStore.resetAttachedToPrompt()

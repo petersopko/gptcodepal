@@ -3,8 +3,16 @@ import { ref, computed } from 'vue'
 
 export const useStatesStore = defineStore('statesStore', () => {
   const loading = ref<boolean>(false)
-  const leftSideBarVisible = ref<boolean>(false)
-  const rightSideBarVisible = ref<boolean>(false)
+
+  const storedLeftSideBarVisible = localStorage.getItem('leftSideBarVisible')
+  const storedRightSideBarVisible = localStorage.getItem('rightSideBarVisible')
+
+  const leftSideBarVisible = ref<boolean>(
+    storedLeftSideBarVisible !== null ? JSON.parse(storedLeftSideBarVisible) : false
+  )
+  const rightSideBarVisible = ref<boolean>(
+    storedRightSideBarVisible !== null ? JSON.parse(storedRightSideBarVisible) : false
+  )
 
   const setLeftSideBarVisible = (visible: boolean): void => {
     leftSideBarVisible.value = visible

@@ -1,11 +1,5 @@
 <template>
-  <div
-    v-show="isLeftSideBarVisible"
-    class="side-bar flex flex-col w-full sm:w-2/5 lg:w-2/6 border-2 border-gray-200"
-    :style="`border-color: ${themeVar.primaryColor};${
-      windowWidth >= 640 ? 'border-right: none !important;' : ''
-    }`"
-  >
+  <div v-show="isLeftSideBarVisible">
     <div class="side-bar-add-chat flex flex-row justify-between mt-4 mx-4">
       <SideBarTop :class="{ 'w-4/5': mobileMode }" />
       <LayoutToggle
@@ -32,12 +26,10 @@ import SideBarTop from '../components/Sidebar/SideBarTopControls.vue'
 import SideBarChatList from '../components/Sidebar/SideBarChatList.vue'
 import SideBarSettings from '../components/Sidebar/SideBarMenu.vue'
 import LayoutToggle from '../components/LayoutToggle.vue'
-import { useThemeVars } from 'naive-ui'
 import { useStatesStore } from '../stores/statesStore'
 import { ref, computed } from 'vue'
 import { useWindowResize } from '../composables/useWindowResize'
 
-const themeVar = useThemeVars()
 const statesStore = useStatesStore()
 
 const windowWidth = useWindowResize()
