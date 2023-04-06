@@ -10,7 +10,7 @@
     />
     <ChatContainerContainer
       v-if="!(isMobile && isLeftSideBarVisible)"
-      class="flex flex-col border-2"
+      class="flex flex-col border-2 w-full"
       :class="chatContainerWidth"
       :style="`border-color: ${themeVar.primaryColor}; `"
     />
