@@ -1,17 +1,27 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
+import { useWindowResize } from '@/composables/useWindowResize'
 
 export const useStatesStore = defineStore('statesStore', () => {
   const loading = ref<boolean>(false)
 
+  const { isMid } = useWindowResize()
   const storedLeftSideBarVisible = localStorage.getItem('leftSideBarVisible')
   const storedRightSideBarVisible = localStorage.getItem('rightSideBarVisible')
 
   const leftSideBarVisible = ref<boolean>(
-    storedLeftSideBarVisible !== null ? JSON.parse(storedLeftSideBarVisible) : false
+    isMid
+      ? storedLeftSideBarVisible !== null
+        ? JSON.parse(storedLeftSideBarVisible)
+        : false
+      : true
   )
   const rightSideBarVisible = ref<boolean>(
-    storedRightSideBarVisible !== null ? JSON.parse(storedRightSideBarVisible) : false
+    isMid
+      ? storedRightSideBarVisible !== null
+        ? JSON.parse(storedRightSideBarVisible)
+        : false
+      : true
   )
 
   const setLeftSideBarVisible = (visible: boolean): void => {
@@ -32,6 +42,14 @@ export const useStatesStore = defineStore('statesStore', () => {
   const updateLoading = (newLoading: boolean): void => {
     loading.value = newLoading
   }
+  const setExclusiveSideBarVisible = (leftVisible: boolean, rightVisible: boolean): void => {
+    if (isMid) {
+      leftSideBarVisible.value = leftVisible
+      rightSideBarVisible.value = rightVisible
+      localStorage.setItem('leftSideBarVisible', JSON.stringify(leftVisible))
+      localStorage.setItem('rightSideBarVisible', JSON.stringify(rightVisible))
+    }
+  }
 
   return {
     isLoading,
@@ -41,6 +59,7 @@ export const useStatesStore = defineStore('statesStore', () => {
     setLeftSideBarVisible,
     setRightSideBarVisible,
     getLeftSideBarVisible,
-    getRightSideBarVisible
+    getRightSideBarVisible,
+    setExclusiveSideBarVisible
   }
 })

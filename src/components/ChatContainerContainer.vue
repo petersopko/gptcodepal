@@ -1,25 +1,19 @@
 <template>
-  <div
-    class="chat-container min-h-screen flex flex-col w-full sm:w-3/5 lg:w-4/6 border-2"
-    :style="`border-color: ${themeVar.primaryColor}; ${
-      (!isLeftSideBarVisible || !isRightSideBarVisible) && windowWidth > 600 ? 'width: 100%;' : ''
-    }`"
-  >
-    <div class="chat-container-menu flex-shrink-0">
+  <div>
+    <div class="flex-shrink-0">
       <n-card class="w-full" content-style="display: flex; justify-content: space-between;">
         <!-- Left LayoutToggle -->
         <LayoutToggle
-          v-if="!(mobileMode && isLeftSideBarVisible)"
           :is-side-bar-visible="isLeftSideBarVisible"
           :window-width="windowWidth"
           :side-bar-width="sideBarWidth"
-          :mobile-mode="mobileMode"
+          :mobile-mode="isMobile"
           :position="'left'"
           @toggle-sidebar="toggleLeftSidebar"
         />
         <!-- Right LayoutToggle -->
         <LayoutToggle
-          v-if="!(mobileMode && isRightSideBarVisible)"
+          v-if="!isMobile"
           :is-side-bar-visible="isRightSideBarVisible"
           :window-width="windowWidth"
           :side-bar-width="sideBarWidth"
@@ -60,29 +54,28 @@ import { ref, computed } from 'vue'
 import LayoutToggle from '../components/LayoutToggle.vue'
 import ChatContainer from '../components/Chat/ChatContainer.vue'
 import SubmitCard from '../components/SubmitCard.vue'
-import { useThemeVars, NCard } from 'naive-ui'
+import { NCard } from 'naive-ui'
 import { useChatStore } from '../stores/chatStore'
 import { useStatesStore } from '../stores/statesStore'
 import { useSubmit } from '../composables/useSubmit'
 import { useWindowResize } from '../composables/useWindowResize'
 
-const themeVar = useThemeVars()
 const chatStore = useChatStore()
 const statesStore = useStatesStore()
-const windowWidth = useWindowResize()
+const { windowWidth, isMobile } = useWindowResize()
 
 const sideBarWidth = ref(0)
 const isLeftSideBarVisible = statesStore.getLeftSideBarVisible()
 const isRightSideBarVisible = statesStore.getRightSideBarVisible()
 
-const mobileMode = computed(() => windowWidth.value <= 640)
+const mobileMode = computed(() => windowWidth.value <= 1024)
 
 const toggleLeftSidebar = () => {
-  statesStore.setLeftSideBarVisible(!isLeftSideBarVisible.value)
+  statesStore.setExclusiveSideBarVisible(!isLeftSideBarVisible.value, isRightSideBarVisible.value)
 }
 
 const toggleRightSidebar = () => {
-  statesStore.setRightSideBarVisible(!isRightSideBarVisible.value)
+  statesStore.setExclusiveSideBarVisible(isLeftSideBarVisible.value, !isRightSideBarVisible.value)
 }
 
 const { submitPrompt, promptTokens, responseTokens } = useSubmit()

@@ -1,21 +1,23 @@
 <template>
-  <div
-    class="whole-screen min-h-screen max-h-screen flex flex-row justify-center xl:min-w-screen xl:mx-auto"
-  >
+  <div class="whole-screen min-h-screen max-h-screen min-w-full flex flex-row justify-center">
     <LeftSideBar
-      class="side-bar flex flex-col w-full sm:w-2/5 lg:w-2/6 border-2 border-gray-200"
+      v-if="!isMobile || isLeftSideBarVisible"
+      class="flex flex-col border-2"
+      :class="leftSideBarWidth"
       :style="`border-color: ${themeVar.primaryColor};${
         windowWidth >= 640 ? 'border-right: none !important;' : ''
       }`"
     />
     <ChatContainerContainer
-      v-show="
-        (!isLeftSideBarVisible && !isRightSideBarVisible && windowWidth <= 640) || windowWidth > 640
-      "
-      class="min-h-screen flex flex-col w-full sm:w-3/5 lg:w-4/6 border-2"
+      v-if="!(isMobile && isLeftSideBarVisible)"
+      class="flex flex-col border-2"
+      :class="chatContainerWidth"
+      :style="`border-color: ${themeVar.primaryColor}; `"
     />
     <RightSideBar
-      class="right-side-bar flex flex-col w-full sm:w-2/5 lg:w-2/6 border-2 border-gray-200 max-h-screen"
+      v-if="!isMobile"
+      class="flex flex-col border-2"
+      :class="rightSideBarWidth"
       :style="`border-color: ${themeVar.primaryColor};${
         windowWidth >= 640 ? 'border-left: none !important;' : ''
       }`"
@@ -24,7 +26,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted } from 'vue'
+import { computed, onMounted } from 'vue'
 import { useThemeVars } from 'naive-ui'
 
 import LeftSideBar from '../components/LeftSideBar.vue'
@@ -37,10 +39,27 @@ import { useStatesStore } from '../stores/statesStore'
 const themeVar = useThemeVars()
 const chatStore = useChatStore()
 const statesStore = useStatesStore()
-const windowWidth = useWindowResize()
+const { windowWidth, isMobile } = useWindowResize()
 
 const isLeftSideBarVisible = statesStore.getLeftSideBarVisible()
 const isRightSideBarVisible = statesStore.getRightSideBarVisible()
+
+const leftSideBarWidth = computed(() => {
+  if (isMobile.value) return 'w-full'
+  return 'sm:w-3/12'
+})
+
+const chatContainerWidth = computed(() => {
+  if (isMobile.value) return 'w-full'
+  if (!isLeftSideBarVisible.value && !isRightSideBarVisible.value) return 'sm:w-12/12'
+  if (!isLeftSideBarVisible.value || !isRightSideBarVisible.value) return 'sm:w-9/12'
+  return 'sm:w-6/12'
+})
+
+const rightSideBarWidth = computed(() => {
+  if (isMobile.value) return 'w-full'
+  return 'sm:w-3/12'
+})
 
 onMounted(() => {
   chatStore.updateActiveChat(chatStore.activeChatIndex)
