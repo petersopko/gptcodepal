@@ -51,11 +51,12 @@ import { ref, watch, onMounted, onUnmounted } from 'vue'
 import LayoutToggle from '../components/LayoutToggle.vue'
 import ChatContainer from '../components/Chat/ChatContainer.vue'
 import SubmitCard from '../components/SubmitCard.vue'
-import { NCard } from 'naive-ui'
+import { NCard, NButton, NIcon } from 'naive-ui'
 import { useChatStore } from '../stores/chatStore'
 import { useStatesStore } from '../stores/statesStore'
 import { useSubmit } from '../composables/useSubmit'
 import { useWindowResize } from '../composables/useWindowResize'
+import { CheckmarkOutline } from '@vicons/ionicons5'
 
 const chatStore = useChatStore()
 const statesStore = useStatesStore()
