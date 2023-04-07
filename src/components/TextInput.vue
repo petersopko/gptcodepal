@@ -19,7 +19,7 @@
 
       <n-button
         :bordered="false"
-        :disabled="!inputTextComputed"
+        :disabled="!inputTextComputed || statesStore.loading"
         class="pr-0 pl-2"
         @click="submitPrompt"
       >
@@ -34,15 +34,18 @@ import { NInput, NButton, NGradientText, NTooltip } from 'naive-ui'
 import { computed } from 'vue'
 import { useInputStore } from '../stores/inputStore'
 import useTokenCount from '../composables/useTokenCount'
+import { useStatesStore } from '../stores/statesStore'
 
 const emit = defineEmits(['submit'])
 
 const { inputStorage, updateInputText } = useInputStore()
 const { activeChatTokenCount } = useTokenCount()
+const statesStore = useStatesStore()
 
 const inputTextComputed = computed(() => inputStorage.inputText)
 
 const submitPrompt = () => {
+  if (statesStore.loading) return
   emit('submit')
 }
 </script>

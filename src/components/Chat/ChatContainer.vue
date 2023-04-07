@@ -28,7 +28,7 @@ import { ApertureOutline } from '@vicons/ionicons5'
 import type { Message } from '@/types'
 
 const chatStore = useChatStore()
-const { isLoading } = useStatesStore()
+const { loading } = useStatesStore()
 const { cancelOngoingRequest } = useSubmit()
 const activeChatMessages = ref<Message[]>([])
 

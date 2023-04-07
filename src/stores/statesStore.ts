@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { ref, computed } from 'vue'
+import { ref } from 'vue'
 import { useWindowResize } from '@/composables/useWindowResize'
 
 export const useStatesStore = defineStore('statesStore', () => {
@@ -37,8 +37,6 @@ export const useStatesStore = defineStore('statesStore', () => {
   const getLeftSideBarVisible = () => leftSideBarVisible
   const getRightSideBarVisible = () => rightSideBarVisible
 
-  const isLoading = computed<boolean>(() => loading.value)
-
   const updateLoading = (newLoading: boolean): void => {
     loading.value = newLoading
   }
@@ -52,7 +50,7 @@ export const useStatesStore = defineStore('statesStore', () => {
   }
 
   return {
-    isLoading,
+    loading,
     updateLoading,
     leftSideBarVisible,
     rightSideBarVisible,

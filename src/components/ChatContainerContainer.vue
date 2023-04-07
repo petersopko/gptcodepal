@@ -108,6 +108,13 @@ watch(
 onMounted(() => {
   if (chatContainerMessages.value) {
     chatContainerMessages.value.addEventListener('scroll', handleScroll)
+    if (messagesEnd.value && chatContainerMessages.value && autoScrollEnabled.value) {
+      messagesEnd.value.scrollIntoView({
+        behavior: 'smooth',
+        block: 'end',
+        inline: 'nearest'
+      })
+    }
   }
 })
 

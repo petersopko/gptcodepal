@@ -125,6 +125,11 @@ export function useSubmit() {
   function handleError(error: AxiosError<any>) {
     statesStore.updateLoading(false)
     const errorMessage = 'An error occurred while fetching the response.'
+    if (error.response?.data.error.message) {
+      showErrorNotification(error.response.data.error.message)
+      console.log('ERROR', error.response.data.error.message)
+      return
+    }
     console.log('ERROR', error)
     chatStore.handleErrorRequest()
     showErrorNotification(errorMessage)
