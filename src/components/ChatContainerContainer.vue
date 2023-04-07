@@ -17,7 +17,7 @@
           :is-side-bar-visible="isRightSideBarVisible"
           :window-width="windowWidth"
           :side-bar-width="sideBarWidth"
-          :mobile-mode="mobileMode"
+          :mobile-mode="isMobile"
           :position="'right'"
           @toggle-sidebar="toggleRightSidebar"
         />
@@ -28,16 +28,12 @@
       class="chat-container-messages flex-grow overflow-y-auto relative"
     >
       <div
-        v-if="
-          (chatStore.activeChat &&
-            chatStore.activeChat.messages &&
-            chatStore.activeChat.messages.length === 0) ||
-          !chatStore.activeChat
-        "
+        v-if="!chatStore.activeChat || chatStore.activeChat.messages.length === 0"
         class="robot-face"
       ></div>
 
       <ChatContainer />
+      <div ref="messagesEnd" style="height: 0"></div>
     </div>
     <div class="chat-container-submit flex-shrink-0">
       <SubmitCard
@@ -50,7 +46,8 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, watch, onMounted, onUnmounted } from 'vue'
+
 import LayoutToggle from '../components/LayoutToggle.vue'
 import ChatContainer from '../components/Chat/ChatContainer.vue'
 import SubmitCard from '../components/SubmitCard.vue'
@@ -63,12 +60,15 @@ import { useWindowResize } from '../composables/useWindowResize'
 const chatStore = useChatStore()
 const statesStore = useStatesStore()
 const { windowWidth, isMobile } = useWindowResize()
+const { submitPrompt, promptTokens, responseTokens } = useSubmit()
 
 const sideBarWidth = ref(0)
 const isLeftSideBarVisible = statesStore.getLeftSideBarVisible()
 const isRightSideBarVisible = statesStore.getRightSideBarVisible()
 
-const mobileMode = computed(() => windowWidth.value <= 1024)
+const chatContainerMessages = ref<HTMLElement | null>(null)
+const messagesEnd = ref<HTMLElement | null>(null)
+const autoScrollEnabled = ref(true)
 
 const toggleLeftSidebar = () => {
   statesStore.setExclusiveSideBarVisible(!isLeftSideBarVisible.value, isRightSideBarVisible.value)
@@ -78,7 +78,44 @@ const toggleRightSidebar = () => {
   statesStore.setExclusiveSideBarVisible(isLeftSideBarVisible.value, !isRightSideBarVisible.value)
 }
 
-const { submitPrompt, promptTokens, responseTokens } = useSubmit()
+const handleScroll = () => {
+  if (chatContainerMessages.value) {
+    const { scrollTop, scrollHeight, clientHeight } = chatContainerMessages.value
+    const bottomTolerance = 30
+
+    if (scrollTop + clientHeight < scrollHeight - bottomTolerance) {
+      autoScrollEnabled.value = false
+    } else {
+      autoScrollEnabled.value = true
+    }
+  }
+}
+
+watch(
+  () => [chatStore.allChats, chatStore.activeChatIndex],
+  () => {
+    if (messagesEnd.value && chatContainerMessages.value && autoScrollEnabled.value) {
+      messagesEnd.value.scrollIntoView({
+        behavior: 'smooth',
+        block: 'end',
+        inline: 'nearest'
+      })
+    }
+  },
+  { deep: true }
+)
+
+onMounted(() => {
+  if (chatContainerMessages.value) {
+    chatContainerMessages.value.addEventListener('scroll', handleScroll)
+  }
+})
+
+onUnmounted(() => {
+  if (chatContainerMessages.value) {
+    chatContainerMessages.value.removeEventListener('scroll', handleScroll)
+  }
+})
 </script>
 
 <style scoped>
