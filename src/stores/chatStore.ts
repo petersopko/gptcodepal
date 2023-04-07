@@ -8,10 +8,15 @@ function getInitialChats() {
   return parsedChats.length > 0 ? parsedChats : initialChat
 }
 
+function getInitialActiveChatIndex() {
+  const index = localStorage.getItem('activeChatIndex')
+  return index ? parseInt(index, 10) : 0
+}
+
 export const useChatStore = defineStore('chatStore', () => {
   const allChats = ref<Chat[]>(getInitialChats())
 
-  const activeChatIndex = ref<number>(0)
+  const activeChatIndex = ref<number>(getInitialActiveChatIndex())
   const activeChat = computed<Chat>(() => {
     return allChats.value[activeChatIndex.value]
   })
@@ -21,6 +26,7 @@ export const useChatStore = defineStore('chatStore', () => {
 
   function updateActiveChat(index: number): void {
     activeChatIndex.value = index
+    localStorage.setItem('activeChatIndex', index.toString())
   }
 
   function addChat(): void {

@@ -81,7 +81,7 @@ const toggleRightSidebar = () => {
 const handleScroll = () => {
   if (chatContainerMessages.value) {
     const { scrollTop, scrollHeight, clientHeight } = chatContainerMessages.value
-    const bottomTolerance = 30
+    const bottomTolerance = 75
 
     if (scrollTop + clientHeight < scrollHeight - bottomTolerance) {
       autoScrollEnabled.value = false
