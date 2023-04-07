@@ -1,121 +1,119 @@
 <template>
-  <n-scrollbar>
-    <n-card
-      v-for="(chat, index) in allChats"
-      :key="index"
-      @click="updateActiveChat(index)"
-      :content-style="{
-        'justify-content': 'space-between',
-        display: 'flex',
-        'align-items': 'center'
-      }"
-      class="chat-card mx-4 my-4 w-auto"
-      size="small"
-      :style="{
-        'border-color': `${activeChatIndex === index ? `${themeVar.primaryColor}` : 'gray'}`
-      }"
-    >
-      <div class="flex items-center">
-        <n-icon text style="font-size: 16px" class="mr-2">
-          <component :is="ChatboxEllipsesOutline" />
+  <n-card
+    v-for="(chat, index) in allChats"
+    :key="index"
+    @click="updateActiveChat(index)"
+    :content-style="{
+      'justify-content': 'space-between',
+      display: 'flex',
+      'align-items': 'center'
+    }"
+    class="chat-card mx-4 my-4 w-auto"
+    size="small"
+    :style="{
+      'border-color': `${activeChatIndex === index ? `${themeVar.primaryColor}` : 'gray'}`
+    }"
+  >
+    <div class="flex items-center">
+      <n-icon text style="font-size: 16px" class="mr-2">
+        <component :is="ChatboxEllipsesOutline" />
+      </n-icon>
+      <p v-if="currentEditIndex !== index">{{ chat.label }}</p>
+      <input
+        :ref="setInputBarRef"
+        v-else
+        type="text"
+        v-model="tempChatLabel"
+        maxlength="20"
+        style="outline: none; background-color: transparent"
+        @blur="cancelEditMode()"
+        @keypress.enter="updateChatLabelFromTemp(index, tempChatLabel)"
+      />
+    </div>
+    <div v-if="activeChatIndex === index" class="flex">
+      <!-- pencil outline -->
+      <n-button
+        v-if="!isEditMode && !isDeleteMode"
+        text
+        style="font-size: 16px"
+        :focusable="false"
+        class="mr-2"
+        @click="toggleEditMode(index, chat.label)"
+      >
+        <n-icon>
+          <PencilOutline />
         </n-icon>
-        <p v-if="currentEditIndex !== index">{{ chat.label }}</p>
-        <input
-          :ref="setInputBarRef"
-          v-else
-          type="text"
-          v-model="tempChatLabel"
-          maxlength="20"
-          style="outline: none; background-color: transparent"
-          @blur="cancelEditMode()"
-          @keypress.enter="updateChatLabelFromTemp(index, tempChatLabel)"
-        />
-      </div>
-      <div v-if="activeChatIndex === index" class="flex">
-        <!-- pencil outline -->
-        <n-button
-          v-if="!isEditMode && !isDeleteMode"
-          text
-          style="font-size: 16px"
-          :focusable="false"
-          class="mr-2"
-          @click="toggleEditMode(index, chat.label)"
-        >
-          <n-icon>
-            <PencilOutline />
-          </n-icon>
-        </n-button>
-        <!-- trash outline -->
-        <n-button
-          v-if="!isEditMode && !isDeleteMode"
-          text
-          style="font-size: 16px"
-          :focusable="false"
-          @click="toggleDeleteMode(index)"
-        >
-          <n-icon>
-            <TrashOutline />
-          </n-icon>
-        </n-button>
-        <!-- edit mode confirm -->
-        <n-button
-          v-if="isEditMode"
-          text
-          style="font-size: 16px"
-          :focusable="false"
-          class="mr-2"
-          @click="updateChatLabelFromTemp(index, tempChatLabel)"
-        >
-          <n-icon>
-            <CheckmarkOutline />
-          </n-icon>
-        </n-button>
-        <!-- edit mode cancel -->
-        <n-button
-          v-if="isEditMode"
-          text
-          style="font-size: 16px"
-          :focusable="false"
-          @click="cancelEditMode()"
-        >
-          <n-icon>
-            <CloseOutline />
-          </n-icon>
-        </n-button>
+      </n-button>
+      <!-- trash outline -->
+      <n-button
+        v-if="!isEditMode && !isDeleteMode"
+        text
+        style="font-size: 16px"
+        :focusable="false"
+        @click="toggleDeleteMode(index)"
+      >
+        <n-icon>
+          <TrashOutline />
+        </n-icon>
+      </n-button>
+      <!-- edit mode confirm -->
+      <n-button
+        v-if="isEditMode"
+        text
+        style="font-size: 16px"
+        :focusable="false"
+        class="mr-2"
+        @click="updateChatLabelFromTemp(index, tempChatLabel)"
+      >
+        <n-icon>
+          <CheckmarkOutline />
+        </n-icon>
+      </n-button>
+      <!-- edit mode cancel -->
+      <n-button
+        v-if="isEditMode"
+        text
+        style="font-size: 16px"
+        :focusable="false"
+        @click="cancelEditMode()"
+      >
+        <n-icon>
+          <CloseOutline />
+        </n-icon>
+      </n-button>
 
-        <!-- delete mode confirm -->
-        <n-button
-          v-if="isDeleteMode && currentDeleteIndex === index"
-          text
-          style="font-size: 16px"
-          :focusable="false"
-          class="mr-2"
-          @click="deleteChat(index)"
-        >
-          <n-icon>
-            <CheckmarkOutline />
-          </n-icon>
-        </n-button>
-        <!-- delete mode cancel -->
-        <n-button
-          v-if="isDeleteMode && currentDeleteIndex === index"
-          text
-          style="font-size: 16px"
-          :focusable="false"
-          @click="toggleDeleteMode(index)"
-        >
-          <n-icon>
-            <CloseOutline />
-          </n-icon>
-        </n-button>
-      </div>
-    </n-card>
-  </n-scrollbar>
+      <!-- delete mode confirm -->
+      <n-button
+        v-if="isDeleteMode && currentDeleteIndex === index"
+        text
+        style="font-size: 16px"
+        :focusable="false"
+        class="mr-2"
+        @click="deleteChat(index)"
+      >
+        <n-icon>
+          <CheckmarkOutline />
+        </n-icon>
+      </n-button>
+      <!-- delete mode cancel -->
+      <n-button
+        v-if="isDeleteMode && currentDeleteIndex === index"
+        text
+        style="font-size: 16px"
+        :focusable="false"
+        @click="toggleDeleteMode(index)"
+      >
+        <n-icon>
+          <CloseOutline />
+        </n-icon>
+      </n-button>
+    </div>
+  </n-card>
 </template>
 
 <script setup lang="ts">
 import { ref, computed, nextTick, watch } from 'vue'
-import { NCard, NButton, NIcon, NScrollbar, useThemeVars } from 'naive-ui'
+import { NCard, NButton, NIcon, useThemeVars } from 'naive-ui'
 import {
   TrashOutline,
   PencilOutline,
