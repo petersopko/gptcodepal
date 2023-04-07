@@ -16,6 +16,8 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
+
+  scrollbar-width: thin; /* For Firefox */
 }
 
 .header-button-right {
@@ -25,6 +27,26 @@
 .n-tab-pane {
   padding: 0 !important;
 }
+
 .assistant-message {
   background-color: #505055;
+}
+
+/* Add this to your styles.css */
+
+/* Customize the scrollbar width and background color */
+::-webkit-scrollbar {
+  width: 4px; /* Adjust this value to your desired scrollbar width */
+  background-color: #18181c; /* Set the background color to match your theme */
+}
+
+/* Customize the scrollbar thumb */
+::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.5); /* Set the thumb color and opacity */
+  border-radius: 2px; /* Adjust this value for rounded corners on the thumb */
+}
+
+/* Customize the scrollbar track */
+::-webkit-scrollbar-track {
+  background-color: transparent;
 }
