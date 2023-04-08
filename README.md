@@ -1,25 +1,18 @@
-# gptcodepal
+# GPT CodePal 🤖
 
-This template should help get you started developing with Vue 3 in Vite.
+## [Vue3](https://v3.vuejs.org/) + [Vite](https://vitejs.dev/) + [NaiveUI](https://www.naiveui.com/en-US/os-theme/dark) + [TailwindCSS](https://tailwindcss.com/)
 
-## Recommended IDE Setup
+Prompted into existence by [GPT-4](https://openai.com/blog/gpt-4/)
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
+## About
 
-## Type Support for `.vue` Imports in TS
+This is a simple chat interface, prompted into existance thanks to early access to GPT-4. I wanted to see how far could the prompting with minor tweaks take me when creating a new app, the result is quite messy and will need further refactor (but works for now).
 
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin) to make the TypeScript language service aware of `.vue` types.
+Note: Created with 8k context model, we'll see the results for 32k.
 
-If the standalone TypeScript plugin doesn't feel fast enough to you, Volar has also implemented a [Take Over Mode](https://github.com/johnsoncodehk/volar/discussions/471#discussioncomment-1361669) that is more performant. You can enable it by the following steps:
+## What doesn't work (yet)
 
-1. Disable the built-in TypeScript Extension
-    1) Run `Extensions: Show Built-in Extensions` from VSCode's command palette
-    2) Find `TypeScript and JavaScript Language Features`, right click and select `Disable (Workspace)`
-2. Reload the VSCode window by running `Developer: Reload Window` from the command palette.
-
-## Customize configuration
-
-See [Vite Configuration Reference](https://vitejs.dev/config/).
+- [ ] **Stop generating** button
 
 ## Project Setup
 
@@ -33,20 +26,4 @@ npm install
 npm run dev
 ```
 
-### Type-Check, Compile and Minify for Production
-
-```sh
-npm run build
-```
-
-### Run Unit Tests with [Vitest](https://vitest.dev/)
-
-```sh
-npm run test:unit
-```
-
-### Lint with [ESLint](https://eslint.org/)
-
-```sh
-npm run lint
-```
+Rest should be pretty obvious, regular Vue/Vite setup. I'm using [NaiveUI](https://www.naiveui.com/en-US/os-theme/dark) for the UI components, and [TailwindCSS](https://tailwindcss.com/) for the styling.
